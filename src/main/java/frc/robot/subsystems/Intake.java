@@ -39,6 +39,10 @@ public class Intake extends SubsystemBase {
         m_IntakeFront.set(.7);
     }
 
+    public void outtake(){
+        m_IntakeFront.set(-.7);
+    }
+
     public void intakeStop(){
         m_IntakeFront.set(0);
     }

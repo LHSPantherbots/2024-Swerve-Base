@@ -119,6 +119,12 @@ public final class Constants {
     public static final int kBackIntake = 1;
   }
 
+  public static final class LauncherConstants{
+    public static final int kLauncherTop = 0;
+    public static final int kLauncherBottom = 1;
+    public static final int kFeeder = 2;
+  }
+
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.1;
