@@ -19,8 +19,10 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Leds;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -36,6 +38,7 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final Intake intake = new Intake();
   public static final Leds leds = new Leds();
 
   // The driver's controller
@@ -43,6 +46,9 @@ public class RobotContainer {
     // The driver's controller
   CommandXboxController m_driverController =
       new CommandXboxController(OIConstants.kDriverControllerPort);
+      CommandXboxController operatorController =
+       new CommandXboxController(OIConstants.kOperatorControllerPort);
+
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -83,6 +89,10 @@ public class RobotContainer {
     m_driverController.b().whileTrue(new RunCommand(()->leds.red(), leds)); 
     m_driverController.x().onTrue(new RunCommand(()->leds.rainbow(), leds));   
     m_driverController.y().whileTrue(new RunCommand(()->leds.blueStreak(), leds));
+
+    operatorController.a().whileTrue(new RunCommand(()->Intake.intake()), Intake));
+    // new JoystickButton(operatorController, GamePadButtons.Start)
+    //             .whileTrue(new InstantCommand(driveTrain::resetAll, driveTrain));
   }
 
   /**
