@@ -115,14 +115,19 @@ public final class Constants {
   }
 
   public static final class IntakeConstants{
-    public static final int kFrontIntake = 0;
-    public static final int kBackIntake = 1;
+    public static final int kFrontIntake = 20;
+    public static final int kBackIntake = 21;
   }
 
   public static final class LauncherConstants{
-    public static final int kLauncherTop = 0;
-    public static final int kLauncherBottom = 1;
-    public static final int kFeeder = 2;
+    public static final int kLauncherTop = 30;
+    public static final int kLauncherBottom = 31;
+    public static final int kFeeder = 32;
+  }
+
+  public static final class ClimbConstants{
+    public static final int kArmLeft = 40;
+    public static final int kArmRight = 41;
   }
 
   public static final class OIConstants {

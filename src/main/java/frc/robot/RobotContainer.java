@@ -90,7 +90,9 @@ public class RobotContainer {
     m_driverController.x().onTrue(new RunCommand(()->leds.rainbow(), leds));   
     m_driverController.y().whileTrue(new RunCommand(()->leds.blueStreak(), leds));
 
-    operatorController.a().whileTrue(new RunCommand(()->Intake.intake()), Intake));
+    operatorController.a().whileTrue(new RunCommand(()->intake.intake(), intake)).onFalse(new RunCommand(()->intake.intakeStop(), intake));
+    operatorController.b().whileTrue(new RunCommand(()->intake.outtake(), intake)).onFalse(new RunCommand(()->intake.intakeStop(), intake));
+
     // new JoystickButton(operatorController, GamePadButtons.Start)
     //             .whileTrue(new InstantCommand(driveTrain::resetAll, driveTrain));
   }

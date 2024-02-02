@@ -14,6 +14,9 @@ public class Launcher extends SubsystemBase {
         private final CANSparkFlex m_LauncherBottom;
         private final CANSparkMax m_Feeder;
 
+        private double lastSetpoint = 0;
+        private double setPoint = 0;
+
         public Launcher(){
         m_LauncherTop = new CANSparkFlex(LauncherConstants.kLauncherTop, MotorType.kBrushless);
         m_LauncherBottom = new CANSparkFlex(LauncherConstants.kLauncherBottom, MotorType.kBrushless);
@@ -41,6 +44,7 @@ public class Launcher extends SubsystemBase {
 
 
         m_LauncherBottom.follow(m_LauncherTop);
+        //m_LauncherTop.setClosedLoopRampRate(0.25);
     }
 
     @Override
@@ -48,8 +52,16 @@ public class Launcher extends SubsystemBase {
 
     }
 
-    public void Launch(){
-        
+    public void launcherRpmUp(){
+        lastSetpoint = setPoint;
+        setPoint = setPoint + 250;
+        //closedLoopLaunch();
+
+    }
+
+    public void launcherRpmDown(){
+        lastSetpoint = setPoint;
+        setPoint = setPoint -250;
     }
 
             
