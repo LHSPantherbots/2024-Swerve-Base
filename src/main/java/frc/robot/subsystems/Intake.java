@@ -21,8 +21,8 @@ public class Intake extends SubsystemBase {
         m_IntakeFront.setInverted(false);
         m_IntakeBack.setInverted(false);
 
-        m_IntakeFront.setIdleMode(IdleMode.kCoast);
-        m_IntakeBack.setIdleMode(IdleMode.kCoast);
+        m_IntakeFront.setIdleMode(IdleMode.kBrake);
+        m_IntakeBack.setIdleMode(IdleMode.kBrake);
 
         m_IntakeFront.setSmartCurrentLimit(60);
         m_IntakeBack.setSmartCurrentLimit(60);

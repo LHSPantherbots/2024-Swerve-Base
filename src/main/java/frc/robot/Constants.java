@@ -129,6 +129,11 @@ public final class Constants {
     public static final int kArmLeft = 40;
     public static final int kArmRight = 41;
   }
+  
+  public static final class FulcrumConstants{
+    public static final int kFulcrumRight = 50;
+    public static final int kFulcrumLeft = 51;
+  }
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
