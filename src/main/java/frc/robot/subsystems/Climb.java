@@ -1,123 +1,149 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimbConstants;
-//import frc.robot.Constants.ArmPidConstants;
+
+public class Climb extends SubsystemBase {
+
+  CANSparkMax m_RightArm =
+      new CANSparkMax(ClimbConstants.kArmRight, MotorType.kBrushless);
+  CANSparkMax m_LeftArm =
+      new CANSparkMax(ClimbConstants.kArmLeft, MotorType.kBrushless);
+
+  RelativeEncoder e_RightArm;
+  RelativeEncoder e_LeftArm;
 
 
-public class Climb extends SubsystemBase  {
+  private double kP = 0.05;
+  private double kI = 0.0;
+  private double kD = 0.0;
+  private double maxVel = 90.0;
+  private double maxAcc = 90.0;
+  private double allowableError = 1.0;
+  private double heightSetpoint = 0.0;
+  private static double kDt = 0.02;
+  private final TrapezoidProfile.Constraints m_constraints;
+  private final ProfiledPIDController m_controller;
 
-    public static boolean climbMode = false;
-    
-    CANSparkMax m_LeftArm = new CANSparkMax(ClimbConstants.kArmLeft, MotorType.kBrushless);
-    CANSparkMax m_RightArm = new CANSparkMax(ClimbConstants.kArmRight, MotorType.kBrushless);
+  /** Creates a new ElevatorSubsystem. */
+  public Climb() {
+    m_RightArm.restoreFactoryDefaults();
+    m_LeftArm.restoreFactoryDefaults();
 
-   
-    SparkPIDController l_pidController;
-    SparkPIDController r_pidController;
-    int smartMotionProfile = 1;
+    // Set limit low when starting to keep from destroying itself before tuning;
+    m_RightArm.setSmartCurrentLimit(60);
+    m_LeftArm.setSmartCurrentLimit(60);
 
-    public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxVel, minVel, maxRPM, maxAcc, allowedErr;
+    // Adjust this value if the arms is accellerating too fast
+    m_RightArm.setClosedLoopRampRate(0.25);
+    m_LeftArm.setClosedLoopRampRate(0.25);
 
-    double pid_setPoint = 0;
+    m_RightArm.setIdleMode(IdleMode.kBrake);
+    m_LeftArm.setIdleMode(IdleMode.kBrake);
 
-    public Climb() {
-        m_LeftArm.restoreFactoryDefaults();
-        m_RightArm.restoreFactoryDefaults();
-        m_LeftArm.setInverted(false);
-        m_RightArm.setInverted(true);
-        m_LeftArm.setSmartCurrentLimit(40);
-        m_RightArm.setSmartCurrentLimit(40);
-        m_LeftArm.setClosedLoopRampRate(1);
-        m_RightArm.setClosedLoopRampRate(1);
-
-        m_LeftArm.setIdleMode(IdleMode.kBrake);
-        m_RightArm.setIdleMode(IdleMode.kBrake);
-
-        
-    }
-    
-    
-    @Override
-    public void periodic() {
-        SmartDashboard.putNumber("ClimbAmp", m_LeftArm.getOutputCurrent());
-        SmartDashboard.putNumber("HookAmp", m_RightArm.getOutputCurrent());
-       // SmartDashboard.putNumber("Right Arm Pos", r_encoder.getPosition());
-       // SmartDashboard.putNumber("Right Arm Vel", r_encoder.getVelocity());
-        SmartDashboard.putNumber("Right Arm Current", m_RightArm.getOutputCurrent());
-       // SmartDashboard.putNumber("Left Arm Pos", m_LeftArm.getPosition());
-       // SmartDashboard.putNumber("Left Arm Vel", m_LeftArm.getVelocity());
-        SmartDashboard.putNumber("Left Arm Current", m_LeftArm.getOutputCurrent());
-        SmartDashboard.putNumber("Arm Set Point", pid_setPoint);
-        SmartDashboard.putBoolean("Climb Mode", climbMode);
-    }
+    // Flip these if the elevator goes the wrong direction
+    m_RightArm.setInverted(false);
+    m_LeftArm.setInverted(false);
 
 
-    public void manualleftClimb(double move){
-        m_LeftArm.set(move);
-    }
-
-    public void manualrightClimb(double move){
-        m_RightArm.set(move);
-    }
-
-    public void manualClimb(double lift, double trim){
-        m_RightArm.set(lift - trim);
-        m_LeftArm.set(lift + trim);
-        // if (!climbMode || (lift > 0.2 || trim > 0.2)){
-        //     lift = deadBand(lift);
-        //     trim = deadBand(trim);
-        //     l_pidController.setReference(lift + trim, ControlType.kDutyCycle, smartMotionProfile);
-        //     // l_arm.set(lift + trim);
-        //     r_pidController.setReference(lift - trim, ControlType.kDutyCycle, smartMotionProfile);
-        //     // r_arm.set(lift - trim);
-        // }
-        // } if (!climbMode && (lift < 0.2 && trim < 0.2 )) {
-        //     lift = deadBand(lift);
-        //     trim = deadBand(trim);
-        //     l_pidController.setReference(lift + trim, ControlType.kDutyCycle, smartMotionProfile);
-        //     // l_arm.set(lift + trim);
-        //     r_pidController.setReference(lift - trim, ControlType.kDutyCycle, smartMotionProfile);
-        // }
-    }
+    e_RightArm = m_RightArm.getEncoder();
+    e_LeftArm = m_LeftArm.getEncoder();
 
 
-    public void startArmSmartMotion() {
-        l_pidController.setReference(pid_setPoint, CANSparkMax.ControlType.kSmartMotion, smartMotionProfile);
-        r_pidController.setReference(pid_setPoint, CANSparkMax.ControlType.kSmartMotion, smartMotionProfile);
-    }
-   
+    m_constraints = new TrapezoidProfile.Constraints(maxVel, maxAcc);
+    m_controller = new ProfiledPIDController(kP, kI, kD, m_constraints, kDt);
 
-    public void extendArms() {
-        
-        pid_setPoint+=16;
-        
-    }
+  }
 
-    public void retractArms() {
-        
-        pid_setPoint-=16;
-        
-    }
+  @Override
+  public void periodic() {
+    // Smart Dashboard Items
+    SmartDashboard.putNumber("Right Climber Height", getRightHeight());
+    SmartDashboard.putNumber("Left Climber Height", getLeftHeight());
+    SmartDashboard.putBoolean("Right Climber at Set Height", isAtHeightRight());
+    SmartDashboard.putBoolean("Left Climber at Set Height", isAtHeightLeft());
+    SmartDashboard.putNumber("Climber Height Setpoint", getHeightSetpoint());
+    SmartDashboard.putNumber("Right Climb Arm Velocity", e_RightArm.getVelocity());
+    SmartDashboard.putNumber("Left Climb Arm Velocity", e_LeftArm.getVelocity());
+    SmartDashboard.putNumber("Right Climber Amps", m_RightArm.getOutputCurrent());
+    SmartDashboard.putNumber("Left Climber Amps", m_LeftArm.getOutputCurrent());
 
-    public void setArmPidSetPoint(double setPoint){
-        pid_setPoint=setPoint;
-    }
+  }
 
-    public void setClimbModeTrue(){
-        climbMode = true;
-    }
+  public double getRightHeight() {
+    return e_RightArm.getPosition();
+  }
 
-    public void setClimbModeFalse(){
-        climbMode = false;
+  public double getLeftHeight() {
+    return e_LeftArm.getPosition();
+  }
 
-    }
+  public boolean isAtHeightRight() {
+    double error = getRightHeight() - heightSetpoint;
+    return (Math.abs(error) < allowableError);
+  }
+
+   public boolean isAtHeightLeft() {
+    double error = getLeftHeight() - heightSetpoint;
+    return (Math.abs(error) < allowableError);
+  }
+
+  public double getHeightSetpoint() {
+    return heightSetpoint;
+  }
+
+  public void setHeightSetpoint(double setPoint) {
+    heightSetpoint = setPoint;
+  }
+
+  public void manualRightArm(double move) {
+    m_RightArm.set(move);
+  }
+
+  public void manualLeftArm(double move) {
+    m_LeftArm.set(move);
+  }
+
+  public void manualAll(double move){
+    manualRightArm(move);
+    manualLeftArm(move);
+  }
+
+  public void resetController() {
+    m_controller.reset(e_RightArm.getPosition());
+    m_controller.reset(e_LeftArm.getPosition());
+
+  }
+
+  public void stopRightArm() {
+    m_RightArm.set(0.0);
+  }
+
+  public void stopLeftArm() {
+    m_LeftArm.set(0.0);
+  }
+
+  public void stopAll(){
+    stopRightArm();
+    stopLeftArm();
+  }
+
+  public void closedLoopElevator() {
+    m_RightArm.set(m_controller.calculate(e_RightArm.getPosition(), heightSetpoint));
+    m_LeftArm.set(m_controller.calculate(e_LeftArm.getPosition(), heightSetpoint));
+  }
+
 }
