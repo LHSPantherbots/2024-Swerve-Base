@@ -47,4 +47,8 @@ public class Intake extends SubsystemBase {
         m_IntakeFront.set(0);
     }
 
+    public double getCurrent(){
+        return m_IntakeFront.getOutputCurrent();
+    }
+
 }
