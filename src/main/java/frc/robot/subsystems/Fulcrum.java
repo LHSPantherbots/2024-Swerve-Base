@@ -101,6 +101,10 @@ public double getPosition(){
     return e_FulcrumEncoder.getPosition();
 }
 
+public void resetController() {
+    m_Controller.reset(e_FulcrumEncoder.getPosition());
+}
+
 public boolean isAtPoint(){
     double error = getPosition() - setPoint;
     return (Math.abs(error) < allowableError);
