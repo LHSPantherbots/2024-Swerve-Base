@@ -31,7 +31,7 @@ public class ShootCmd extends Command {
             this.feader.stopAll();
         }
 
-        if (this.launcher.getCurrent()>curentSpikeLevel) {
+        if (this.launcher.getCurrent() > curentSpikeLevel) {
             this.currentSpikeDetected = true;
         }
     }
@@ -46,5 +46,5 @@ public class ShootCmd extends Command {
     public boolean isFinished() {
         return this.currentSpikeDetected;
     }
-    
+
 }

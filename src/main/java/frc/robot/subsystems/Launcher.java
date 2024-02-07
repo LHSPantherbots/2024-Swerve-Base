@@ -11,39 +11,35 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LauncherConstants;
 
 public class Launcher extends SubsystemBase {
-    
-        private final CANSparkFlex m_LauncherTop;
-        private final CANSparkFlex m_LauncherBottom;
-        private final RelativeEncoder m_LauncherEncoder;
 
-        private double lastSetpoint = 0;
-        private double setPoint = 0;
+    private final CANSparkFlex m_LauncherTop;
+    private final CANSparkFlex m_LauncherBottom;
+    private final RelativeEncoder m_LauncherEncoder;
 
-        public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, allowableError;
-        private SparkPIDController pidController;
+    private double lastSetpoint = 0;
+    private double setPoint = 0;
 
-        public Launcher(){
+    public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, allowableError;
+    private SparkPIDController pidController;
+
+    public Launcher() {
         m_LauncherTop = new CANSparkFlex(LauncherConstants.kLauncherTop, MotorType.kBrushless);
         m_LauncherBottom = new CANSparkFlex(LauncherConstants.kLauncherBottom, MotorType.kBrushless);
 
         m_LauncherTop.restoreFactoryDefaults();
         m_LauncherBottom.restoreFactoryDefaults();
 
-
         m_LauncherTop.setInverted(false);
         m_LauncherBottom.setInverted(false);
-
 
         m_LauncherTop.setIdleMode(IdleMode.kBrake);
         m_LauncherBottom.setIdleMode(IdleMode.kBrake);
 
-
         m_LauncherTop.setSmartCurrentLimit(60);
         m_LauncherBottom.setSmartCurrentLimit(60);
 
-
         m_LauncherBottom.follow(m_LauncherTop);
-        //m_LauncherTop.setClosedLoopRampRate(0.25);
+        // m_LauncherTop.setClosedLoopRampRate(0.25);
 
         m_LauncherEncoder = m_LauncherTop.getEncoder();
 
@@ -70,7 +66,7 @@ public class Launcher extends SubsystemBase {
     }
 
     @Override
-    public void periodic(){
+    public void periodic() {
 
     }
 
@@ -81,39 +77,45 @@ public class Launcher extends SubsystemBase {
         pidController.setIZone(kI);
         pidController.setFF(kFF);
         pidController.setOutputRange(kMinOutput, kMaxOutput);
-    
-    
-        pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
-        }
 
-    public void launcherRpmUp(){
+        pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
+    }
+
+    public void launcherRpmUp() {
         lastSetpoint = setPoint;
         setPoint = setPoint + 250;
         closedLoopLaunch();
 
     }
 
-    public void launcherRpmDown(){
+    public void launcherRpmDown() {
         lastSetpoint = setPoint;
-        setPoint = setPoint -250;
+        setPoint = setPoint - 250;
         closedLoopLaunch();
     }
 
-    public void lancherMaxSpeed(){
-        lastSetpoint= setPoint;
+    public void lancherMaxSpeed() {
+        lastSetpoint = setPoint;
         setPoint = 6000;
         closedLoopLaunch();
     }
 
-    public void stopLauncher(){
+    public void stopLauncher() {
         lastSetpoint = setPoint;
         setPoint = 0;
         closedLoopLaunch();
     }
 
-    public void stopAll(){
+    public void stopAll() {
         lastSetpoint = setPoint;
         setPoint = 0;
+        closedLoopLaunch();
+    }
+
+    public void resumeLauncher() {
+        var tmp = setPoint;
+        setPoint = lastSetpoint;
+        lastSetpoint = tmp;
         closedLoopLaunch();
     }
 
@@ -125,6 +127,5 @@ public class Launcher extends SubsystemBase {
     public double getCurrent() {
         return m_LauncherTop.getOutputCurrent();
     }
-            
 
 }

@@ -22,7 +22,6 @@ import frc.robot.subsystems.Fulcrum;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Leds;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -43,13 +42,11 @@ public class RobotContainer {
   private final Fulcrum fulcrum = new Fulcrum();
 
   // The driver's controller
-  //XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-    // The driver's controller
-  CommandXboxController m_driverController =
-      new CommandXboxController(OIConstants.kDriverControllerPort);
-      CommandXboxController operatorController =
-       new CommandXboxController(OIConstants.kOperatorControllerPort);
-
+  // XboxController m_driverController = new
+  // XboxController(OIConstants.kDriverControllerPort);
+  // The driver's controller
+  CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+  CommandXboxController operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -67,7 +64,7 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband((m_driverController.getRightTriggerAxis()
-                - m_driverController.getLeftTriggerAxis()), OIConstants.kDriveDeadband),
+                    - m_driverController.getLeftTriggerAxis()), OIConstants.kDriveDeadband),
                 true, true),
             m_robotDrive));
 
@@ -85,20 +82,22 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_driverController.rightBumper().whileTrue(new RunCommand(()->m_robotDrive.setX(), m_robotDrive));
+    m_driverController.rightBumper().whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
 
-    m_driverController.a().whileTrue(new RunCommand(()->leds.green(), leds));
-    m_driverController.b().whileTrue(new RunCommand(()->leds.red(), leds)); 
-    m_driverController.x().onTrue(new RunCommand(()->leds.rainbow(), leds));
-    
-    m_driverController.y().whileTrue(new RunCommand(()->leds.blueStreak(), leds));
+    m_driverController.a().whileTrue(new RunCommand(() -> leds.green(), leds));
+    m_driverController.b().whileTrue(new RunCommand(() -> leds.red(), leds));
+    m_driverController.x().onTrue(new RunCommand(() -> leds.rainbow(), leds));
 
-    operatorController.a().whileTrue(new RunCommand(()->intake.intake(), intake)).onFalse(new RunCommand(()->intake.intakeStop(), intake));
-    operatorController.b().whileTrue(new RunCommand(()->intake.outtake(), intake)).onFalse(new RunCommand(()->intake.intakeStop(), intake));
-    operatorController.x().whileTrue(new RunCommand(() ->fulcrum.manualFulcrum(.5), fulcrum));   
+    m_driverController.y().whileTrue(new RunCommand(() -> leds.blueStreak(), leds));
+
+    operatorController.a().whileTrue(new RunCommand(() -> intake.intake(), intake))
+        .onFalse(new RunCommand(() -> intake.intakeStop(), intake));
+    operatorController.b().whileTrue(new RunCommand(() -> intake.outtake(), intake))
+        .onFalse(new RunCommand(() -> intake.intakeStop(), intake));
+    operatorController.x().whileTrue(new RunCommand(() -> fulcrum.manualFulcrum(.5), fulcrum));
 
     // new JoystickButton(operatorController, GamePadButtons.Start)
-    //             .whileTrue(new InstantCommand(driveTrain::resetAll, driveTrain));
+    // .whileTrue(new InstantCommand(driveTrain::resetAll, driveTrain));
   }
 
   /**

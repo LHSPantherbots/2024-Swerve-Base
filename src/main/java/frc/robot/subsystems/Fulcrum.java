@@ -27,14 +27,13 @@ public class Fulcrum extends SubsystemBase {
     private final TrapezoidProfile.Constraints m_Constraints;
     private final ProfiledPIDController m_Controller;
 
-
-    public Fulcrum(){
+    public Fulcrum() {
         m_FulcrumRight = new CANSparkMax(FulcrumConstants.kFulcrumRight, MotorType.kBrushless);
         m_FulcrumLeft = new CANSparkMax(FulcrumConstants.kFulcrumLeft, MotorType.kBrushless);
-         
+
         m_FulcrumRight.restoreFactoryDefaults();
         m_FulcrumLeft.restoreFactoryDefaults();
-         
+
         m_FulcrumRight.setInverted(false);
         m_FulcrumLeft.setInverted(false);
 
@@ -65,7 +64,7 @@ public class Fulcrum extends SubsystemBase {
         maxRPM = 5700;
         allowableError = 100; // 50 //Lets the system known when the velocity is close enough to launch
 
-        m_Constraints = new TrapezoidProfile.Constraints(90,90);
+        m_Constraints = new TrapezoidProfile.Constraints(90, 90);
         m_Controller = new ProfiledPIDController(kP, kI, kD, m_Constraints, kDt);
 
         // set PID coefficients
@@ -75,79 +74,79 @@ public class Fulcrum extends SubsystemBase {
         pidController.setIZone(kIz);
         pidController.setFF(kFF);
         pidController.setOutputRange(kMinOutput, kMaxOutput);
-}
+    }
 
-@Override
-public void periodic(){    
-    SmartDashboard.putBoolean("Fulcrum is at Set Point", isAtPoint());
-    SmartDashboard.putNumber("Fulcrum Velocity", e_FulcrumEncoder.getVelocity());
-}
+    @Override
+    public void periodic() {
+        SmartDashboard.putBoolean("Fulcrum is at Set Point", isAtPoint());
+        SmartDashboard.putNumber("Fulcrum Velocity", e_FulcrumEncoder.getVelocity());
+    }
 
-public void manualFulcrum(double move){
-    //an if statment may need to be added to keep the fulcrum from going too far in any given direction
-    m_FulcrumRight.set(move);
-}
+    public void manualFulcrum(double move) {
+        // an if statment may need to be added to keep the fulcrum from going too far in
+        // any given direction
+        m_FulcrumRight.set(move);
+    }
 
-public void manualFulcrumLeft(double move){
-    m_FulcrumLeft.set(move);
-}
+    public void manualFulcrumLeft(double move) {
+        m_FulcrumLeft.set(move);
+    }
 
-public void stopFulcrum(){
-    m_FulcrumLeft.set(0.0);
-    m_FulcrumRight.set(0.0);
-}
+    public void stopFulcrum() {
+        m_FulcrumLeft.set(0.0);
+        m_FulcrumRight.set(0.0);
+    }
 
-public double getPosition(){
-    return e_FulcrumEncoder.getPosition();
-}
+    public double getPosition() {
+        return e_FulcrumEncoder.getPosition();
+    }
 
-public void resetController() {
-    m_Controller.reset(e_FulcrumEncoder.getPosition());
-}
+    public void resetController() {
+        m_Controller.reset(e_FulcrumEncoder.getPosition());
+    }
 
-public boolean isAtPoint(){
-    double error = getPosition() - setPoint;
-    return (Math.abs(error) < allowableError);
-}
+    public boolean isAtPoint() {
+        double error = getPosition() - setPoint;
+        return (Math.abs(error) < allowableError);
+    }
 
-public void stop(){
-    m_FulcrumRight.set(0.0);
-}
+    public void stop() {
+        m_FulcrumRight.set(0.0);
+    }
 
-public double getSetPoint(){
-    return setPoint;
-}
+    public double getSetPoint() {
+        return setPoint;
+    }
 
-public double getLastSetPoint(){
-    return lastSetpoint;
-}
+    public double getLastSetPoint() {
+        return lastSetpoint;
+    }
 
-public void setSetPoint(double point){
-    lastSetpoint = setPoint;
-    setPoint = point;
-}
+    public void setSetPoint(double point) {
+        lastSetpoint = setPoint;
+        setPoint = point;
+    }
 
-public void setHorizontalHeight(){
-    lastSetpoint = setPoint;
-    //setPoint = tbd
-    //closedLoopFulcrum(); this may or may not be needed
-}
+    public void setHorizontalHeight() {
+        lastSetpoint = setPoint;
+        // setPoint = tbd
+        // closedLoopFulcrum(); this may or may not be needed
+    }
 
-public void setAmpHeight(){
-    lastSetpoint = setPoint;
-    //setPoint = tbd
-    //closedLoopFulcrum(); this may or may not be needed
-}
+    public void setAmpHeight() {
+        lastSetpoint = setPoint;
+        // setPoint = tbd
+        // closedLoopFulcrum(); this may or may not be needed
+    }
 
-public void setSpeakerHeight(){
-    lastSetpoint = setPoint;
-    //setPoint = tbd
-    //closedLoopFulcrum(); this may or may not be needed
-}
+    public void setSpeakerHeight() {
+        lastSetpoint = setPoint;
+        // setPoint = tbd
+        // closedLoopFulcrum(); this may or may not be needed
+    }
 
-public void closedLoopFulcrum(){
-    m_FulcrumRight.set(m_Controller.calculate(e_FulcrumEncoder.getPosition(), setPoint));
-}
-
+    public void closedLoopFulcrum() {
+        m_FulcrumRight.set(m_Controller.calculate(e_FulcrumEncoder.getPosition(), setPoint));
+    }
 
 }

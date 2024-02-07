@@ -11,7 +11,7 @@ public class Intake extends SubsystemBase {
     private final CANSparkMax m_IntakeFront;
     private final CANSparkMax m_IntakeBack;
 
-    public Intake(){
+    public Intake() {
         m_IntakeFront = new CANSparkMax(IntakeConstants.kFrontIntake, MotorType.kBrushless);
         m_IntakeBack = new CANSparkMax(IntakeConstants.kBackIntake, MotorType.kBrushless);
 
@@ -31,23 +31,23 @@ public class Intake extends SubsystemBase {
     }
 
     @Override
-    public void periodic(){
+    public void periodic() {
 
     }
 
-    public void intake(){
+    public void intake() {
         m_IntakeFront.set(.7);
     }
 
-    public void outtake(){
+    public void outtake() {
         m_IntakeFront.set(-.7);
     }
 
-    public void intakeStop(){
+    public void intakeStop() {
         m_IntakeFront.set(0);
     }
 
-    public double getCurrent(){
+    public double getCurrent() {
         return m_IntakeFront.getOutputCurrent();
     }
 
