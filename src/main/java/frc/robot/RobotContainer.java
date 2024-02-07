@@ -18,6 +18,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Fulcrum;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Leds;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,6 +40,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final Intake intake = new Intake();
   public static final Leds leds = new Leds();
+  private final Fulcrum fulcrum = new Fulcrum();
 
   // The driver's controller
   //XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -70,6 +72,7 @@ public class RobotContainer {
             m_robotDrive));
 
     leds.setDefaultCommand(new RunCommand(() -> leds.pantherStreak(), leds));
+    fulcrum.setDefaultCommand(new RunCommand(() -> fulcrum.stopFulcrum(), fulcrum));
   }
 
   /**
@@ -86,11 +89,13 @@ public class RobotContainer {
 
     m_driverController.a().whileTrue(new RunCommand(()->leds.green(), leds));
     m_driverController.b().whileTrue(new RunCommand(()->leds.red(), leds)); 
-    m_driverController.x().onTrue(new RunCommand(()->leds.rainbow(), leds));   
+    m_driverController.x().onTrue(new RunCommand(()->leds.rainbow(), leds));
+    
     m_driverController.y().whileTrue(new RunCommand(()->leds.blueStreak(), leds));
 
     operatorController.a().whileTrue(new RunCommand(()->intake.intake(), intake)).onFalse(new RunCommand(()->intake.intakeStop(), intake));
     operatorController.b().whileTrue(new RunCommand(()->intake.outtake(), intake)).onFalse(new RunCommand(()->intake.intakeStop(), intake));
+    operatorController.x().whileTrue(new RunCommand(() ->fulcrum.manualFulcrum(.5), fulcrum));   
 
     // new JoystickButton(operatorController, GamePadButtons.Start)
     //             .whileTrue(new InstantCommand(driveTrain::resetAll, driveTrain));

@@ -41,13 +41,13 @@ public class Fulcrum extends SubsystemBase {
         m_FulcrumRight.setIdleMode(IdleMode.kBrake);
         m_FulcrumLeft.setIdleMode(IdleMode.kBrake);
 
-        m_FulcrumRight.setSmartCurrentLimit(60);
-        m_FulcrumLeft.setSmartCurrentLimit(60);
+        m_FulcrumRight.setSmartCurrentLimit(25);
+        m_FulcrumLeft.setSmartCurrentLimit(25);
 
         m_FulcrumRight.setClosedLoopRampRate(0.25);
         m_FulcrumLeft.setClosedLoopRampRate(0.25);
 
-        m_FulcrumLeft.follow(m_FulcrumRight);
+        m_FulcrumLeft.follow(m_FulcrumRight, true);
 
         pidController = m_FulcrumRight.getPIDController();
 
@@ -86,6 +86,15 @@ public void periodic(){
 public void manualFulcrum(double move){
     //an if statment may need to be added to keep the fulcrum from going too far in any given direction
     m_FulcrumRight.set(move);
+}
+
+public void manualFulcrumLeft(double move){
+    m_FulcrumLeft.set(move);
+}
+
+public void stopFulcrum(){
+    m_FulcrumLeft.set(0.0);
+    m_FulcrumRight.set(0.0);
 }
 
 public double getPosition(){
