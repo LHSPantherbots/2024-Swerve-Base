@@ -1,28 +1,44 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Intake;
 
 public class IntakeCmd extends Command {
     Intake intake;
-    Double curentSpikeLevel = 10.0;
-    boolean currentSpikeDetected = false;
+    Feeder feeder;
+    boolean noteWasDetected = false;
+    boolean shouldEnd = false;
 
     public IntakeCmd(
-            Intake intake) {
+            Intake intake, Feeder feeder) {
         this.intake = intake;
-        addRequirements(intake);
+        this.feeder = feeder;
+        addRequirements(intake, feeder);
     }
 
     @Override
     public void initialize() {
         this.intake.intake();
+        this.feeder.feed();
     }
 
     @Override
     public void execute() {
-        if (this.intake.getCurrent() > this.curentSpikeLevel) {
-            this.currentSpikeDetected = true;
+        if (this.feeder.isNoteDetected() && !noteWasDetected) {
+            this.noteWasDetected = true;
+        } else if (!this.feeder.isNoteDetected() && noteWasDetected) {
+            this.shouldEnd = true;
+        }
+        if (!noteWasDetected && !shouldEnd) {
+            this.intake.intake();
+            this.feeder.feed();
+        } else if (noteWasDetected && !shouldEnd) {
+            this.intake.intakeStop();
+            this.feeder.reversefeed();
+        } else if (noteWasDetected && shouldEnd) {
+            this.intake.intakeStop();
+            this.feeder.stopAll();
         }
     }
 
@@ -33,7 +49,7 @@ public class IntakeCmd extends Command {
 
     @Override
     public boolean isFinished() {
-        return this.currentSpikeDetected;
+        return this.shouldEnd;
     }
 
 }

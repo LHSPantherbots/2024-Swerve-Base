@@ -55,7 +55,7 @@ public class RobotContainer {
   public RobotContainer() {
 
     NamedCommands.registerCommand("ShootCmd", new ShootCmd(launcher, feeder));
-    NamedCommands.registerCommand("IntakeCmd", new IntakeCmd(intake));
+    NamedCommands.registerCommand("IntakeCmd", new IntakeCmd(intake, feeder));
 
     autoChoice = AutoBuilder.buildAutoChooser();
 
@@ -77,7 +77,7 @@ public class RobotContainer {
             m_robotDrive));
 
     leds.setDefaultCommand(new RunCommand(() -> leds.pantherStreak(), leds));
-    fulcrum.setDefaultCommand(new RunCommand(() -> fulcrum.stopFulcrum(), fulcrum));
+    // fulcrum.setDefaultCommand(new RunCommand(() -> fulcrum.stopFulcrum(), fulcrum));
   }
 
   /**
@@ -98,11 +98,19 @@ public class RobotContainer {
 
     m_driverController.y().whileTrue(new RunCommand(() -> leds.blueStreak(), leds));
 
-    operatorController.a().whileTrue(new RunCommand(() -> intake.intake(), intake))
-        .onFalse(new RunCommand(() -> intake.intakeStop(), intake));
-    operatorController.b().whileTrue(new RunCommand(() -> intake.outtake(), intake))
-        .onFalse(new RunCommand(() -> intake.intakeStop(), intake));
-    operatorController.x().whileTrue(new RunCommand(() -> fulcrum.manualFulcrum(.5), fulcrum));
+    // operatorController.a().whileTrue(new RunCommand(() -> intake.intake(), intake))
+    //     .onFalse(new RunCommand(() -> intake.intakeStop(), intake));
+    // operatorController.b().whileTrue(new RunCommand(() -> intake.outtake(), intake))
+    //     .onFalse(new RunCommand(() -> intake.intakeStop(), intake));
+    // // operatorController.x().whileTrue(new RunCommand(() -> fulcrum.manualFulcrum(.5), fulcrum));
+    // operatorController.x().whileTrue(new RunCommand(() -> feeder.feed(), feeder))
+    //     .onFalse(new RunCommand(()-> feeder.stopAll(), feeder));
+    
+    // operatorController.y().whileTrue(new RunCommand(()-> launcher.lancherMaxSpeed(), launcher))
+    //     .onFalse(new RunCommand(()-> launcher.stopAll(), launcher));
+    operatorController.a().onTrue(new IntakeCmd(intake, feeder));
+    operatorController.b().onTrue(new ShootCmd(launcher, feeder));
+    operatorController.x().onTrue(new RunCommand(() -> launcher.stopAll(), launcher)).onTrue(new RunCommand(() -> feeder.stopAll(), feeder)).onTrue(new RunCommand(() -> intake.intakeStop(), intake));
 
     // new JoystickButton(operatorController, GamePadButtons.Start)
     // .whileTrue(new InstantCommand(driveTrain::resetAll, driveTrain));

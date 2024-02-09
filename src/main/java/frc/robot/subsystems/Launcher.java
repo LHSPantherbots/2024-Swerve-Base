@@ -96,7 +96,7 @@ public class Launcher extends SubsystemBase {
 
     public void lancherMaxSpeed() {
         lastSetpoint = setPoint;
-        setPoint = 6000;
+        setPoint = 4500;
         closedLoopLaunch();
     }
 
