@@ -10,7 +10,6 @@ public class Leds extends SubsystemBase {
 
   private AddressableLED m_led;
   private AddressableLEDBuffer m_ledBuffer;
-  
   // Store what the last hue of the first pixel is
   private int m_rainbowFirstPixelHue;
 
@@ -125,8 +124,7 @@ public class Leds extends SubsystemBase {
 
   public void red() {
     for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      // Sets the specified LED to the RGB values for red
-      m_ledBuffer.setRGB(i, 255, 0, 0);
+      m_ledBuffer.setRGB(i, 255, 0, 0);//red
     }
 
     m_led.setData(m_ledBuffer);
@@ -134,8 +132,7 @@ public class Leds extends SubsystemBase {
 
   public void blue() {
     for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      // Sets the specified LED to the RGB values for blue
-      m_ledBuffer.setRGB(i, 0, 0, 255);
+      m_ledBuffer.setRGB(i, 0, 0, 255);//blue
     }
 
     m_led.setData(m_ledBuffer);
@@ -152,7 +149,7 @@ public class Leds extends SubsystemBase {
 
   public void yellow() {
     for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      // Sets the specified LED to the RGB values for green
+      // Sets the specified LED to the RGB values for yellow
       m_ledBuffer.setRGB(i, 255, 128, 0);
     }
 
@@ -170,7 +167,7 @@ public class Leds extends SubsystemBase {
 
   public void white() {
     for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      // Sets the specified LED to the RGB values for purple
+      // Sets the specified LED to the RGB values for white
       m_ledBuffer.setRGB(i, 255, 255, 255);
     }
 
@@ -246,6 +243,52 @@ public class Leds extends SubsystemBase {
 
     numLoops += 1;
     // Timer.delay(0.2);
+
+  }
+
+  public void PurpleWhiteStrobe(){
+    if (numLoops == 0 || numLoops == 2){
+      for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+      m_ledBuffer.setRGB(i, 0, 0, 0); //black
+      }
+    }
+    else if (numLoops == 1){
+      for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+      m_ledBuffer.setRGB(i, 255, 255, 255); //white
+      }
+    }
+    else{
+      for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+      m_ledBuffer.setRGB(i, 148, 0, 211); //purple
+      }
+    }
+
+    numLoops++;
+    numLoops %= 4;
+  }
+
+  public void PinkYellowStreak(){
+    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
+      m_ledBuffer.setRGB(i, 245, 34,195); //pink
+      if (i % 2 == index){
+        m_ledBuffer.setRGB(i, 239, 239, 32); //yellow
+      }
+      
+    }
+  /*  for (int i = index; i < m_ledBuffer.getLength(); i += 2) {
+      m_ledBuffer.setRGB(i, 239, 239, 32);
+    }
+*/
+    if (numLoops % 10 == 0) {
+      index++;
+      index = index % 2;
+      numLoops = 0;
+    }
+
+    numLoops++;
+
+    m_led.setData(m_ledBuffer);
+
 
   }
 }
