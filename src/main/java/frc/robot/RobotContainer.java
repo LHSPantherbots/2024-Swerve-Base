@@ -117,7 +117,7 @@ public class RobotContainer {
     
     // operatorController.y().whileTrue(new RunCommand(()-> launcher.lancherMaxSpeed(), launcher))
     //     .onFalse(new RunCommand(()-> launcher.stopAll(), launcher));
-    operatorController.a().whileTrue(new IntakeCmd2(intake, feeder));
+    operatorController.a().whileTrue(new IntakeCmd2(intake, feeder, fulcrum));
     operatorController.b().onTrue(new ShootCmd(launcher, feeder));
     operatorController.x().onTrue(new RunCommand(() -> launcher.stopAll(), launcher)).onTrue(new RunCommand(() -> feeder.stopAll(), feeder)).onTrue(new RunCommand(() -> intake.intakeStop(), intake));
 
