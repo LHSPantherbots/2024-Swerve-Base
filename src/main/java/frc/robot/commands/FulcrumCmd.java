@@ -32,16 +32,16 @@ public class FulcrumCmd extends Command {
         this.fulcrum.resetController();
         switch (this.position) {
             case STOW:
-                this.fulcrum.setSetPoint(10);
-                break;
-            case INTAKE:
                 this.fulcrum.setSetPoint(45);
                 break;
+            case INTAKE:
+                this.fulcrum.setSetPoint(9);
+                break;
             case AMP:
-                this.fulcrum.setSetPoint(27);
+                this.fulcrum.setSetPoint(90);
                 break;
             case SPEAKER:
-                this.fulcrum.setSetPoint(20);
+                this.fulcrum.setSetPoint(27);
                 break;
         }
     }

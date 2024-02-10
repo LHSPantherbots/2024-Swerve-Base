@@ -9,8 +9,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.FeedHoldCmd;
 import frc.robot.commands.FulcrumCmd;
 import frc.robot.commands.IntakeCmd;
+import frc.robot.commands.IntakeCmd2;
 import frc.robot.commands.ShootCmd;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Feeder;
@@ -57,7 +59,8 @@ public class RobotContainer {
   public RobotContainer() {
 
     NamedCommands.registerCommand("ShootCmd", new ShootCmd(launcher, feeder));
-    NamedCommands.registerCommand("IntakeCmd", new IntakeCmd(intake, feeder));
+    //NamedCommands.registerCommand("IntakeCmd", new IntakeCmd(intake, feeder));
+    NamedCommands.registerCommand("IntakeCmd2", new IntakeCmd(intake, feeder));
 
     autoChoice = AutoBuilder.buildAutoChooser();
 
@@ -82,6 +85,8 @@ public class RobotContainer {
     // fulcrum.setDefaultCommand(new RunCommand(() -> fulcrum.stopFulcrum(), fulcrum));
 
     fulcrum.setDefaultCommand(new RunCommand(() -> fulcrum.manualFulcrum(operatorController.getRightY()*0.5), fulcrum));
+  
+    feeder.setDefaultCommand(new FeedHoldCmd(feeder));
   }
 
   /**
@@ -112,11 +117,13 @@ public class RobotContainer {
     
     // operatorController.y().whileTrue(new RunCommand(()-> launcher.lancherMaxSpeed(), launcher))
     //     .onFalse(new RunCommand(()-> launcher.stopAll(), launcher));
-    operatorController.a().onTrue(new IntakeCmd(intake, feeder));
+    operatorController.a().whileTrue(new IntakeCmd2(intake, feeder));
     operatorController.b().onTrue(new ShootCmd(launcher, feeder));
     operatorController.x().onTrue(new RunCommand(() -> launcher.stopAll(), launcher)).onTrue(new RunCommand(() -> feeder.stopAll(), feeder)).onTrue(new RunCommand(() -> intake.intakeStop(), intake));
 
     operatorController.pov(0).onTrue(new FulcrumCmd(Position.AMP, fulcrum, false));
+    operatorController.pov(270).onTrue(new FulcrumCmd(Position.STOW, fulcrum, false));
+    operatorController.pov(90).onTrue(new FulcrumCmd(Position.SPEAKER, fulcrum, false));
     operatorController.pov(180).onTrue(new FulcrumCmd(Position.INTAKE, fulcrum, false));
     
 
