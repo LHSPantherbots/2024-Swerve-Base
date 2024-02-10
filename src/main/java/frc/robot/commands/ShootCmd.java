@@ -28,12 +28,12 @@ public class ShootCmd extends Command {
         if (this.launcher.isAtVelocity()) {
             this.feader.feed();
         } else {
-            this.feader.stopAll();
+            // this.feader.stopAll();
         }
 
-        if (this.launcher.getCurrent() > curentSpikeLevel) {
-            this.currentSpikeDetected = true;
-        }
+        // if (this.launcher.getCurrent() > curentSpikeLevel) {
+        //     this.currentSpikeDetected = true;
+        // }
     }
 
     @Override

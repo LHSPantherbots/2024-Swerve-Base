@@ -23,6 +23,10 @@ public class FulcrumCmd extends Command {
         addRequirements(fulcrum);
     }
 
+    /*
+     * 27deg - 98in - 4500rpm
+     */
+
     @Override
     public void initialize() {
         this.fulcrum.resetController();
@@ -31,10 +35,10 @@ public class FulcrumCmd extends Command {
                 this.fulcrum.setSetPoint(10);
                 break;
             case INTAKE:
-                this.fulcrum.setSetPoint(15);
+                this.fulcrum.setSetPoint(45);
                 break;
             case AMP:
-                this.fulcrum.setSetPoint(90);
+                this.fulcrum.setSetPoint(27);
                 break;
             case SPEAKER:
                 this.fulcrum.setSetPoint(20);

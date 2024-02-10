@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.FulcrumCmd;
 import frc.robot.commands.IntakeCmd;
 import frc.robot.commands.ShootCmd;
 import frc.robot.subsystems.DriveSubsystem;
@@ -17,6 +18,7 @@ import frc.robot.subsystems.Fulcrum;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Leds;
+import frc.utils.Position;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -78,6 +80,8 @@ public class RobotContainer {
 
     leds.setDefaultCommand(new RunCommand(() -> leds.pantherStreak(), leds));
     // fulcrum.setDefaultCommand(new RunCommand(() -> fulcrum.stopFulcrum(), fulcrum));
+
+    fulcrum.setDefaultCommand(new RunCommand(() -> fulcrum.manualFulcrum(operatorController.getRightY()*0.5), fulcrum));
   }
 
   /**
@@ -111,6 +115,10 @@ public class RobotContainer {
     operatorController.a().onTrue(new IntakeCmd(intake, feeder));
     operatorController.b().onTrue(new ShootCmd(launcher, feeder));
     operatorController.x().onTrue(new RunCommand(() -> launcher.stopAll(), launcher)).onTrue(new RunCommand(() -> feeder.stopAll(), feeder)).onTrue(new RunCommand(() -> intake.intakeStop(), intake));
+
+    operatorController.pov(0).onTrue(new FulcrumCmd(Position.AMP, fulcrum, false));
+    operatorController.pov(180).onTrue(new FulcrumCmd(Position.INTAKE, fulcrum, false));
+    
 
     // new JoystickButton(operatorController, GamePadButtons.Start)
     // .whileTrue(new InstantCommand(driveTrain::resetAll, driveTrain));

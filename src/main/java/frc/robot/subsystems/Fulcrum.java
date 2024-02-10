@@ -4,6 +4,8 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkAbsoluteEncoder;
+import com.revrobotics.SparkAbsoluteEncoder.Type;
 import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -22,7 +24,7 @@ public class Fulcrum extends SubsystemBase {
     public double kP, kI, kD, kIz, kFF, kDt, kMaxOutput, kMinOutput, maxRPM, allowableError;
     private SparkPIDController pidController;
 
-    RelativeEncoder e_FulcrumEncoder;
+    SparkAbsoluteEncoder e_FulcrumEncoder;
 
     private final TrapezoidProfile.Constraints m_Constraints;
     private final ProfiledPIDController m_Controller;
@@ -40,31 +42,32 @@ public class Fulcrum extends SubsystemBase {
         m_FulcrumRight.setIdleMode(IdleMode.kBrake);
         m_FulcrumLeft.setIdleMode(IdleMode.kBrake);
 
-        m_FulcrumRight.setSmartCurrentLimit(25);
-        m_FulcrumLeft.setSmartCurrentLimit(25);
+        m_FulcrumRight.setSmartCurrentLimit(40);
+        m_FulcrumLeft.setSmartCurrentLimit(40);
 
-        m_FulcrumRight.setClosedLoopRampRate(0.25);
-        m_FulcrumLeft.setClosedLoopRampRate(0.25);
+        // m_FulcrumRight.setClosedLoopRampRate(0.25);
+        // m_FulcrumLeft.setClosedLoopRampRate(0.25);
 
         m_FulcrumLeft.follow(m_FulcrumRight, true);
 
         pidController = m_FulcrumRight.getPIDController();
 
-        e_FulcrumEncoder = m_FulcrumRight.getEncoder();
+        e_FulcrumEncoder = m_FulcrumRight.getAbsoluteEncoder(Type.kDutyCycle);
+        e_FulcrumEncoder.setPositionConversionFactor(360.0);
 
         // PID coefficients these will need to be tuned
-        kP = 0.00015;// 0.00025; //5e-5;
+        kP = 0.025;// 0.00025; //5e-5;
         kI = 0;// 1e-6;
-        kD = 0.0008;// 0.0004;
+        kD = 0.0000;// 0.0004;
         kIz = 0;
-        kFF = 0.00017;// 0.00019;
-        kDt = 0.02;
+        kFF = 0.0;// 0.00019;
+        kDt = 0.06;
         kMaxOutput = 1;
         kMinOutput = -1;
         maxRPM = 5700;
         allowableError = 100; // 50 //Lets the system known when the velocity is close enough to launch
 
-        m_Constraints = new TrapezoidProfile.Constraints(90, 90);
+        m_Constraints = new TrapezoidProfile.Constraints(90, 45);
         m_Controller = new ProfiledPIDController(kP, kI, kD, m_Constraints, kDt);
 
         // set PID coefficients
@@ -80,6 +83,9 @@ public class Fulcrum extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putBoolean("Fulcrum is at Set Point", isAtPoint());
         SmartDashboard.putNumber("Fulcrum Velocity", e_FulcrumEncoder.getVelocity());
+        SmartDashboard.putNumber("Fulcrum Output", m_FulcrumRight.getAppliedOutput());
+        SmartDashboard.putNumber("Fulcrum Setpoint", setPoint);
+        SmartDashboard.putNumber("Fulcrum Pos", e_FulcrumEncoder.getPosition());
     }
 
     public void manualFulcrum(double move) {
