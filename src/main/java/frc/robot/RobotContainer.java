@@ -14,6 +14,7 @@ import frc.robot.commands.FulcrumCmd;
 import frc.robot.commands.IntakeCmd;
 import frc.robot.commands.IntakeCmd2;
 import frc.robot.commands.ShootCmd;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Fulcrum;
@@ -22,6 +23,7 @@ import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Leds;
 import frc.utils.Position;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -43,6 +45,7 @@ public class RobotContainer {
   private final Fulcrum fulcrum = new Fulcrum();
   private final Launcher launcher = new Launcher();
   private final Feeder feeder = new Feeder();
+  private final Climb climb = new Climb();
 
   // The driver's controller
   // XboxController m_driverController = new
@@ -87,6 +90,7 @@ public class RobotContainer {
     fulcrum.setDefaultCommand(new RunCommand(() -> fulcrum.manualFulcrum(operatorController.getRightY()*0.5), fulcrum));
   
     feeder.setDefaultCommand(new FeedHoldCmd(feeder));
+    climb.setDefaultCommand(new RunCommand(()-> climb.manualAll(0, 0), climb));
   }
 
   /**
@@ -106,7 +110,9 @@ public class RobotContainer {
     m_driverController.x().onTrue(new RunCommand(() -> leds.rainbow(), leds));
 
     m_driverController.y().whileTrue(new RunCommand(() -> leds.blueStreak(), leds));
-
+    m_driverController.start().onTrue(new InstantCommand(()->m_robotDrive.zeroHeading()));
+    m_driverController.leftBumper().whileTrue(
+        new RunCommand(()->climb.manualAll(-m_driverController.getRightY(),-m_driverController.getRightX()), climb));
     // operatorController.a().whileTrue(new RunCommand(() -> intake.intake(), intake))
     //     .onFalse(new RunCommand(() -> intake.intakeStop(), intake));
     // operatorController.b().whileTrue(new RunCommand(() -> intake.outtake(), intake))
@@ -117,9 +123,10 @@ public class RobotContainer {
     
     // operatorController.y().whileTrue(new RunCommand(()-> launcher.lancherMaxSpeed(), launcher))
     //     .onFalse(new RunCommand(()-> launcher.stopAll(), launcher));
-    operatorController.a().whileTrue(new IntakeCmd2(intake, feeder));
+    operatorController.a().whileTrue(new FulcrumCmd(Position.INTAKE, fulcrum, false).alongWith(new IntakeCmd2(intake, feeder, leds, fulcrum)));
     operatorController.b().onTrue(new ShootCmd(launcher, feeder));
     operatorController.x().onTrue(new RunCommand(() -> launcher.stopAll(), launcher)).onTrue(new RunCommand(() -> feeder.stopAll(), feeder)).onTrue(new RunCommand(() -> intake.intakeStop(), intake));
+    operatorController.y().whileTrue(new RunCommand(()-> feeder.reversefeed(), feeder));
 
     operatorController.pov(0).onTrue(new FulcrumCmd(Position.AMP, fulcrum, false));
     operatorController.pov(270).onTrue(new FulcrumCmd(Position.STOW, fulcrum, false));
