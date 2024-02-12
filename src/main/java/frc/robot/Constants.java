@@ -164,4 +164,46 @@ public final class Constants {
   public static final class RIO_Channels_DIO {
     public static final int FEEDER_BEAM_BREAK = 0;
   }
+
+  public static final class LEDs{
+    public static final int purple_Red = 0;
+    public static final int purple_Green = 0;
+    public static final int purple_Blue = 0;
+    public static final int purple_Hue = 0;
+    public static final int purple_Sat = 0;
+    public static final int purple_Val = 0;
+
+    public static final int yellow_Red = 0;
+    public static final int yellow_Green = 0;
+    public static final int yellow_Blue = 0;
+    public static final int yellow_Hue = 0;
+    public static final int yellow_Sat = 0;
+    public static final int yellow_Val = 0;
+
+    public static final int orange_Red = 0;
+    public static final int orange_Green = 0;
+    public static final int orange_Blue = 0;
+    public static final int orange_Hue = 0;
+    public static final int orange_Sat = 0;
+    public static final int orange_Val = 0;
+
+    public static final int red_Hue = 0;
+    public static final int red_Sat = 100;
+    public static final int red_Val = 100;
+
+    public static final int blue_Hue = 240;
+    public static final int blue_Sat = 100;
+    public static final int blue_Val = 100;
+
+    public static final int green_Hue = 240;
+    public static final int green_Sat = 100;
+    public static final int green_Val = 100;
+
+    public static final int Red = 255;
+    public static final int Green = 255;
+    public static final int Blue = 255;
+    public static final int white_Hue = 0;
+    public static final int white_Sat = 0;
+    public static final int white_Val = 100;
+  }
 }
