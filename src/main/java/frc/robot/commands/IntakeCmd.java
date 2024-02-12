@@ -9,6 +9,7 @@ public class IntakeCmd extends Command {
     Feeder feeder;
     boolean noteWasDetected = false;
     boolean shouldEnd = false;
+    
 
     public IntakeCmd(
             Intake intake, Feeder feeder) {

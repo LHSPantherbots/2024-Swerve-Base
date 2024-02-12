@@ -16,10 +16,12 @@ public class FeedHoldCmd extends Command {
     addRequirements(m_feeder);
   }
 
+  
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_feeder.resetEncoder();
+    m_feeder.closedLoopFeeder();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
