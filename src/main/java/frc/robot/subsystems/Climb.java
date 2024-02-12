@@ -55,7 +55,7 @@ public class Climb extends SubsystemBase {
     m_LeftArm.setIdleMode(IdleMode.kBrake);
 
     // Flip these if the elevator goes the wrong direction
-    m_RightArm.setInverted(false);
+    m_RightArm.setInverted(true);
     m_LeftArm.setInverted(false);
 
 
@@ -117,9 +117,9 @@ public class Climb extends SubsystemBase {
     m_LeftArm.set(move);
   }
 
-  public void manualAll(double move){
-    manualRightArm(move);
-    manualLeftArm(move);
+  public void manualAll(double lift, double adjust){
+    manualRightArm(lift + adjust);
+    manualLeftArm(lift - adjust);
   }
 
   public void resetController() {
