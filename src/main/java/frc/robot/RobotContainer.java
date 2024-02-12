@@ -103,7 +103,21 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_driverController.rightBumper().whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
+    
+   //While Right bumper is held robot is robot relative 
+    
+    m_driverController.rightBumper().whileTrue(
+            new RunCommand(
+            () -> m_robotDrive.drive(
+                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband((m_driverController.getRightTriggerAxis()
+                    - m_driverController.getLeftTriggerAxis()), OIConstants.kDriveDeadband),
+                false, true),
+                m_robotDrive)
+                .alongWith(new RunCommand(()->leds.rainbow(),leds)));
+
+
 
     m_driverController.a().whileTrue(new RunCommand(() -> leds.green(), leds));
     m_driverController.b().whileTrue(new RunCommand(() -> leds.red(), leds));
