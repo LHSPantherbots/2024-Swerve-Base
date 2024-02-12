@@ -166,26 +166,26 @@ public final class Constants {
   }
 
   public static final class LEDs{
-    public static final int purple_Red = 0;
+    public static final int purple_Red = 148;
     public static final int purple_Green = 0;
-    public static final int purple_Blue = 0;
-    public static final int purple_Hue = 0;
-    public static final int purple_Sat = 0;
-    public static final int purple_Val = 0;
+    public static final int purple_Blue = 211;
+    public static final int purple_Hue = 282;
+    public static final int purple_Sat = 100;
+    public static final int purple_Val = 83;
 
-    public static final int yellow_Red = 0;
-    public static final int yellow_Green = 0;
+    public static final int yellow_Red = 255;
+    public static final int yellow_Green = 90;
     public static final int yellow_Blue = 0;
-    public static final int yellow_Hue = 0;
-    public static final int yellow_Sat = 0;
-    public static final int yellow_Val = 0;
+    public static final int yellow_Hue = 21;
+    public static final int yellow_Sat = 100;
+    public static final int yellow_Val = 100;
 
-    public static final int orange_Red = 0;
-    public static final int orange_Green = 0;
+    public static final int orange_Red = 251;
+    public static final int orange_Green = 51;
     public static final int orange_Blue = 0;
-    public static final int orange_Hue = 0;
-    public static final int orange_Sat = 0;
-    public static final int orange_Val = 0;
+    public static final int orange_Hue = 12;
+    public static final int orange_Sat = 100;
+    public static final int orange_Val = 98;
 
     public static final int red_Hue = 0;
     public static final int red_Sat = 100;
