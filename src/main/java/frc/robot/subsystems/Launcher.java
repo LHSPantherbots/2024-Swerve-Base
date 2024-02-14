@@ -55,7 +55,7 @@ public class Launcher extends SubsystemBase {
         kMaxOutput = 1;
         kMinOutput = -1;
         maxRPM = 5700;
-        allowableError = 100; // 50 //Lets the system known when the velocity is close enough to launch
+        allowableError = 200; // 50 //Lets the system known when the velocity is close enough to launch
 
         // set PID coefficients
         pidController.setP(kP);

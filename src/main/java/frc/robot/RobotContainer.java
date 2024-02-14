@@ -14,6 +14,7 @@ import frc.robot.commands.FulcrumCmd;
 import frc.robot.commands.IntakeCmd;
 import frc.robot.commands.IntakeCmd2;
 import frc.robot.commands.ShootCmd;
+import frc.robot.commands.ShootCmd2;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Feeder;
@@ -53,6 +54,8 @@ public class RobotContainer {
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
+  XboxController driverC = new XboxController(OIConstants.kDriverControllerPort);
+  XboxController operatorC = new XboxController(OIConstants.kOperatorControllerPort);
 
   private final SendableChooser<Command> autoChoice;
 
@@ -89,7 +92,8 @@ public class RobotContainer {
 
     fulcrum.setDefaultCommand(new RunCommand(() -> fulcrum.manualFulcrum(operatorController.getRightY()*0.5), fulcrum));
   
-    feeder.setDefaultCommand(new FeedHoldCmd(feeder));
+   // feeder.setDefaultCommand(new FeedHoldCmd(feeder));
+    feeder.setDefaultCommand(new RunCommand(()->feeder.stopAll(), feeder));
     climb.setDefaultCommand(new RunCommand(()-> climb.manualAll(0, 0), climb));
   }
 
@@ -116,14 +120,19 @@ public class RobotContainer {
                 false, true),
                 m_robotDrive)
                 .alongWith(new RunCommand(()->leds.rainbow(),leds)));
+//x - floor intake
+//y - floor outake
+//rb - feed
+//lb - rev feed
+//b launch
 
 
 
-    m_driverController.a().whileTrue(new RunCommand(() -> leds.green(), leds));
-    m_driverController.b().whileTrue(new RunCommand(() -> leds.red(), leds));
-    m_driverController.x().onTrue(new RunCommand(() -> leds.rainbow(), leds));
+    //m_driverController.a().whileTrue(new RunCommand(() -> leds.green(), leds));
+    //m_driverController.b().whileTrue(new RunCommand(() -> leds.red(), leds));
+    //m_driverController.x().onTrue(new RunCommand(() -> leds.rainbow(), leds));
 
-    m_driverController.y().whileTrue(new RunCommand(() -> leds.blueStreak(), leds));
+    //m_driverController.y().whileTrue(new RunCommand(() -> leds.blueStreak(), leds));
     m_driverController.start().onTrue(new InstantCommand(()->m_robotDrive.zeroHeading()));
     m_driverController.leftBumper().whileTrue(
         new RunCommand(()->climb.manualAll(-m_driverController.getRightY(),-m_driverController.getRightX()), climb));
@@ -137,10 +146,12 @@ public class RobotContainer {
     
     // operatorController.y().whileTrue(new RunCommand(()-> launcher.lancherMaxSpeed(), launcher))
     //     .onFalse(new RunCommand(()-> launcher.stopAll(), launcher));
-    operatorController.a().whileTrue(new FulcrumCmd(Position.INTAKE, fulcrum, false).alongWith(new IntakeCmd2(intake, feeder, leds, fulcrum)));
+    operatorController.x().whileTrue(new FulcrumCmd(Position.INTAKE, fulcrum, false).alongWith(new IntakeCmd2(intake, feeder, leds, fulcrum)));
+    operatorController.y().whileTrue(new FulcrumCmd(Position.INTAKE, fulcrum, false).alongWith(new IntakeCmd2(intake, feeder, leds, fulcrum)));
     operatorController.b().onTrue(new ShootCmd(launcher, feeder));
     operatorController.x().onTrue(new RunCommand(() -> launcher.stopAll(), launcher)).onTrue(new RunCommand(() -> feeder.stopAll(), feeder)).onTrue(new RunCommand(() -> intake.intakeStop(), intake));
-    operatorController.y().whileTrue(new RunCommand(()-> feeder.reversefeed(), feeder));
+    operatorController.y().whileTrue(new RunCommand(()-> feeder.reversefeed(), feeder).andThen(new InstantCommand(()->feeder.resetEncoder(),feeder)));
+    operatorController.rightBumper().whileTrue(new RunCommand(()-> feeder.feed(), feeder).andThen(new InstantCommand(()->feeder.resetEncoder(),feeder)));
 
     operatorController.pov(0).onTrue(new FulcrumCmd(Position.AMP, fulcrum, false));
     operatorController.pov(270).onTrue(new FulcrumCmd(Position.STOW, fulcrum, false));
