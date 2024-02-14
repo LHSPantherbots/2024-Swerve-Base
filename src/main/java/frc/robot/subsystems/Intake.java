@@ -15,8 +15,8 @@ public class Intake extends SubsystemBase {
         m_IntakeFront = new CANSparkMax(IntakeConstants.kFrontIntake, MotorType.kBrushless);
         m_IntakeBack = new CANSparkMax(IntakeConstants.kBackIntake, MotorType.kBrushless);
 
-        m_IntakeFront.restoreFactoryDefaults();
-        m_IntakeBack.restoreFactoryDefaults();
+        // m_IntakeFront.restoreFactoryDefaults();
+        // m_IntakeBack.restoreFactoryDefaults();
 
         m_IntakeFront.setInverted(false);
         m_IntakeBack.setInverted(false);
@@ -24,8 +24,8 @@ public class Intake extends SubsystemBase {
         m_IntakeFront.setIdleMode(IdleMode.kBrake);
         m_IntakeBack.setIdleMode(IdleMode.kBrake);
 
-        m_IntakeFront.setSmartCurrentLimit(60);
-        m_IntakeBack.setSmartCurrentLimit(60);
+        m_IntakeFront.setSmartCurrentLimit(20);
+        m_IntakeBack.setSmartCurrentLimit(20);
 
         m_IntakeBack.follow(m_IntakeFront);
     }

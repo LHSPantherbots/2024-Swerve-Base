@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import frc.robot.Constants.LEDs;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 
@@ -13,9 +13,9 @@ public class Leds extends SubsystemBase {
   // Store what the last hue of the first pixel is
   private int m_rainbowFirstPixelHue;
 
-  private int bluePulseBrightness = 0;
-  private int greenPulseBrightness = 0;
-  private int redPulseBrightness = 0;
+  private int temp_Blue = 0;
+  private int temp_Green = 0;
+  private int temp_Red = 0;
   private int blueStreakLED = 0;
   private int numLoops = 0;
   private int index = 0;
@@ -50,11 +50,10 @@ public class Leds extends SubsystemBase {
 
   public void rainbow() {
     // For every pixel
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
       // Calculate the hue - hue is easier for rainbows because the color
       // shape is a circle so only one value needs to precess
-      final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
-      // Set the value
+      int hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
       m_ledBuffer.setHSV(i, hue, 255, 128);
     }
     // Increase by to make the rainbow "move"
@@ -67,10 +66,10 @@ public class Leds extends SubsystemBase {
 
   public void pantherStreak() {
     for (int i = 0; i < m_ledBuffer.getLength(); i++) {
-      m_ledBuffer.setRGB(i, 148, 0, 211);
+      m_ledBuffer.setRGB(i, LEDs.purple_Red, LEDs.purple_Green, LEDs.purple_Blue);
     }
     for (int i = index; i < m_ledBuffer.getLength(); i += 2) {
-      m_ledBuffer.setRGB(i, 255, 90, 0);
+      m_ledBuffer.setRGB(i, LEDs.yellow_Red, LEDs.yellow_Green, LEDs.yellow_Blue);
     }
 
     if (numLoops % 10 == 0) {
@@ -86,10 +85,10 @@ public class Leds extends SubsystemBase {
 
   public void purpleStreak() {
     for (int i = 0; i < m_ledBuffer.getLength(); i++) {
-      m_ledBuffer.setRGB(i, 148, 0, 211);
+      m_ledBuffer.setRGB(i, LEDs.purple_Red, LEDs.purple_Green, LEDs.purple_Blue);
     }
     for (int i = index; i < m_ledBuffer.getLength(); i += 2) {
-      m_ledBuffer.setRGB(i, 37, 0, 52);
+      m_ledBuffer.setRGB(i, LEDs.purple_Red / 4, LEDs.purple_Green / 4, LEDs.purple_Blue / 4);
     }
 
     if (numLoops % 10 == 0) {
@@ -103,12 +102,53 @@ public class Leds extends SubsystemBase {
     m_led.setData(m_ledBuffer);
   }
 
+  public void purpleFlash(){
+    for(int i = 0; i < m_ledBuffer.getLength(); i++){
+      m_ledBuffer.setRGB(i, temp_Red, temp_Green, temp_Blue);
+    }
+
+    if (numLoops < 5){ //sets speed of flash
+      temp_Red = LEDs.purple_Red;
+      temp_Blue = LEDs.purple_Blue;
+      temp_Green = LEDs.purple_Green;
+    }
+    else{
+      temp_Red = 0;
+      temp_Blue = 0;
+      temp_Green = 0;
+    }
+
+    numLoops %= 10;
+
+  }
+
+  public void yellowFlash(){
+    for(int i = 0; i < m_ledBuffer.getLength(); i++){
+      m_ledBuffer.setRGB(i, temp_Red, temp_Green, temp_Blue);
+    }
+
+    if (numLoops < 5){ //sets speed of flash
+      temp_Red = LEDs.yellow_Red;
+      temp_Blue = LEDs.yellow_Blue;
+      temp_Green = LEDs.yellow_Green;
+    }
+    else{
+      temp_Red = 0;
+      temp_Blue = 0;
+      temp_Green = 0;
+    }
+
+    numLoops %= 10;
+
+  }
+
+
   public void yellowStreak() {
     for (int i = 0; i < m_ledBuffer.getLength(); i++) {
-      m_ledBuffer.setRGB(i, 255, 90, 0);
+      m_ledBuffer.setRGB(i,LEDs.yellow_Red, LEDs.yellow_Green, LEDs.yellow_Blue);
     }
     for (int i = index; i < m_ledBuffer.getLength(); i += 2) {
-      m_ledBuffer.setRGB(i, 63, 22, 0);
+      m_ledBuffer.setRGB(i, LEDs.yellow_Red / 4, LEDs.yellow_Green / 4 , LEDs.yellow_Blue / 4);
     }
 
     if (numLoops % 10 == 0) {
@@ -123,109 +163,109 @@ public class Leds extends SubsystemBase {
   }
 
   public void red() {
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      m_ledBuffer.setRGB(i, 255, 0, 0);//red
+    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
+      m_ledBuffer.setRGB(i, LEDs.Red, 0, 0);//red
     }
 
     m_led.setData(m_ledBuffer);
   }
 
   public void blue() {
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      m_ledBuffer.setRGB(i, 0, 0, 255);//blue
+    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
+      m_ledBuffer.setRGB(i, 0, 0, LEDs.Blue);//blue
     }
 
     m_led.setData(m_ledBuffer);
   }
 
   public void green() {
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
       // Sets the specified LED to the RGB values for green
-      m_ledBuffer.setRGB(i, 0, 255, 0);
+      m_ledBuffer.setRGB(i, 0, LEDs.Green, 0);
     }
 
     m_led.setData(m_ledBuffer);
   }
 
   public void yellow() {
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
       // Sets the specified LED to the RGB values for yellow
-      m_ledBuffer.setRGB(i, 255, 128, 0);
+      m_ledBuffer.setRGB(i, LEDs.yellow_Red, LEDs.yellow_Green, LEDs.yellow_Blue);
     }
 
     m_led.setData(m_ledBuffer);
   }
 
   public void purple() {
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
       // Sets the specified LED to the RGB values for purple
-      m_ledBuffer.setRGB(i, 148, 0, 211);
+      m_ledBuffer.setRGB(i, LEDs.purple_Red, LEDs.purple_Blue, LEDs.purple_Green);
     }
 
     m_led.setData(m_ledBuffer);
   }
 
   public void white() {
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
       // Sets the specified LED to the RGB values for white
-      m_ledBuffer.setRGB(i, 255, 255, 255);
+      m_ledBuffer.setRGB(i, LEDs.Red, LEDs.Green, LEDs.Blue);
     }
 
     m_led.setData(m_ledBuffer);
   }
 
   public void bluePulse() {
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
       // Sets the specified LED to the RGB values for blue
-      m_ledBuffer.setRGB(i, 0, 0, bluePulseBrightness);
+      m_ledBuffer.setRGB(i, 0, 0, temp_Blue);
     }
 
     // increase brightness
-    bluePulseBrightness += 5;
+    temp_Blue += 5;
 
     // Check bounds
-    bluePulseBrightness %= 255;
+    temp_Blue %= 255;
 
     m_led.setData(m_ledBuffer);
   }
 
   public void greenPulse() {
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
       // Sets the specified LED to the RGB values for blue
-      m_ledBuffer.setRGB(i, 0, greenPulseBrightness, 0);
+      m_ledBuffer.setRGB(i, 0, temp_Green, 0);
     }
 
     // increase brightness
-    greenPulseBrightness += 5;
+    temp_Green += 5;
 
     // Check bounds
-    greenPulseBrightness %= 255;
+    temp_Green %= 255;
 
     m_led.setData(m_ledBuffer);
   }
 
   public void orangePulse() {
 
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
       // Sets the specified LED to the RGB values for orange
-      m_ledBuffer.setRGB(i, redPulseBrightness, greenPulseBrightness, 0);
+      m_ledBuffer.setRGB(i, temp_Red, temp_Green, 0);
     }
 
     // increase brightness
-    redPulseBrightness += 5;
-    greenPulseBrightness += 1;
+    temp_Red += 5;
+    temp_Green += 1;
 
     // Check bounds
-    redPulseBrightness %= 255;
-    greenPulseBrightness %= 51;
+    temp_Red %= 255;
+    temp_Green %= 51;
 
     m_led.setData(m_ledBuffer);
   }
 
   public void blueStreak() {
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
       // Sets the specified LED to the RGB values for blue
-      m_ledBuffer.setRGB(i, 0, 0, 255);
+      m_ledBuffer.setRGB(i, 0, 0, LEDs.Blue);
     }
 
     // turns one led off
@@ -242,24 +282,44 @@ public class Leds extends SubsystemBase {
     m_led.setData(m_ledBuffer);
 
     numLoops += 1;
-    // Timer.delay(0.2);
+
+  }
+
+public void purpleStreak10() {
+    for (int i = index; i < index + 10; i++) {
+      m_ledBuffer.setRGB(i, LEDs.purple_Red, LEDs.purple_Blue, LEDs.purple_Green);
+    }
+
+    m_ledBuffer.setRGB(index - 1, 0,0,0);
+
+    // increase brightness
+    if (numLoops % 3 == 0) {
+      index++;
+
+      // Check bounds
+      index = index % (m_ledBuffer.getLength() - 10) + 1;
+    }
+
+    m_led.setData(m_ledBuffer);
+
+    numLoops++;
 
   }
 
   public void PurpleWhiteStrobe(){
     if (numLoops == 0 || numLoops == 2){
-      for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+      for (int i = 0; i < m_ledBuffer.getLength(); i++) {
       m_ledBuffer.setRGB(i, 0, 0, 0); //black
       }
     }
     else if (numLoops == 1){
-      for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      m_ledBuffer.setRGB(i, 255, 255, 255); //white
+      for (int i = 0; i < m_ledBuffer.getLength(); i++) {
+      m_ledBuffer.setRGB(i, LEDs.Red, LEDs.Green, LEDs.Blue);
       }
     }
     else{
-      for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      m_ledBuffer.setRGB(i, 148, 0, 211); //purple
+      for (int i = 0; i < m_ledBuffer.getLength(); i++) {
+      m_ledBuffer.setRGB(i, LEDs.purple_Red, LEDs.purple_Blue, LEDs.purple_Green);
       }
     }
 
@@ -291,4 +351,23 @@ public class Leds extends SubsystemBase {
 
 
   }
-}
+
+
+  public void snakeStreak()
+  {
+      for (int i = index; i < m_ledBuffer.getLength() - 4; i++) { //set color pattern of the leds  
+          m_ledBuffer.setRGB(i, 148, 0, 211); //purple        
+
+      /*add one every loop, if it reaches 4, make it go back to 0
+      This switches the postions of the leds for each color, makes it looks like colors are snaking around bot*/
+          if (numLoops % 10 == 0) {
+              index++;
+              index = index % 2;
+              numLoops = 0;
+            }
+
+    }
+  }
+    
+} 
+

@@ -23,10 +23,6 @@ public class FulcrumCmd extends Command {
         addRequirements(fulcrum);
     }
 
-    /*
-     * 27deg - 98in - 4500rpm
-     */
-
     @Override
     public void initialize() {
         this.fulcrum.resetController();
