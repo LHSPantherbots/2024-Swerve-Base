@@ -62,7 +62,7 @@ public class RobotContainer {
   public RobotContainer() {
 
     NamedCommands.registerCommand("ShootCmd", new ShootCmd(launcher, feeder));
-    //NamedCommands.registerCommand("IntakeCmd", new IntakeCmd(intake, feeder));
+    NamedCommands.registerCommand("IntakeCmd", new IntakeCmd(intake, feeder));
     NamedCommands.registerCommand("IntakeCmd2", new IntakeCmd(intake, feeder));
 
     autoChoice = AutoBuilder.buildAutoChooser();

@@ -69,6 +69,9 @@ public class Launcher extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Shooter Current", m_LauncherTop.getOutputCurrent());
+        SmartDashboard.putNumber("Launcer RPM", m_LauncherEncoder.getVelocity());
+        SmartDashboard.putNumber("Launcher SetPoint", setPoint);
+        SmartDashboard.putBoolean("Launcher Is At Vel", isAtVelocity());
 
     }
 

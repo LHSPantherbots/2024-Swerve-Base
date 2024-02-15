@@ -78,7 +78,9 @@ public final class Constants {
     public static final double kWheelDiameterMeters = 4 * 25.4 / 1000.0; // 4" wheel
     public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
     // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15 teeth on the bevel pinion
-    public static final double kDrivingMotorReduction = 42/12 * 18/28 * 45/15;
+    // public static final double kDrivingMotorReduction = (42/12) * (18/28) * (45/15);
+
+    public static final double kDrivingMotorReduction = 6.75;
     public static final double kDriveWheelFreeSpeedRps = (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters)
         / kDrivingMotorReduction;
 
