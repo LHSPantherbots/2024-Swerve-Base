@@ -44,6 +44,7 @@ public class Feeder extends SubsystemBase {
 
     @Override
     public void periodic() {
+        SmartDashboard.putBoolean("Beam Break", isNoteDetected());
 
     }
 

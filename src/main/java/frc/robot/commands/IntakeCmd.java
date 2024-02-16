@@ -46,6 +46,8 @@ public class IntakeCmd extends Command {
     @Override
     public void end(boolean interrupted) {
         this.intake.intakeStop();
+        this.noteWasDetected = false;
+        this.shouldEnd = false;
     }
 
     @Override

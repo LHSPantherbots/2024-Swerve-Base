@@ -19,12 +19,17 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.revrobotics.REVPhysicsSim;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create SwerveModules
@@ -71,6 +76,9 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
       });
+  
+  private final Field2d m_field = new Field2d();
+  private final StructArrayPublisher<SwerveModuleState> publisher;
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -82,8 +90,8 @@ public class DriveSubsystem extends SubsystemBase {
         this::getChassisSpeed,
         this::driveRobotRelative,
         new HolonomicPathFollowerConfig(
-            new PIDConstants(5.0, 0.0, 0.0),
-            new PIDConstants(5.0, 0.0, 0.0),
+            new PIDConstants(1.0, 0.0, 0.0),
+            new PIDConstants(1.0, 0.0, 0.0),
             4.5,
             0.4,
             new ReplanningConfig()),
@@ -100,10 +108,17 @@ public class DriveSubsystem extends SubsystemBase {
           return false;
         },
         this);
+    
+    SmartDashboard.putData("Field", m_field);
+    publisher = NetworkTableInstance.getDefault()
+      .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
   }
 
   @Override
   public void periodic() {
+    if (RobotBase.isSimulation()) {
+      REVPhysicsSim.getInstance().run();
+    }
     // Update the odometry in the periodic block
     m_odometry.update(
         Rotation2d.fromDegrees(getAngle()),
@@ -113,21 +128,35 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
+    
+    m_field.setRobotPose(m_odometry.getPoseMeters());
 
     SmartDashboard.putNumber("Front Left Angle", m_frontLeft.getPosition().angle.getDegrees());
     SmartDashboard.putNumber("Front Right Angle", m_frontRight.getPosition().angle.getDegrees());
     SmartDashboard.putNumber("Rear Left Angle", m_rearLeft.getPosition().angle.getDegrees());
     SmartDashboard.putNumber("Rear Right Angle", m_rearRight.getPosition().angle.getDegrees());
     SmartDashboard.putNumber("Gyro Angle", getAngle());
+    SmartDashboard.putString("Chassis Speed", getChassisSpeed().toString());
+    publisher.set(new SwerveModuleState[] {
+      m_frontLeft.getState(),
+      m_frontRight.getState(),
+      m_rearLeft.getState(),
+      m_rearRight.getState()
+    });
   }
 
+
   public ChassisSpeeds getChassisSpeed() {
-    return DriveConstants.kDriveKinematics.toChassisSpeeds(new SwerveModuleState[] {
-        m_frontLeft.getState(),
-        m_frontRight.getState(),
-        m_rearLeft.getState(),
-        m_rearRight.getState()
-    });
+    // Think something wrong here causes PathPlaner to act crazy
+    // m_odometry.
+    // return DriveConstants.kDriveKinematics.toChassisSpeeds(m_frontLeft.getState(), m_frontRight.getState(), m_rearLeft.getState(), m_rearLeft.getState());
+    return DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());
+    // return DriveConstants.kDriveKinematics.toChassisSpeeds(new SwerveModuleState[] {
+    //     m_frontLeft.getState(),
+    //     m_frontRight.getState(),
+    //     m_rearLeft.getState(),
+    //     m_rearRight.getState()
+    // });
   }
 
   /**
@@ -137,6 +166,16 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public Pose2d getPose() {
     return m_odometry.getPoseMeters();
+  }
+
+  public SwerveModuleState[] getModuleStates() {
+    SwerveModuleState[] states = new SwerveModuleState[] {
+      m_frontLeft.getState(),
+      m_frontRight.getState(),
+      m_rearLeft.getState(),
+      m_rearRight.getState()
+    };
+    return states;
   }
 
   /**
@@ -238,7 +277,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void driveRobotRelative(ChassisSpeeds cs) {
-    drive(-cs.vyMetersPerSecond, cs.vxMetersPerSecond, cs.omegaRadiansPerSecond, false, false);
+    drive(cs.vxMetersPerSecond, cs.vyMetersPerSecond, cs.omegaRadiansPerSecond, false, false);
   }
 
   /**
