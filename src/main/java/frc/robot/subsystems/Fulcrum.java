@@ -148,8 +148,12 @@ public class Fulcrum extends SubsystemBase {
     }
 
     public void closedLoopFulcrum() {
+<<<<<<< HEAD
         // m_FulcrumRight.set(m_Controller.calculate(e_FulcrumEncoder.getPosition(), setPoint));
         pidController.setReference(setPoint, CANSparkMax.ControlType.kPosition);
+=======
+        m_FulcrumRight.set(m_Controller.calculate(e_FulcrumEncoder.getPosition(), setPoint));
+>>>>>>> 5179372961bf16c52d0e536bddb6208388ab60e8
     }
 
 

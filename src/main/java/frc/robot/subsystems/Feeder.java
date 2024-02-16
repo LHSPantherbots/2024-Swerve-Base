@@ -45,9 +45,13 @@ public class Feeder extends SubsystemBase {
 
     @Override
     public void periodic() {
+<<<<<<< HEAD
         SmartDashboard.putNumber("Feeder RPM", feederEncoder.getVelocity());
         SmartDashboard.putNumber("Feeder Output", m_Feeder.getAppliedOutput());
         SmartDashboard.putNumber("Feeder Current", m_Feeder.getOutputCurrent());
+=======
+        SmartDashboard.putBoolean("Beam Break", isNoteDetected());
+>>>>>>> 5179372961bf16c52d0e536bddb6208388ab60e8
 
     }
 
@@ -64,7 +68,7 @@ public class Feeder extends SubsystemBase {
     }
 
     public void closedLoopFeeder() {
-        m_Feeder.set(m_controller.calculate(feederEncoder.getPosition(), positionSetpoint)); // is this needed?
+        m_Feeder.set(m_controller.calculate(feederEncoder.getPosition(), positionSetpoint)); 
       }
 
     public boolean isNoteDetected() {
