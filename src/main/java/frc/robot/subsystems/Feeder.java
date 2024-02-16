@@ -72,7 +72,7 @@ public class Feeder extends SubsystemBase {
     }
 
     public void closedLoopFeeder() {
-        m_Feeder.set(m_controller.calculate(feederEncoder.getPosition(), positionSetpoint));
+        m_Feeder.set(m_controller.calculate(feederEncoder.getPosition(), positionSetpoint)); // is this needed?
       }
 
     public void resetEncoder() {
