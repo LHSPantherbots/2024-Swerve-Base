@@ -62,9 +62,8 @@ public class Feeder extends SubsystemBase {
     }
 
     public void closedLoopFeeder() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'closedLoopFeeder'");
-    }
+        m_Feeder.set(m_controller.calculate(feederEncoder.getPosition(), positionSetpoint)); 
+      }
 
     public boolean isNoteDetected() {
         // TODO Auto-generated method stub
