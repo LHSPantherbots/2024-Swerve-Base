@@ -66,6 +66,10 @@ public class DriveSubsystem extends SubsystemBase {
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
+  //AutoAim PID values
+  private double kP = 0.012;
+  private double kF = 0.2;
+
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
@@ -340,6 +344,30 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public double getTurnRate() {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  }
+
+  public void autoAim() {
+    double desiredAngle = Math.atan(m_odometry.getPoseMeters().getY()-5.55/m_odometry.getPoseMeters().getX());
+    double error = m_odometry.getPoseMeters().getRotation().getRadians() - desiredAngle;
+    kF = Math.copySign(kF, error);
+    double outF = kF;
+    double outP = kP * error;
+    double outputTurn = outF + outP;
+    if (Math.abs(error) > 0.1 ) { // if error is greater than ~5.7 deg (0.1 rad)
+      drive(0, 0, outputTurn, false, false);
+    } else {
+      drive(0, 0, 0, false, false);
+    }
+  }
+
+  public boolean isAimedAtGoal() {
+    double desiredAngle = Math.atan(m_odometry.getPoseMeters().getY()-5.55/m_odometry.getPoseMeters().getX());
+    double error = m_odometry.getPoseMeters().getRotation().getRadians() - desiredAngle;
+    if (Math.abs(error) > 0.1 ) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
 
