@@ -32,8 +32,8 @@ public class Fulcrum extends SubsystemBase {
         m_FulcrumRight = new CANSparkMax(FulcrumConstants.kFulcrumRight, MotorType.kBrushless);
         m_FulcrumLeft = new CANSparkMax(FulcrumConstants.kFulcrumLeft, MotorType.kBrushless);
 
-       // m_FulcrumRight.restoreFactoryDefaults();
-       // m_FulcrumLeft.restoreFactoryDefaults();
+        m_FulcrumRight.restoreFactoryDefaults();
+        m_FulcrumLeft.restoreFactoryDefaults();
 
         m_FulcrumRight.setInverted(false);
         m_FulcrumLeft.setInverted(false);
@@ -44,50 +44,37 @@ public class Fulcrum extends SubsystemBase {
         m_FulcrumRight.setSmartCurrentLimit(40);
         m_FulcrumLeft.setSmartCurrentLimit(40);
 
-        // m_FulcrumRight.setClosedLoopRampRate(0.25);
-        // m_FulcrumLeft.setClosedLoopRampRate(0.25);
+        m_FulcrumRight.setClosedLoopRampRate(0.25);
+        m_FulcrumLeft.setClosedLoopRampRate(0.25);
 
         m_FulcrumLeft.follow(m_FulcrumRight, true);
 
-        
-        e_FulcrumEncoder = m_FulcrumRight.getAbsoluteEncoder(Type.kDutyCycle);
+        pidController = m_FulcrumRight.getPIDController();
+
         e_FulcrumEncoder.setPositionConversionFactor(360.0);
 
-        pidController = m_FulcrumRight.getPIDController();
-        pidController.setFeedbackDevice(e_FulcrumEncoder);
-
-        pidController.setP(0.01);
-        pidController.setI(0.0);
-        pidController.setD(0.0);
-        pidController.setFF(0.0);
-        pidController.setOutputRange(-1, 1);
-
-
         // PID coefficients these will need to be tuned
-        kP = 0.02;// 0.00025; //5e-5;
+        kP = 0.00015;// 0.00025; //5e-5;
         kI = 0;// 1e-6;
-        kD = 0.0000;// 0.0004;
+        kD = 0.0008;// 0.0004;
         kIz = 0;
-        kFF = 0.0;// 0.00019;
+        kFF = 0.00017;// 0.00019;
         kDt = 0.02;
         kMaxOutput = 1;
         kMinOutput = -1;
         maxRPM = 5700;
         allowableError = 5; // 50 //Lets the system known when the velocity is close enough to launch
 
-        m_Constraints = new TrapezoidProfile.Constraints(180, 90);
-        //m_Controller = new ProfiledPIDController(kP, kI, kD, m_Constraints, kDt);
+        m_Constraints = new TrapezoidProfile.Constraints(90, 90);
         m_Controller = new ProfiledPIDController(kP, kI, kD, m_Constraints, kDt);
 
         // set PID coefficients
-        //pidController.setP(kP);
-       // pidController.setI(kI);
-        //pidController.setD(kD);
-        //pidController.setIZone(kIz);
-        //pidController.setFF(kFF);
-        //pidController.setOutputRange(kMinOutput, kMaxOutput);
-        m_FulcrumLeft.burnFlash();
-        m_FulcrumRight.burnFlash();
+        pidController.setP(kP);
+        pidController.setI(kI);
+        pidController.setD(kD);
+        pidController.setIZone(kIz);
+        pidController.setFF(kFF);
+        pidController.setOutputRange(kMinOutput, kMaxOutput);
     }
 
     @Override
@@ -164,8 +151,7 @@ public class Fulcrum extends SubsystemBase {
     }
 
     public void closedLoopFulcrum() {
-        //m_FulcrumRight.set(m_Controller.calculate(e_FulcrumEncoder.getPosition(), setPoint));
-        pidController.setReference(setPoint, CANSparkMax.ControlType.kPosition);
+        m_FulcrumRight.set(m_Controller.calculate(e_FulcrumEncoder.getPosition(), setPoint));
     }
 
 

@@ -6,17 +6,14 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LauncherConstants;
-import frc.robot.Constants.RIO_Channels_DIO;
 
 public class Feeder extends SubsystemBase {
 
     private final CANSparkMax m_Feeder;
     private final PIDController m_controller;
-
+    
     RelativeEncoder feederEncoder;
 
     private double kP = 0.1;
@@ -25,38 +22,30 @@ public class Feeder extends SubsystemBase {
     private double kIz = 0.0;
     private double allowableError = 0.5;
     private double positionSetpoint = 0.0;
-  
-    DigitalInput breamBreak = new DigitalInput(RIO_Channels_DIO.FEEDER_BEAM_BREAK);
 
     public Feeder() {
 
-        
         m_Feeder = new CANSparkMax(LauncherConstants.kFeeder, MotorType.kBrushless);
 
         m_Feeder.restoreFactoryDefaults();
 
         m_Feeder.setInverted(false);
 
-        m_Feeder.setIdleMode(IdleMode.kBrake);
+        m_Feeder.setIdleMode(IdleMode.kCoast);
 
         m_Feeder.setSmartCurrentLimit(30);
 
         this.feederEncoder = m_Feeder.getEncoder();
         m_controller = new PIDController(kP, kI, kD);
         m_Feeder.burnFlash();
+        
+
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("Beam Break", isNoteDetected());
-        SmartDashboard.putNumber("Feeder RPM", feederEncoder.getVelocity());
-        SmartDashboard.putNumber("Feeder Output", m_Feeder.getAppliedOutput());
-        SmartDashboard.putNumber("Feeder Current", m_Feeder.getOutputCurrent());
 
-    }
-
-    public boolean isNoteDetected() {
-        return !breamBreak.get();
     }
 
     public void stopAll() {
@@ -64,19 +53,23 @@ public class Feeder extends SubsystemBase {
     }
 
     public void feed() {
-        m_Feeder.set(-.5);
+        m_Feeder.set(.5);
     }
 
     public void reversefeed() {
-        m_Feeder.set(.15);
+        m_Feeder.set(-.5);
     }
 
     public void closedLoopFeeder() {
-        m_Feeder.set(m_controller.calculate(feederEncoder.getPosition(), positionSetpoint));
-      }
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'closedLoopFeeder'");
+    }
 
-    public void resetEncoder() {
-        feederEncoder.setPosition(0.0);
-      }
+    public boolean isNoteDetected() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isNoteDetected'");
+    }
+
+
 
 }
