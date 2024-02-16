@@ -51,11 +51,11 @@ public class Launcher extends SubsystemBase {
         kI = 0;// 1e-6;
         kD = 0.0008;// 0.0004;
         kIz = 0;
-        kFF = 0.00017;// 0.00019;
+        kFF = 0.00017;// 0.00019; TODO need to tune this
         kMaxOutput = 1;
         kMinOutput = -1;
         maxRPM = 5700;
-        allowableError = 100; // 50 //Lets the system known when the velocity is close enough to launch
+        allowableError = 250; // 50 //Lets the system known when the velocity is close enough to launch
 
         // set PID coefficients
         pidController.setP(kP);

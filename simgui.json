@@ -24,10 +24,55 @@
     "transitory": {
       "SmartDashboard": {
         "open": true
+      },
+      "SwerveModuleState[]##v_/SwerveStates": {
+        "SwerveModuleState##v_[0]": {
+          "Rotation2d##v_angle": {
+            "open": true
+          },
+          "open": true
+        },
+        "SwerveModuleState##v_[1]": {
+          "Rotation2d##v_angle": {
+            "open": true
+          },
+          "open": true
+        },
+        "SwerveModuleState##v_[2]": {
+          "Rotation2d##v_angle": {
+            "open": true
+          },
+          "open": true
+        },
+        "SwerveModuleState##v_[3]": {
+          "Rotation2d##v_angle": {
+            "open": true
+          },
+          "open": true
+        },
+        "open": true
       }
     }
   },
   "NetworkTables Info": {
     "visible": true
+  },
+  "Plot": {
+    "Plot <0>": {
+      "plots": [
+        {
+          "backgroundColor": [
+            0.0,
+            0.0,
+            0.0,
+            0.8500000238418579
+          ],
+          "height": 338
+        }
+      ],
+      "window": {
+        "visible": false
+      }
+    }
   }
 }

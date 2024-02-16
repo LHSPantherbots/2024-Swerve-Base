@@ -78,6 +78,37 @@
           "data": {
             "name": "ShootCmd"
           }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MidSpeaker-LowNote"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeCmd"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LowNote-MidSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootCmd"
+          }
         }
       ]
     }

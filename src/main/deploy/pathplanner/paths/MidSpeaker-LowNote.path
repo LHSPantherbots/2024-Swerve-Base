@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7774493730805643,
-        "y": 6.156972313944628
+        "x": 1.9360380538942894,
+        "y": 4.701687948830443
       },
       "isLocked": false,
       "linkedName": "MidSpeaker"
     },
     {
       "anchor": {
-        "x": 2.8129401713348883,
-        "y": 6.977901955803912
+        "x": 2.607707760870067,
+        "y": 4.085990717435981
       },
       "prevControl": {
-        "x": 0.9471909852910615,
-        "y": 7.0058881935945685
+        "x": 1.338998314360265,
+        "y": 4.085990717435981
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "TopNote"
+      "linkedName": "LowNote"
     }
   ],
   "rotationTargets": [],

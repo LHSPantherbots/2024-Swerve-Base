@@ -49,6 +49,9 @@ public class Feeder extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("Beam Break", isNoteDetected());
+        SmartDashboard.putNumber("Feeder RPM", feederEncoder.getVelocity());
+        SmartDashboard.putNumber("Feeder Output", m_Feeder.getAppliedOutput());
+        SmartDashboard.putNumber("Feeder Current", m_Feeder.getOutputCurrent());
 
     }
 

@@ -23,11 +23,13 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.revrobotics.REVPhysicsSim;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create SwerveModules
@@ -114,6 +116,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if (RobotBase.isSimulation()) {
+      REVPhysicsSim.getInstance().run();
+    }
     // Update the odometry in the periodic block
     m_odometry.update(
         Rotation2d.fromDegrees(getAngle()),
@@ -139,6 +144,7 @@ public class DriveSubsystem extends SubsystemBase {
       m_rearRight.getState()
     });
   }
+
 
   public ChassisSpeeds getChassisSpeed() {
     // Think something wrong here causes PathPlaner to act crazy
@@ -271,7 +277,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void driveRobotRelative(ChassisSpeeds cs) {
-    drive(-cs.vyMetersPerSecond, cs.vxMetersPerSecond, cs.omegaRadiansPerSecond, false, false);
+    drive(cs.vxMetersPerSecond, cs.vyMetersPerSecond, cs.omegaRadiansPerSecond, false, false);
   }
 
   /**

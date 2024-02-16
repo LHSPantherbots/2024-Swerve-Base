@@ -21,6 +21,8 @@ public class ShootCmd extends Command {
 
     @Override
     public void initialize() {
+        this.noteWasDetected = false;
+        this.shouldEnd = false;
         this.launcher.lancherMaxSpeed();
         this.feeder.stopAll();
     }
@@ -35,8 +37,6 @@ public class ShootCmd extends Command {
         this.launcher.closedLoopLaunch();
         if (this.launcher.isAtVelocity()) {
             this.feeder.feed();
-        } else {
-            // this.feader.stopAll();
         }
 
         // if (this.launcher.getCurrent() > curentSpikeLevel) {
