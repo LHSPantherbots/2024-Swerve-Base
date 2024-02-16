@@ -14,6 +14,7 @@ import frc.robot.commands.FulcrumCmd;
 import frc.robot.commands.IntakeCmd;
 import frc.robot.commands.IntakeCmd2;
 import frc.robot.commands.ShootCmd;
+import frc.robot.commands.TurnToTargetCmd;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Feeder;
@@ -64,6 +65,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("ShootCmd", new ShootCmd(launcher, feeder));
     NamedCommands.registerCommand("IntakeCmd", new IntakeCmd(intake, feeder));
     NamedCommands.registerCommand("IntakeCmd2", new IntakeCmd(intake, feeder));
+    NamedCommands.registerCommand("AutoAim", new TurnToTargetCmd(m_robotDrive));
 
     autoChoice = AutoBuilder.buildAutoChooser();
 
