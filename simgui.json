@@ -22,9 +22,6 @@
   },
   "NetworkTables": {
     "transitory": {
-      "FMSInfo": {
-        "open": true
-      },
       "SmartDashboard": {
         "open": true
       },
@@ -52,14 +49,12 @@
             "open": true
           },
           "open": true
-        }
+        },
+        "open": true
       }
     }
   },
   "NetworkTables Info": {
-    "Connections": {
-      "open": true
-    },
     "visible": true
   },
   "Plot": {

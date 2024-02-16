@@ -29,14 +29,14 @@ public class ShootCmd extends Command {
 
     @Override
     public void execute() {
-        this.launcher.closedLoopLaunch();
-        if (this.launcher.isAtVelocity()) {
-            this.feeder.feed();
-        }
         if (this.feeder.isNoteDetected() && !noteWasDetected) {
             this.noteWasDetected = true;
         } else if (!this.feeder.isNoteDetected() && noteWasDetected) {
             this.shouldEnd = true;
+        }
+        this.launcher.closedLoopLaunch();
+        if (this.launcher.isAtVelocity()) {
+            this.feeder.feed();
         }
 
         // if (this.launcher.getCurrent() > curentSpikeLevel) {
