@@ -14,12 +14,14 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.Publisher;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -147,6 +149,7 @@ public class DriveSubsystem extends SubsystemBase {
       m_rearLeft.getState(),
       m_rearRight.getState()
     });
+    SmartDashboard.putNumber("Distance To Target", getDistanceToTarget());
   }
 
 
@@ -368,6 +371,12 @@ public class DriveSubsystem extends SubsystemBase {
     } else {
       return true;
     }
+  }
+
+  public double getDistanceToTarget() {
+    // m_poseEstimator.getEstimatedPosition().getTranslation().getDistance(tmpPose.getTranslation())
+    return m_odometry.getPoseMeters().getTranslation().getDistance(new Translation2d(0.0, 5.55));
+
   }
 
 

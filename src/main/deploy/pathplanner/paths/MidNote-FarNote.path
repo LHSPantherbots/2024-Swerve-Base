@@ -1,0 +1,68 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.9155563765672983,
+        "y": 5.662548779643014
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.9155563765672983,
+        "y": 5.662548779643014
+      },
+      "isLocked": false,
+      "linkedName": "MidNoteDirect"
+    },
+    {
+      "anchor": {
+        "x": 5.275729096912739,
+        "y": 6.334218486618792
+      },
+      "prevControl": {
+        "x": 4.561483997967996,
+        "y": 6.307981388690051
+      },
+      "nextControl": {
+        "x": 5.989974195857482,
+        "y": 6.360455584547534
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.813147989932344,
+        "y": 5.774493730805644
+      },
+      "prevControl": {
+        "x": 6.758999699817582,
+        "y": 5.765164984875425
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "FarNote2"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
