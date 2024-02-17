@@ -173,4 +173,16 @@ public class Fulcrum extends SubsystemBase {
         return (e_FulcrumEncoder.getPosition()<15.0);
     }
 
+    // calculates estimated fulcrum angle to hit goal with out accounting for the change in height as fulcrum moves
+    public void autoAim() {
+        Double distance = SmartDashboard.getNumber("Distance To Target", .5);
+        Double theta = Math.toRadians(55.0); // angle of shooter relative to arm
+        Double Rz = 0.7; // Meters (Shooter Height)
+        Double Tz = 2.05; // Meters (Target Height)
+        Double alpha = Math.atan((Tz-Rz)/(distance)); // Radians (angle to target)
+        Double beta = theta - alpha; // radians (arm angle)
+        setPoint = beta;
+        closedLoopFulcrum();
+    }
+
 }

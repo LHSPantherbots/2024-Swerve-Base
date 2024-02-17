@@ -14,12 +14,14 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.Publisher;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -65,6 +67,10 @@ public class DriveSubsystem extends SubsystemBase {
   private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
+
+  //AutoAim PID values
+  private double kP = 0.012;
+  private double kF = 0.2;
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
@@ -143,6 +149,7 @@ public class DriveSubsystem extends SubsystemBase {
       m_rearLeft.getState(),
       m_rearRight.getState()
     });
+    SmartDashboard.putNumber("Distance To Target", getDistanceToTarget());
   }
 
 
@@ -340,6 +347,36 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public double getTurnRate() {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  }
+
+  public void autoAim() {
+    double desiredAngle = Math.atan(m_odometry.getPoseMeters().getY()-5.55/m_odometry.getPoseMeters().getX());
+    double error = m_odometry.getPoseMeters().getRotation().getRadians() - desiredAngle;
+    kF = Math.copySign(kF, error);
+    double outF = kF;
+    double outP = kP * error;
+    double outputTurn = outF + outP;
+    if (Math.abs(error) > 0.1 ) { // if error is greater than ~5.7 deg (0.1 rad)
+      drive(0, 0, outputTurn, false, false);
+    } else {
+      drive(0, 0, 0, false, false);
+    }
+  }
+
+  public boolean isAimedAtGoal() {
+    double desiredAngle = Math.atan(m_odometry.getPoseMeters().getY()-5.55/m_odometry.getPoseMeters().getX());
+    double error = m_odometry.getPoseMeters().getRotation().getRadians() - desiredAngle;
+    if (Math.abs(error) > 0.1 ) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  public double getDistanceToTarget() {
+    // m_poseEstimator.getEstimatedPosition().getTranslation().getDistance(tmpPose.getTranslation())
+    return m_odometry.getPoseMeters().getTranslation().getDistance(new Translation2d(0.0, 5.55));
+
   }
 
 
