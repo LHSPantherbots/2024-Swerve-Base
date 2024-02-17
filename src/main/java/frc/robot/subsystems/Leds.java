@@ -293,11 +293,12 @@ public void purpleStreak10() {
     m_ledBuffer.setRGB(index - 1, 0,0,0);
 
     // increase brightness
-    if (numLoops % 3 == 0) {
+    if (numLoops % 7 == 0) {
       index++;
+      numLoops = 0;
 
       // Check bounds
-      index = index % (m_ledBuffer.getLength() - 10) + 1;
+      index = index % (m_ledBuffer.getLength() - 20) + 1;
     }
 
     m_led.setData(m_ledBuffer);
