@@ -18,14 +18,11 @@ import frc.robot.Constants.ClimbConstants;
 
 public class Climb extends SubsystemBase {
 
-  CANSparkMax m_RightArm =
-      new CANSparkMax(ClimbConstants.kArmRight, MotorType.kBrushless);
-  CANSparkMax m_LeftArm =
-      new CANSparkMax(ClimbConstants.kArmLeft, MotorType.kBrushless);
+  CANSparkMax m_RightArm = new CANSparkMax(ClimbConstants.kArmRight, MotorType.kBrushless);
+  CANSparkMax m_LeftArm = new CANSparkMax(ClimbConstants.kArmLeft, MotorType.kBrushless);
 
   RelativeEncoder e_RightArm;
   RelativeEncoder e_LeftArm;
-
 
   private double kP = 0.05;
   private double kI = 0.0;
@@ -58,10 +55,8 @@ public class Climb extends SubsystemBase {
     m_RightArm.setInverted(true);
     m_LeftArm.setInverted(false);
 
-
     e_RightArm = m_RightArm.getEncoder();
     e_LeftArm = m_LeftArm.getEncoder();
-
 
     m_constraints = new TrapezoidProfile.Constraints(maxVel, maxAcc);
     m_controller = new ProfiledPIDController(kP, kI, kD, m_constraints, kDt);
@@ -96,7 +91,7 @@ public class Climb extends SubsystemBase {
     return (Math.abs(error) < allowableError);
   }
 
-   public boolean isAtHeightLeft() {
+  public boolean isAtHeightLeft() {
     double error = getLeftHeight() - heightSetpoint;
     return (Math.abs(error) < allowableError);
   }
@@ -110,14 +105,20 @@ public class Climb extends SubsystemBase {
   }
 
   public void manualRightArm(double move) {
-    m_RightArm.set(move);
+    if ((getRightHeight() < ClimbConstants.heightUpperLimit || move < 0) &&
+        (getRightHeight() > ClimbConstants.heightLowerLimit || move > 0)) {
+      m_RightArm.set(move);
+    }
   }
 
   public void manualLeftArm(double move) {
-    m_LeftArm.set(move);
+    if ((getLeftHeight() < ClimbConstants.heightUpperLimit || move < 0) &&
+        (getLeftHeight() > ClimbConstants.heightLowerLimit || move > 0)) {
+      m_LeftArm.set(move);
+    }
   }
 
-  public void manualAll(double lift, double adjust){
+  public void manualAll(double lift, double adjust) {
     manualRightArm(lift + adjust);
     manualLeftArm(lift - adjust);
   }
@@ -136,7 +137,7 @@ public class Climb extends SubsystemBase {
     m_LeftArm.set(0.0);
   }
 
-  public void stopAll(){
+  public void stopAll() {
     stopRightArm();
     stopLeftArm();
   }
