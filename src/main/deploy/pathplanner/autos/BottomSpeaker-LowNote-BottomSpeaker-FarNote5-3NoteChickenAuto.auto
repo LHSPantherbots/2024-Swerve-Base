@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7980072100495078,
-      "y": 6.63469379570338
+      "x": 0.7515525931593531,
+      "y": 4.4256278086024805
     },
-    "rotation": 60.07463915754776
+    "rotation": -61.38954033478391
   },
   "command": {
     "type": "sequential",
@@ -24,81 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "TopSpeaker-TopNote"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakeCmd"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoAim"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoFulcrum"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootCmd"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "TopNote-MidNote"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakeCmd"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoAim"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoFulcrum"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootCmd"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "MidNote-FarNote2"
+                  "pathName": "BottomSpeaker-LowNote"
                 }
               },
               {
@@ -113,19 +39,38 @@
         {
           "type": "path",
           "data": {
-            "pathName": "FarNote2-Shoot"
+            "pathName": "LowNote-BottomSpeaker"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoAim"
+            "name": "ShootCmd"
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "AutoFulcrum"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "BottomSpeaker-FarNote5"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeCmd"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FarNote5-BottomSpeaker"
           }
         },
         {
