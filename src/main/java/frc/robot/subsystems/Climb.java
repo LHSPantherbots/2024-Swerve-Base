@@ -105,15 +105,17 @@ public class Climb extends SubsystemBase {
     return heightSetpoint;
   }
 
-  public void setHeightSetpoint(double setPoint) {
+  public void setHeightSetpoint(double setPoint) { 
     heightSetpoint = setPoint;
   }
 
   public void manualRightArm(double move) {
+    if (move > ClimbConstants.heightLimit)
     m_RightArm.set(move);
   }
 
   public void manualLeftArm(double move) {
+    if (move > ClimbConstants.heightLimit)
     m_LeftArm.set(move);
   }
 

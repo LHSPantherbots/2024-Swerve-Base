@@ -130,6 +130,7 @@ public final class Constants {
   public static final class ClimbConstants{
     public static final int kArmLeft = 40;
     public static final int kArmRight = 41;
+    public static final int heightLimit = 50; //NOT CLARIFIED AS THE LIMIT NUMBER, WILL NEED TO BE CHANGED
   }
   
   public static final class FulcrumConstants{
