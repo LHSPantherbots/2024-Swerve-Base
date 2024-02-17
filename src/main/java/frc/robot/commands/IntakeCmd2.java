@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Fulcrum;
 import frc.robot.subsystems.Intake;
@@ -15,12 +16,11 @@ public class IntakeCmd2 extends Command {
     boolean shouldEnd = false;
 
     public IntakeCmd2(
-            Intake intake, Feeder feeder, Leds leds, Fulcrum fulcrum) {
+            Intake intake, Feeder feeder, Fulcrum fulcrum) {
         this.intake = intake;
         this.feeder = feeder;
-        this.leds = leds;
         this.fulcrum = fulcrum;
-        addRequirements(intake, feeder, leds);
+        addRequirements(intake, feeder);
     }
 
     @Override
@@ -33,11 +33,13 @@ public class IntakeCmd2 extends Command {
         if (this.fulcrum.isFulcurmDown()){
             this.intake.intake();
             this.feeder.feed();
-            this.leds.greenPulse();
+            //this.leds.greenPulse();
+            RobotContainer.leds.greenPulse();
         }else{
             this.intake.intakeStop();
             this.feeder.stopAll();
-            this.leds.greenPulse();
+            //this.leds.greenPulse();
+            RobotContainer.leds.greenPulse();
         }
     }
 
@@ -45,7 +47,8 @@ public class IntakeCmd2 extends Command {
     public void end(boolean interrupted) {
         this.intake.intakeStop();
         this.feeder.stopAll();
-        this.leds.orangePulse();
+        //this.leds.orangePulse();
+        RobotContainer.leds.orangePulse();
         
     }
 

@@ -119,7 +119,7 @@ public class RobotContainer {
                     - m_driverController.getLeftTriggerAxis()), OIConstants.kDriveDeadband),
                 false, true),
                 m_robotDrive)
-                // .alongWith(new RunCommand(()->leds.rainbow(),leds))
+                .alongWith(new RunCommand(()->leds.rainbow(),leds))
                 );
 
 
@@ -142,7 +142,7 @@ public class RobotContainer {
     
     // operatorController.y().whileTrue(new RunCommand(()-> launcher.lancherMaxSpeed(), launcher))
     //     .onFalse(new RunCommand(()-> launcher.stopAll(), launcher));
-    operatorController.a().whileTrue(new FulcrumCmd(Position.INTAKE, fulcrum, false).alongWith(new IntakeCmd2(intake, feeder, leds,fulcrum)));
+    operatorController.a().whileTrue(new FulcrumCmd(Position.INTAKE, fulcrum, false).alongWith(new IntakeCmd2(intake, feeder,fulcrum)));
     //operatorController.b().onTrue(new ShootCmd(launcher, feeder));
     operatorController.b().onTrue(new RunCommand(()->launcher.lancherMaxSpeed(), launcher ));
     operatorController.x().onTrue(new RunCommand(() -> launcher.stopAll(), launcher)).onTrue(new RunCommand(() -> feeder.stopAll(), feeder)).onTrue(new RunCommand(() -> intake.intakeStop(), intake));
