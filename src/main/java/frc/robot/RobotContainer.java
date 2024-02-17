@@ -123,11 +123,11 @@ public class RobotContainer {
 
 
 
-    m_driverController.a().whileTrue(new RunCommand(() -> leds.green(), leds));
-    m_driverController.b().whileTrue(new RunCommand(() -> leds.red(), leds));
-    m_driverController.x().onTrue(new RunCommand(() -> leds.rainbow(), leds));
-
-    m_driverController.y().whileTrue(new RunCommand(() -> leds.blueStreak(), leds));
+    m_driverController.a().whileTrue(new RunCommand(() -> leds.purpleFlash(), leds));
+    m_driverController.b().whileTrue(new RunCommand(() -> leds.yellowFlash(), leds));
+    m_driverController.x().whileTrue(new RunCommand(() -> leds.rainbow(), leds));
+    m_driverController.y().whileTrue(new RunCommand(() -> leds.purpleStreak10(), leds));
+    
     m_driverController.start().onTrue(new InstantCommand(()->m_robotDrive.zeroHeading()));
     m_driverController.leftBumper().whileTrue(
         new RunCommand(()->climb.manualAll(-m_driverController.getRightY(),-m_driverController.getRightX()), climb));

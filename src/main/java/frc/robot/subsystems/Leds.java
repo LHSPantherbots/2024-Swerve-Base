@@ -18,7 +18,7 @@ public class Leds extends SubsystemBase {
   private int temp_Red = 0;
   private int blueStreakLED = 0;
   private int numLoops = 0;
-  private int index = 0;
+  private int index = 1;
 
   public Leds() {
     // PWM port 9
