@@ -18,7 +18,8 @@ public class Leds extends SubsystemBase {
   private int temp_Red = 0;
   private int blueStreakLED = 0;
   private int numLoops = 0;
-  private int index = 1;
+  private int index = 0;
+  private int index1 = 1; //this varible should never be less than 1
 
   public Leds() {
     // PWM port 9
@@ -286,19 +287,19 @@ public class Leds extends SubsystemBase {
   }
 
 public void purpleStreak10() {
-    for (int i = index; i < index + 10; i++) {
+    for (int i = index1; i < index1 + 10; i++) {
       m_ledBuffer.setRGB(i, LEDs.purple_Red, LEDs.purple_Blue, LEDs.purple_Green);
     }
 
-    m_ledBuffer.setRGB(index - 1, 0,0,0);
+    m_ledBuffer.setRGB(index1 - 1, 0,0,0);
 
     // increase brightness
     if (numLoops % 7 == 0) {
-      index++;
+      index1++;
       numLoops = 0;
 
       // Check bounds
-      index = index % (m_ledBuffer.getLength() - 20) + 1;
+      index1 = index1 % (m_ledBuffer.getLength() - 20) + 1;
     }
 
     m_led.setData(m_ledBuffer);
