@@ -357,43 +357,35 @@ public class DriveSubsystem extends SubsystemBase {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
+  public boolean isRed() {
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent()) {
+      return alliance.get() == DriverStation.Alliance.Red;
+    } else {
+      return false;
+    }
+  }
+
   public double angleToTarget() {
     double Ry = m_odometry.getPoseMeters().getY();
     double Rx = m_odometry.getPoseMeters().getX();
     double desiredAngle = 0;
-    boolean isRed;
-    var alliance = DriverStation.getAlliance();
-    if (alliance.isPresent()) {
-      isRed = alliance.get() == DriverStation.Alliance.Red;
+    double Ty;
+    if (isRed()) {
+      Ty = 2.65;
     } else {
-      isRed = false;
+      Ty = 5.55;
     }
-    if (Ry > 5.55) {
-      desiredAngle = Math.atan((Ry - 5.55)/Rx) * (isRed ? -1.0 : 1.0);
+    if (Ry > Ty) {
+      desiredAngle = Math.atan((Ry - Ty)/Rx) * (isRed() ? -1.0 : 1.0);
     } else {
-      desiredAngle = -Math.atan((5.55-Ry)/Rx) * (isRed ? -1.0 : 1.0);
+      desiredAngle = -Math.atan((Ty-Ry)/Rx) * (isRed() ? -1.0 : 1.0);
     }
     return desiredAngle;
   }
 
   public double errorToTarget() {
-    double Ry = m_odometry.getPoseMeters().getY();
-    double Rx = m_odometry.getPoseMeters().getX();
-    double desiredAngle = 0;
-    boolean isRed;
-    var alliance = DriverStation.getAlliance();
-    if (alliance.isPresent()) {
-      isRed = alliance.get() == DriverStation.Alliance.Red;
-    } else {
-      isRed = false;
-    }
-    if (Ry > 5.55) {
-      desiredAngle = Math.atan((Ry - 5.55)/Rx) * (isRed ? -1.0 : 1.0);
-    } else {
-      desiredAngle = -Math.atan((5.55-Ry)/Rx) * (isRed ? -1.0 : 1.0);
-    }
-    // double desiredAngle = Math.IEEEremainder(Math.atan(5.55-m_odometry.getPoseMeters().getY()/m_odometry.getPoseMeters().getX())+Math.PI, 2*Math.PI);
-    double error = desiredAngle - m_odometry.getPoseMeters().getRotation().getRadians();
+    double error = angleToTarget() - currAngle();
     return error;
   }
 
@@ -401,30 +393,8 @@ public class DriveSubsystem extends SubsystemBase {
     return m_odometry.getPoseMeters().getRotation().getRadians();
   }
 
-  public void autoAim() { // rework to use sin/cos using distance (hypot) and X offset
-    double Ry = m_odometry.getPoseMeters().getY();
-    double Rx = m_odometry.getPoseMeters().getX();
-    double desiredAngle = 0;
-    boolean isRed;
-    double Ty;
-    var alliance = DriverStation.getAlliance();
-    if (alliance.isPresent()) {
-      isRed = alliance.get() == DriverStation.Alliance.Red;
-    } else {
-      isRed = false;
-    }
-    if (isRed) {
-      Ty = 2.65;
-    } else {
-      Ty = 5.55;
-    }
-    if (Ry > Ty) {
-      desiredAngle = Math.atan((Ry - Ty)/Rx);
-    } else {
-      desiredAngle = -Math.atan((Ty - Ry)/Rx);
-    }
-    // double desiredAngle = Math.IEEEremainder(Math.atan(5.55-m_odometry.getPoseMeters().getY()/m_odometry.getPoseMeters().getX())+Math.PI, 2*Math.PI);
-    double error = desiredAngle - m_odometry.getPoseMeters().getRotation().getRadians();
+  public void autoAim() { 
+    double error = angleToTarget() - m_odometry.getPoseMeters().getRotation().getRadians();
     kF = Math.copySign(kF, error);
     double outF = kF;
     double outP = kP * error;
@@ -437,31 +407,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public boolean isAimedAtGoal() {
-    double Ry = m_odometry.getPoseMeters().getY();
-    double Rx = m_odometry.getPoseMeters().getX();
-    boolean isRed;
-    double Ty;
-    double desiredAngle;
-    var alliance = DriverStation.getAlliance();
-    if (alliance.isPresent()) {
-      isRed = alliance.get() == DriverStation.Alliance.Red;
-    } else {
-      isRed = false;
-    }
-    if (isRed) {
-      Ty = 2.65;
-    } else {
-      Ty = 5.55;
-    }
-
-    if (Ry > Ty) {
-      desiredAngle = Math.atan((Ry - Ty)/Rx);
-    } else {
-      desiredAngle = -Math.atan((Ty - Ry)/Rx);
-    }
-    // double desiredAngle = Math.IEEEremainder(Math.atan(5.55-m_odometry.getPoseMeters().getY()/m_odometry.getPoseMeters().getX())+Math.PI, 2*Math.PI);
-    // double error = m_odometry.getPoseMeters().getRotation().getRadians() - desiredAngle;
-    double error = desiredAngle - m_odometry.getPoseMeters().getRotation().getRadians();
+    double error = angleToTarget() - m_odometry.getPoseMeters().getRotation().getRadians();
     if (Math.abs(error) > 0.1 ) {
       return false;
     } else {
@@ -470,16 +416,8 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double getDistanceToTarget() {
-    // m_poseEstimator.getEstimatedPosition().getTranslation().getDistance(tmpPose.getTranslation())
-    boolean isRed;
     double Ty;
-    var alliance = DriverStation.getAlliance();
-    if (alliance.isPresent()) {
-      isRed = alliance.get() == DriverStation.Alliance.Red;
-    } else {
-      isRed = false;
-    }
-    if (isRed) {
+    if (isRed()) {
       Ty = 2.65;
     } else {
       Ty = 5.55;
