@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import org.opencv.core.Mat;
+
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -69,8 +71,8 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
   //AutoAim PID values
-  private double kP = 0.012;
-  private double kF = 0.2;
+  private double kP = 0.0; //0.05;
+  private double kF = 0.05; //0.0125;
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
@@ -150,6 +152,9 @@ public class DriveSubsystem extends SubsystemBase {
       m_rearRight.getState()
     });
     SmartDashboard.putNumber("Distance To Target", getDistanceToTarget());
+    SmartDashboard.putNumber("desired Angle", angleToTarget());
+    SmartDashboard.putNumber("auto aim error", errorToTarget());
+    SmartDashboard.putNumber("currAngle", currAngle());
   }
 
 
@@ -349,9 +354,47 @@ public class DriveSubsystem extends SubsystemBase {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
-  public void autoAim() {
-    double desiredAngle = Math.atan(m_odometry.getPoseMeters().getY()-5.55/m_odometry.getPoseMeters().getX());
-    double error = m_odometry.getPoseMeters().getRotation().getRadians() - desiredAngle;
+  public double angleToTarget() {
+    double Ry = m_odometry.getPoseMeters().getY();
+    double Rx = m_odometry.getPoseMeters().getX();
+    double desiredAngle = 0;
+    if (Ry > 5.55) {
+      desiredAngle = Math.atan((Ry - 5.55)/Rx);
+    } else {
+      desiredAngle = -Math.atan((5.55-Ry)/Rx);
+    }
+    return desiredAngle;
+  }
+
+  public double errorToTarget() {
+    double Ry = m_odometry.getPoseMeters().getY();
+    double Rx = m_odometry.getPoseMeters().getX();
+    double desiredAngle = 0;
+    if (Ry > 5.55) {
+      desiredAngle = Math.atan((Ry - 5.55)/Rx);
+    } else {
+      desiredAngle = -Math.atan((5.55-Ry)/Rx);
+    }
+    // double desiredAngle = Math.IEEEremainder(Math.atan(5.55-m_odometry.getPoseMeters().getY()/m_odometry.getPoseMeters().getX())+Math.PI, 2*Math.PI);
+    double error = desiredAngle - m_odometry.getPoseMeters().getRotation().getRadians();
+    return error;
+  }
+
+  public double currAngle() {
+    return m_odometry.getPoseMeters().getRotation().getRadians();
+  }
+
+  public void autoAim() { // rework to use sin/cos using distance (hypot) and X offset
+    double Ry = m_odometry.getPoseMeters().getY();
+    double Rx = m_odometry.getPoseMeters().getX();
+    double desiredAngle = 0;
+    if (Ry > 5.55) {
+      desiredAngle = Math.atan((Ry - 5.55)/Rx);
+    } else {
+      desiredAngle = -Math.atan((5.55-Ry)/Rx);
+    }
+    // double desiredAngle = Math.IEEEremainder(Math.atan(5.55-m_odometry.getPoseMeters().getY()/m_odometry.getPoseMeters().getX())+Math.PI, 2*Math.PI);
+    double error = desiredAngle - m_odometry.getPoseMeters().getRotation().getRadians();
     kF = Math.copySign(kF, error);
     double outF = kF;
     double outP = kP * error;
@@ -364,7 +407,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public boolean isAimedAtGoal() {
-    double desiredAngle = Math.atan(m_odometry.getPoseMeters().getY()-5.55/m_odometry.getPoseMeters().getX());
+    double desiredAngle = Math.IEEEremainder(Math.atan(5.55-m_odometry.getPoseMeters().getY()/m_odometry.getPoseMeters().getX())+Math.PI, 2*Math.PI);
     double error = m_odometry.getPoseMeters().getRotation().getRadians() - desiredAngle;
     if (Math.abs(error) > 0.1 ) {
       return false;
