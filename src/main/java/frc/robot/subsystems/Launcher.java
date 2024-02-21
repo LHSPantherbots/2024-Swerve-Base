@@ -7,8 +7,11 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.networktables.DoubleSubscriber;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.Constants.LauncherConstants;
 
 public class Launcher extends SubsystemBase {
@@ -22,6 +25,18 @@ public class Launcher extends SubsystemBase {
 
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, allowableError;
     private SparkPIDController pidController;
+
+    static InterpolatingDoubleTreeMap kDistanceToShooterSpeed = new InterpolatingDoubleTreeMap();
+
+    // These values are made up, must get real values from testing
+    static {
+        kDistanceToShooterSpeed.put(0.0, 5000.0);
+        kDistanceToShooterSpeed.put(1.0, 5200.0);
+        kDistanceToShooterSpeed.put(3.0, 5400.0);
+        kDistanceToShooterSpeed.put(5.0, 6000.0);
+    }
+
+    final DoubleSubscriber distanceSubscriber;
 
     public Launcher() {
         m_LauncherTop = new CANSparkFlex(LauncherConstants.kLauncherTop, MotorType.kBrushless);
@@ -64,6 +79,8 @@ public class Launcher extends SubsystemBase {
         pidController.setIZone(kIz);
         pidController.setFF(kFF);
         pidController.setOutputRange(kMinOutput, kMaxOutput);
+
+        distanceSubscriber = NetworkTableInstance.getDefault().getDoubleTopic("/Distance").subscribe(0.0);
     }
 
     @Override
@@ -72,7 +89,7 @@ public class Launcher extends SubsystemBase {
         SmartDashboard.putNumber("Launcer RPM", m_LauncherEncoder.getVelocity());
         SmartDashboard.putNumber("Launcher SetPoint", setPoint);
         SmartDashboard.putBoolean("Launcher Is At Vel", isAtVelocity());
-
+        SmartDashboard.putNumber("Auto RPM", getAutoShooterSpeed());
     }
 
     public void closedLoopLaunch() {
@@ -131,6 +148,14 @@ public class Launcher extends SubsystemBase {
 
     public double getCurrent() {
         return m_LauncherTop.getOutputCurrent();
+    }
+
+    public double getShooterSpeedForDistance(double distance) {
+        return kDistanceToShooterSpeed.get(distance);
+    }
+
+    public double getAutoShooterSpeed() {
+        return getShooterSpeedForDistance(distanceSubscriber.get());
     }
 
 }
