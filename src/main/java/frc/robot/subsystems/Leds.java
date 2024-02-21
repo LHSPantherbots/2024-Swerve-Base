@@ -407,6 +407,7 @@ public void purpleStreak10() {
         
     switch(this.state){
         
+      case CLIMB: red(); break;
       case TARGET_LOCK: white(); break;
       case LAUNCH: blue(); break;
       case NOTE_STORED: orange(); break;

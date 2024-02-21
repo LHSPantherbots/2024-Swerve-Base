@@ -6,5 +6,6 @@ public enum RobotStatus{
     NOTE_STORED,
     LAUNCH,
     ROBOT_CENTRIC,
+    CLIMB,
     TARGET_LOCK
 }

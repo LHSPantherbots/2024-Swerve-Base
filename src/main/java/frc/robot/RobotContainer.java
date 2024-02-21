@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.FeedCenterCmd;
 import frc.robot.commands.FeedHoldCmd;
 import frc.robot.commands.FulcrumAimCmd;
 import frc.robot.commands.FulcrumCmd;
@@ -134,6 +135,8 @@ public class RobotContainer {
     m_driverController.start().onTrue(new InstantCommand(()->m_robotDrive.zeroHeading()));
     m_driverController.leftBumper().whileTrue(
         new RunCommand(()->climb.manualAll(-m_driverController.getRightY(),-m_driverController.getRightX()), climb));
+    m_driverController.leftBumper().onTrue(new InstantCommand(()-> leds.setRobotStatus(RobotStatus.CLIMB), leds));
+    m_driverController.leftBumper().onFalse(new InstantCommand(()-> leds.setRobotStatus(leds.getPrevRobotStatus()), leds));
     // operatorController.a().whileTrue(new RunCommand(() -> intake.intake(), intake))
     //     .onFalse(new RunCommand(() -> intake.intakeStop(), intake));
     // operatorController.b().whileTrue(new RunCommand(() -> intake.outtake(), intake))
@@ -153,6 +156,8 @@ public class RobotContainer {
     operatorController.y().whileTrue(new RunCommand(()-> intake.outtake(), intake));
     operatorController.rightBumper().whileTrue(new RunCommand(()-> feeder.feed(), feeder));
     operatorController.leftBumper().whileTrue(new RunCommand(()-> feeder.reversefeed(), feeder));
+
+    operatorController.start().whileTrue(new FeedCenterCmd(feeder));
 
     operatorController.pov(0).onTrue(new FulcrumCmd(Position.AMP, fulcrum, false));
     operatorController.pov(270).onTrue(new FulcrumCmd(Position.STOW, fulcrum, false));
