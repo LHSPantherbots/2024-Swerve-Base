@@ -24,6 +24,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Leds;
 import frc.utils.Position;
+import frc.utils.RobotStatus;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -146,8 +147,10 @@ public class RobotContainer {
     operatorController.a().whileTrue(new FulcrumCmd(Position.INTAKE, fulcrum, false).alongWith(new IntakeCmd2(intake, feeder,fulcrum)));
     //operatorController.b().onTrue(new ShootCmd(launcher, feeder));
     operatorController.b().onTrue(new RunCommand(()->launcher.lancherMaxSpeed(), launcher ));
+    operatorController.b().onTrue(new InstantCommand(()-> leds.setRobotStatus(RobotStatus.LAUNCH), leds));
     operatorController.x().onTrue(new RunCommand(() -> launcher.stopAll(), launcher)).onTrue(new RunCommand(() -> feeder.stopAll(), feeder)).onTrue(new RunCommand(() -> intake.intakeStop(), intake));
-    operatorController.y().whileTrue(new RunCommand(()-> feeder.reversefeed(), feeder));
+    operatorController.x().onTrue(new InstantCommand(()-> leds.setRobotStatus(RobotStatus.DEFAULT), leds));
+    operatorController.y().whileTrue(new RunCommand(()-> intake.outtake(), intake));
     operatorController.rightBumper().whileTrue(new RunCommand(()-> feeder.feed(), feeder));
     operatorController.leftBumper().whileTrue(new RunCommand(()-> feeder.reversefeed(), feeder));
 
