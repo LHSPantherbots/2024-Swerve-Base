@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import org.opencv.core.Mat;
+
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -69,8 +71,8 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
   //AutoAim PID values
-  private double kP = 0.012;
-  private double kF = 0.2;
+  private double kP = 0.15; //0.05;
+  private double kF = 0.05; //0.0125;
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
@@ -96,8 +98,8 @@ public class DriveSubsystem extends SubsystemBase {
         this::getChassisSpeed,
         this::driveRobotRelative,
         new HolonomicPathFollowerConfig(
-            new PIDConstants(1.0, 0.0, 0.0),
-            new PIDConstants(1.0, 0.0, 0.0),
+            new PIDConstants(5.0, 0.0, 0.0),
+            new PIDConstants(2.0, 0.0, 0.0),
             4.5,
             0.4,
             new ReplanningConfig()),
@@ -150,6 +152,12 @@ public class DriveSubsystem extends SubsystemBase {
       m_rearRight.getState()
     });
     SmartDashboard.putNumber("Distance To Target", getDistanceToTarget());
+    SmartDashboard.putNumber("desired Angle", angleToTarget());
+    SmartDashboard.putNumber("auto aim error", errorToTarget());
+    SmartDashboard.putNumber("currAngle", currAngle());
+    SmartDashboard.putNumber("desired Angle (deg)", Math.toDegrees(angleToTarget()));
+    SmartDashboard.putNumber("auto aim error (deg)", Math.toDegrees(errorToTarget()));
+    SmartDashboard.putNumber("currAngle (deg)", Math.toDegrees(currAngle()));
   }
 
 
@@ -349,9 +357,44 @@ public class DriveSubsystem extends SubsystemBase {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
-  public void autoAim() {
-    double desiredAngle = Math.atan(m_odometry.getPoseMeters().getY()-5.55/m_odometry.getPoseMeters().getX());
-    double error = m_odometry.getPoseMeters().getRotation().getRadians() - desiredAngle;
+  public boolean isRed() {
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent()) {
+      return alliance.get() == DriverStation.Alliance.Red;
+    } else {
+      return false;
+    }
+  }
+
+  public double angleToTarget() {
+    double Ry = m_odometry.getPoseMeters().getY();
+    double Rx = m_odometry.getPoseMeters().getX();
+    double desiredAngle = 0;
+    double Ty;
+    if (isRed()) {
+      Ty = 2.65;
+    } else {
+      Ty = 5.55;
+    }
+    if (Ry > Ty) {
+      desiredAngle = Math.atan((Ry - Ty)/Rx) * (isRed() ? -1.0 : 1.0);
+    } else {
+      desiredAngle = -Math.atan((Ty-Ry)/Rx) * (isRed() ? -1.0 : 1.0);
+    }
+    return desiredAngle;
+  }
+
+  public double errorToTarget() {
+    double error = angleToTarget() - currAngle();
+    return -error;
+  }
+
+  public double currAngle() {
+    return m_odometry.getPoseMeters().getRotation().getRadians();
+  }
+
+  public void autoAim() { 
+    double error = angleToTarget() - m_odometry.getPoseMeters().getRotation().getRadians();
     kF = Math.copySign(kF, error);
     double outF = kF;
     double outP = kP * error;
@@ -364,8 +407,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public boolean isAimedAtGoal() {
-    double desiredAngle = Math.atan(m_odometry.getPoseMeters().getY()-5.55/m_odometry.getPoseMeters().getX());
-    double error = m_odometry.getPoseMeters().getRotation().getRadians() - desiredAngle;
+    double error = angleToTarget() - m_odometry.getPoseMeters().getRotation().getRadians();
     if (Math.abs(error) > 0.1 ) {
       return false;
     } else {
@@ -374,8 +416,13 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double getDistanceToTarget() {
-    // m_poseEstimator.getEstimatedPosition().getTranslation().getDistance(tmpPose.getTranslation())
-    return m_odometry.getPoseMeters().getTranslation().getDistance(new Translation2d(0.0, 5.55));
+    double Ty;
+    if (isRed()) {
+      Ty = 2.65;
+    } else {
+      Ty = 5.55;
+    }
+    return m_odometry.getPoseMeters().getTranslation().getDistance(new Translation2d(0.0, Ty));
 
   }
 

@@ -8,10 +8,12 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.FeedHoldCmd;
 import frc.robot.commands.FulcrumAimCmd;
 import frc.robot.commands.FulcrumCmd;
+import frc.robot.commands.FulcrumTuningCmd;
 import frc.robot.commands.IntakeCmd;
 import frc.robot.commands.IntakeCmd2;
 import frc.robot.commands.ShootCmd;
@@ -68,6 +70,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("IntakeCmd2", new IntakeCmd(intake, feeder));
     NamedCommands.registerCommand("AutoAim", new TurnToTargetCmd(m_robotDrive));
     NamedCommands.registerCommand("AutoFulcrum", new FulcrumAimCmd(fulcrum));
+
+    SmartDashboard.putData("Turn To Target", new TurnToTargetCmd(m_robotDrive));
+    SmartDashboard.putData("Auto Fulcrum", new FulcrumAimCmd(fulcrum));
+    SmartDashboard.putData("Set Fulcrum SetPoint", new FulcrumTuningCmd(fulcrum));
 
     autoChoice = AutoBuilder.buildAutoChooser();
 

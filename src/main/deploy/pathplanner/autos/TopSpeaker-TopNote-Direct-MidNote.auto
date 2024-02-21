@@ -45,12 +45,6 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoFulcrum"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "ShootCmd"
           }
         },
@@ -77,12 +71,6 @@
           "type": "named",
           "data": {
             "name": "AutoAim"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoFulcrum"
           }
         },
         {

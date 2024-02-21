@@ -17,12 +17,21 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/Shuffleboard/Autonomous/SendableChooser[0]": "String Chooser",
-      "/SmartDashboard/Field": "Field2d"
+      "/SmartDashboard/Auto Fulcrum": "Command",
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Set Fulcrum SetPoint": "Command",
+      "/SmartDashboard/Turn To Target": "Command"
     }
   },
   "NetworkTables": {
     "transitory": {
       "SmartDashboard": {
+        "Field": {
+          "double[]##v_/SmartDashboard/Field/Robot": {
+            "open": true
+          },
+          "open": true
+        },
         "open": true
       },
       "SwerveModuleState[]##v_/SwerveStates": {

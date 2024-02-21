@@ -2,6 +2,9 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import java.util.Map;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
@@ -9,6 +12,10 @@ import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.FulcrumConstants;
@@ -27,6 +34,12 @@ public class Fulcrum extends SubsystemBase {
 
     private final TrapezoidProfile.Constraints m_Constraints;
     private final ProfiledPIDController m_Controller;
+
+    private ShuffleboardTab tab = Shuffleboard.getTab("Tuning");
+    private GenericEntry  sbAngle = tab.add("Fulcrum Angle", 1)
+        .withWidget(BuiltInWidgets.kNumberSlider)
+        .withProperties(Map.of("min", 0, "max", 90))
+        .getEntry();
 
     public Fulcrum() {
         m_FulcrumRight = new CANSparkMax(FulcrumConstants.kFulcrumRight, MotorType.kBrushless);
@@ -88,6 +101,7 @@ public class Fulcrum extends SubsystemBase {
         //pidController.setOutputRange(kMinOutput, kMaxOutput);
         m_FulcrumLeft.burnFlash();
         m_FulcrumRight.burnFlash();
+
     }
 
     @Override
@@ -183,6 +197,10 @@ public class Fulcrum extends SubsystemBase {
         Double beta = theta - alpha; // radians (arm angle)
         setPoint = beta;
         closedLoopFulcrum();
+    }
+
+    public double getSbAngle() {
+        return sbAngle.getDouble(1.0);
     }
 
 }
