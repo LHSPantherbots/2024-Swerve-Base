@@ -141,6 +141,11 @@ public class Launcher extends SubsystemBase {
         closedLoopLaunch();
     }
 
+    public void setSetPoint(double point) {
+        lastSetpoint = setPoint;
+        setPoint = point;
+    }
+
     public boolean isAtVelocity() {
         double error = m_LauncherEncoder.getVelocity() - setPoint;
         return (Math.abs(error) < allowableError);
