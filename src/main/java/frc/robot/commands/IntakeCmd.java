@@ -49,6 +49,11 @@ public class IntakeCmd extends Command {
     @Override
     public void end(boolean interrupted) {
         this.intake.intakeStop();
+        if (this.feeder.isNoteDetected()){
+            RobotContainer.leds.state = RobotStatus.NOTE_STORED;
+        }else{
+            RobotContainer.leds.state = RobotStatus.DEFAULT;
+        }
         this.noteWasDetected = false;
         this.shouldEnd = false;
     }
