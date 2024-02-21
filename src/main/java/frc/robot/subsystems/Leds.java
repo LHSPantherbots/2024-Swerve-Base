@@ -204,6 +204,17 @@ public class Leds extends SubsystemBase {
     m_led.setData(m_ledBuffer);
   }
 
+  public void orange() {
+
+    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
+      // Sets the specified LED to the RGB values for orange
+      m_ledBuffer.setRGB(i, 255, 165, 0);
+    }
+
+    m_led.setData(m_ledBuffer);
+  }
+
+
   public void purple() {
     for (int i = 0; i < m_ledBuffer.getLength(); i++) {
       // Sets the specified LED to the RGB values for purple
@@ -381,15 +392,18 @@ public void purpleStreak10() {
   public void ledState(){
       
     switch(this.state){
-      case DEFAULT: pantherStreak(); break;
+      
+      case TARGET_LOCK: white(); break;
+      case LAUNCH: blue(); break;
+      case NOTE_STORED: orange(); break;
+      case INTAKE: if(RobotContainer.feeder.isNoteDetected()){orangePulse();break;} greenPulse(); break;
       case 1: purpleFlash(); break;
       case 2: yellowFlash(); break;
       case 3: purpleStreak10(); break;
       case 4: yellowStreak(); break;
       case 5: red(); break;
-      case 6: blue(); break;
-      case INTAKE: if(RobotContainer.feeder.isNoteDetected()){orange();break;} green(); break;
-      case 8: rainbow(); break;
+      case ROBOT_CENTRIC: rainbow(); break;
+      case DEFAULT: pantherStreak(); break;
   }
 
 
