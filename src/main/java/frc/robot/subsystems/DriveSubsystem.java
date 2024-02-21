@@ -71,7 +71,7 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
   //AutoAim PID values
-  private double kP = 0.0; //0.05;
+  private double kP = 0.15; //0.05;
   private double kF = 0.05; //0.0125;
 
   // Odometry class for tracking robot pose
@@ -98,8 +98,8 @@ public class DriveSubsystem extends SubsystemBase {
         this::getChassisSpeed,
         this::driveRobotRelative,
         new HolonomicPathFollowerConfig(
-            new PIDConstants(1.0, 0.0, 0.0),
-            new PIDConstants(1.0, 0.0, 0.0),
+            new PIDConstants(5.0, 0.0, 0.0),
+            new PIDConstants(2.0, 0.0, 0.0),
             4.5,
             0.4,
             new ReplanningConfig()),
@@ -386,7 +386,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public double errorToTarget() {
     double error = angleToTarget() - currAngle();
-    return error;
+    return -error;
   }
 
   public double currAngle() {
