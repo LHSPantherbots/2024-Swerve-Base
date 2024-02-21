@@ -24,7 +24,7 @@ public class IntakeCmd extends Command {
     public void initialize() {
         this.intake.intake();
         this.feeder.feed();
-        RobotContainer.leds.state = RobotStatus.INTAKE;
+        RobotContainer.leds.setRobotStatus(RobotStatus.INTAKE);
     }
 
     @Override
@@ -50,9 +50,9 @@ public class IntakeCmd extends Command {
     public void end(boolean interrupted) {
         this.intake.intakeStop();
         if (this.feeder.isNoteDetected()){
-            RobotContainer.leds.state = RobotStatus.NOTE_STORED;
+            RobotContainer.leds.setRobotStatus(RobotStatus.NOTE_STORED);
         }else{
-            RobotContainer.leds.state = RobotStatus.DEFAULT;
+            RobotContainer.leds.setRobotStatus(RobotStatus.DEFAULT);
         }
         this.noteWasDetected = false;
         this.shouldEnd = false;
