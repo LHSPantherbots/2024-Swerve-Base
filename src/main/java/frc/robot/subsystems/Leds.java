@@ -11,7 +11,8 @@ import frc.utils.RobotStatus;
 public class Leds extends SubsystemBase {
   /* Creates a new leds */
 
-  public static RobotStatus state = RobotStatus.DEFAULT;
+  private static RobotStatus state = RobotStatus.DEFAULT;
+  private static RobotStatus prevState = RobotStatus.DEFAULT;
   public static int LEDstate = 0;
   private AddressableLED m_led;
   private AddressableLEDBuffer m_ledBuffer;
@@ -387,6 +388,19 @@ public void purpleStreak10() {
             }
 
     }
+  }
+
+  public void setRobotStatus(RobotStatus newState){
+    this.prevState = this.state;
+    this.state = newState;
+  }
+
+public RobotStatus getRobotStatus(){
+  return this.state;
+}
+
+  public RobotStatus getPrevRobotStatus(){
+    return this.prevState;
   }
 
   public void ledState(){
