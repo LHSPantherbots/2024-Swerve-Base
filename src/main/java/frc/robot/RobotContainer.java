@@ -122,14 +122,11 @@ public class RobotContainer {
                 false, true),
                 m_robotDrive)
                 );
+    m_driverController.a().onTrue(new InstantCommand(()->leds.state.RobotStatus.ROBOT_CENTRIC, leds));
 
 
 
 
-    m_driverController.a().onTrue(new RunCommand(() -> leds.purpleFlash(), leds));
-    m_driverController.b().onTrue(new RunCommand(() -> leds.yellowFlash(), leds));
-    m_driverController.x().onTrue(new RunCommand(() -> leds.rainbow(), leds));
-    m_driverController.y().onTrue(new RunCommand(() -> leds.purpleStreak10(), leds));
     
 
     m_driverController.start().onTrue(new InstantCommand(()->m_robotDrive.zeroHeading()));
