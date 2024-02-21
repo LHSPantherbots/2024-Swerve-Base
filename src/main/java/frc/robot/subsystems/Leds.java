@@ -1,13 +1,18 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.LEDs;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import frc.utils.RobotStatus;
+
 
 public class Leds extends SubsystemBase {
   /* Creates a new leds */
 
+  public static RobotStatus state = RobotStatus.DEFAULT;
+  public static int LEDstate = 0;
   private AddressableLED m_led;
   private AddressableLEDBuffer m_ledBuffer;
   // Store what the last hue of the first pixel is
@@ -39,7 +44,9 @@ public class Leds extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+
+
+    
   }
 
   public void ledsOff() {
@@ -370,6 +377,21 @@ public void purpleStreak10() {
 
     }
   }
-    
+
+  public void ledState(){
+      
+    switch(this.state){
+      case DEFAULT: pantherStreak(); break;
+      case 1: purpleFlash(); break;
+      case 2: yellowFlash(); break;
+      case 3: purpleStreak10(); break;
+      case 4: yellowStreak(); break;
+      case 5: red(); break;
+      case 6: blue(); break;
+      case INTAKE: if(RobotContainer.feeder.isNoteDetected()){orange();break;} green(); break;
+      case 8: rainbow(); break;
+  }
+
+
 } 
 

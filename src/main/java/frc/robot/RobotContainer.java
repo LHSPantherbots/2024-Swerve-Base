@@ -43,10 +43,11 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final Intake intake = new Intake();
-  public static final Leds leds = new Leds();
+
   private final Fulcrum fulcrum = new Fulcrum();
   private final Launcher launcher = new Launcher();
-  private final Feeder feeder = new Feeder();
+  public static final Feeder feeder = new Feeder();
+  public static final Leds leds = new Leds();
   private final Climb climb = new Climb();
 
   // The driver's controller
@@ -88,7 +89,8 @@ public class RobotContainer {
                 true, true),
             m_robotDrive));
 
-    leds.setDefaultCommand(new RunCommand(() -> leds.pantherStreak(), leds));
+    //leds.setDefaultCommand(new RunCommand(() -> leds.pantherStreak(), leds));
+    Leds.LEDstate = 0;
     // fulcrum.setDefaultCommand(new RunCommand(() -> fulcrum.stopFulcrum(), fulcrum));
 
     fulcrum.setDefaultCommand(new RunCommand(() -> fulcrum.manualFulcrum(operatorController.getRightY()*0.5), fulcrum));
@@ -119,7 +121,6 @@ public class RobotContainer {
                     - m_driverController.getLeftTriggerAxis()), OIConstants.kDriveDeadband),
                 false, true),
                 m_robotDrive)
-                .alongWith(new RunCommand(()->leds.rainbow(),leds))
                 );
 
 
