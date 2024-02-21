@@ -5,5 +5,6 @@ public enum RobotStatus{
     INTAKE,
     NOTE_STORED,
     LAUNCH,
+    ROBOT_CENTRIC,
     TARGET_LOCK
 }
