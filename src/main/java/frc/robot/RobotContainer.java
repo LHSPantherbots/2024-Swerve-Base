@@ -89,8 +89,8 @@ public class RobotContainer {
                 true, true),
             m_robotDrive));
 
-    //leds.setDefaultCommand(new RunCommand(() -> leds.pantherStreak(), leds));
-    Leds.LEDstate = 0;
+    leds.setDefaultCommand(new RunCommand(() -> leds.ledState(), leds));
+    
     // fulcrum.setDefaultCommand(new RunCommand(() -> fulcrum.stopFulcrum(), fulcrum));
 
     fulcrum.setDefaultCommand(new RunCommand(() -> fulcrum.manualFulcrum(operatorController.getRightY()*0.5), fulcrum));
@@ -122,7 +122,8 @@ public class RobotContainer {
                 false, true),
                 m_robotDrive)
                 );
-    m_driverController.a().onTrue(new InstantCommand(()->leds.state.RobotStatus.ROBOT_CENTRIC, leds));
+    m_driverController.a().onTrue(new InstantCommand(()-> leds.setRobotStatus(RobotStatus.ROBOT_CENTRIC), leds));
+    m_driverController.a().onFalse(new InstantCommand(()-> leds.setRobotStatus(leds.getPrevRobotStatus()), leds));
 
 
 
