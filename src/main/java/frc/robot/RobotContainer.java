@@ -95,7 +95,7 @@ public class RobotContainer {
     
     // fulcrum.setDefaultCommand(new RunCommand(() -> fulcrum.stopFulcrum(), fulcrum));
 
-    fulcrum.setDefaultCommand(new RunCommand(() -> fulcrum.manualFulcrum(operatorController.getRightY()*0.5), fulcrum));
+    fulcrum.setDefaultCommand(new RunCommand(() -> fulcrum.manualFulcrum(operatorController.getRightY()*0.0), fulcrum));
   
     feeder.setDefaultCommand(new RunCommand(()-> feeder.stopAll(), feeder));
     climb.setDefaultCommand(new RunCommand(()-> climb.manualAll(0, 0), climb));
@@ -134,7 +134,7 @@ public class RobotContainer {
 
     m_driverController.start().onTrue(new InstantCommand(()->m_robotDrive.zeroHeading()));
     m_driverController.leftBumper().whileTrue(
-        new RunCommand(()->climb.manualAll(-m_driverController.getRightY(),-m_driverController.getRightX()), climb));
+        new RunCommand(()->climb.manualAll(-MathUtil.applyDeadband(m_driverController.getRightY(), OIConstants.kDriveDeadband),-MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband)), climb));
     m_driverController.leftBumper().onTrue(new InstantCommand(()-> leds.setRobotStatus(RobotStatus.CLIMB), leds));
     m_driverController.leftBumper().onFalse(new InstantCommand(()-> leds.setRobotStatus(leds.getPrevRobotStatus()), leds));
     // operatorController.a().whileTrue(new RunCommand(() -> intake.intake(), intake))
@@ -147,7 +147,8 @@ public class RobotContainer {
     
     // operatorController.y().whileTrue(new RunCommand(()-> launcher.lancherMaxSpeed(), launcher))
     //     .onFalse(new RunCommand(()-> launcher.stopAll(), launcher));
-    operatorController.a().whileTrue(new FulcrumCmd(Position.INTAKE, fulcrum, false).alongWith(new IntakeCmd2(intake, feeder,fulcrum)));
+    operatorController.a().whileTrue(new FulcrumCmd
+    (Position.INTAKE, fulcrum, false).alongWith(new IntakeCmd2(intake, feeder,fulcrum)));
     //operatorController.b().onTrue(new ShootCmd(launcher, feeder));
     operatorController.b().onTrue(new RunCommand(()->launcher.lancherMaxSpeed(), launcher ));
     operatorController.b().onTrue(new InstantCommand(()-> leds.setRobotStatus(RobotStatus.LAUNCH), leds));
