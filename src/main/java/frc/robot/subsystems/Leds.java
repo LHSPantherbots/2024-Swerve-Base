@@ -209,7 +209,7 @@ public class Leds extends SubsystemBase {
 
     for (int i = 0; i < m_ledBuffer.getLength(); i++) {
       // Sets the specified LED to the RGB values for orange
-      m_ledBuffer.setRGB(i, 255, 165, 0);
+      m_ledBuffer.setRGB(i, LEDs.orange_Red, LEDs.orange_Green, LEDs.orange_Blue);
     }
 
     m_led.setData(m_ledBuffer);
