@@ -1,8 +1,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Intake;
+import frc.utils.RobotStatus;
 
 public class IntakeCmd extends Command {
     Intake intake;
@@ -22,6 +24,7 @@ public class IntakeCmd extends Command {
     public void initialize() {
         this.intake.intake();
         this.feeder.feed();
+        RobotContainer.leds.setRobotStatus(RobotStatus.INTAKE);
     }
 
     @Override
@@ -46,6 +49,11 @@ public class IntakeCmd extends Command {
     @Override
     public void end(boolean interrupted) {
         this.intake.intakeStop();
+        if (this.feeder.isNoteDetected()){
+            RobotContainer.leds.setRobotStatus(RobotStatus.NOTE_STORED);
+        }else{
+            RobotContainer.leds.setRobotStatus(RobotStatus.DEFAULT);
+        }
         this.noteWasDetected = false;
         this.shouldEnd = false;
     }

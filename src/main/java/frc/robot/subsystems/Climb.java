@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -37,8 +38,8 @@ public class Climb extends SubsystemBase {
 
   /** Creates a new ElevatorSubsystem. */
   public Climb() {
-    m_RightArm.restoreFactoryDefaults();
-    m_LeftArm.restoreFactoryDefaults();
+    // m_RightArm.restoreFactoryDefaults();
+    // m_LeftArm.restoreFactoryDefaults();
 
     // Set limit low when starting to keep from destroying itself before tuning;
     m_RightArm.setSmartCurrentLimit(60);
@@ -55,11 +56,24 @@ public class Climb extends SubsystemBase {
     m_RightArm.setInverted(true);
     m_LeftArm.setInverted(false);
 
+    m_RightArm.enableSoftLimit(SoftLimitDirection.kForward, true);
+    m_RightArm.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    m_RightArm.setSoftLimit(SoftLimitDirection.kForward, 415);
+    m_RightArm.setSoftLimit(SoftLimitDirection.kReverse, 0);
+
+    m_LeftArm.enableSoftLimit(SoftLimitDirection.kForward, true);
+    m_LeftArm.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    m_LeftArm.setSoftLimit(SoftLimitDirection.kForward, 415);
+    m_LeftArm.setSoftLimit(SoftLimitDirection.kReverse, 0);
+
     e_RightArm = m_RightArm.getEncoder();
     e_LeftArm = m_LeftArm.getEncoder();
 
     m_constraints = new TrapezoidProfile.Constraints(maxVel, maxAcc);
     m_controller = new ProfiledPIDController(kP, kI, kD, m_constraints, kDt);
+
+    e_LeftArm.setPosition(0);
+    e_RightArm.setPosition(0);
 
   }
 
@@ -105,17 +119,23 @@ public class Climb extends SubsystemBase {
   }
 
   public void manualRightArm(double move) {
-    if ((getRightHeight() < ClimbConstants.heightUpperLimit || move < 0) &&
-        (getRightHeight() > ClimbConstants.heightLowerLimit || move > 0)) {
-      m_RightArm.set(move);
-    }
+    m_RightArm.set(move);
+    // if ((getRightHeight() < ClimbConstants.heightUpperLimit || move < 0) &&
+    //     (getRightHeight() > ClimbConstants.heightLowerLimit || move > 0)) {
+    //   m_RightArm.set(move);
+    // } else {
+    //   m_RightArm.set(0);
+    // }
   }
 
   public void manualLeftArm(double move) {
-    if ((getLeftHeight() < ClimbConstants.heightUpperLimit || move < 0) &&
-        (getLeftHeight() > ClimbConstants.heightLowerLimit || move > 0)) {
-      m_LeftArm.set(move);
-    }
+    m_LeftArm.set(move);
+    // if ((getLeftHeight() < ClimbConstants.heightUpperLimit || move < 0) &&
+    //     (getLeftHeight() > ClimbConstants.heightLowerLimit || move > 0)) {
+    //   m_LeftArm.set(move);
+    // } else {
+    //   m_LeftArm.set(0);
+    // }
   }
 
   public void manualAll(double lift, double adjust) {

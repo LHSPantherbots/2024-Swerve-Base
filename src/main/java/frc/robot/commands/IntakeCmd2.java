@@ -6,6 +6,7 @@ import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Fulcrum;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Leds;
+import frc.utils.RobotStatus;
 
 public class IntakeCmd2 extends Command {
     Intake intake;
@@ -33,13 +34,15 @@ public class IntakeCmd2 extends Command {
         if (this.fulcrum.isFulcurmDown()){
             this.intake.intake();
             this.feeder.feed();
-            //this.leds.greenPulse();
-            RobotContainer.leds.greenPulse();
+            // //this.leds.greenPulse();
+            // RobotContainer.leds.greenPulse();
+            RobotContainer.leds.setRobotStatus(RobotStatus.INTAKE);
         }else{
             this.intake.intakeStop();
             this.feeder.stopAll();
             //this.leds.greenPulse();
-            RobotContainer.leds.greenPulse();
+            // RobotContainer.leds.greenPulse();
+            RobotContainer.leds.setRobotStatus(RobotStatus.INTAKE);
         }
     }
 
@@ -48,7 +51,12 @@ public class IntakeCmd2 extends Command {
         this.intake.intakeStop();
         this.feeder.stopAll();
         //this.leds.orangePulse();
-        RobotContainer.leds.orangePulse();
+        // RobotContainer.leds.orangePulse();
+        if (this.feeder.isNoteDetected()){
+            RobotContainer.leds.setRobotStatus(RobotStatus.NOTE_STORED);
+        }else{
+            RobotContainer.leds.setRobotStatus(RobotStatus.DEFAULT);
+        }
         
     }
 

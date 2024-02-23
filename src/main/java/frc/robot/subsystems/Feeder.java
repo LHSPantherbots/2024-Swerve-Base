@@ -67,6 +67,10 @@ public class Feeder extends SubsystemBase {
         m_Feeder.set(-.5);
     }
 
+    public void setFeed(double feedVal){
+        m_Feeder.set(feedVal);
+    }
+
     public void reversefeed() {
         m_Feeder.set(.15);
     }
