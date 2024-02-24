@@ -163,4 +163,10 @@ public class Launcher extends SubsystemBase {
         return getShooterSpeedForDistance(distanceSubscriber.get());
     }
 
+    public void launcherAutoSpeed() {
+        lastSetpoint = setPoint;
+        setPoint = getAutoShooterSpeed();
+        closedLoopLaunch();
+    }
+
 }

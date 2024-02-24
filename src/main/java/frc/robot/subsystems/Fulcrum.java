@@ -51,7 +51,7 @@ public class Fulcrum extends SubsystemBase {
         kDistanceToFulcrumAngle.put(1.0, 9.0);
         kDistanceToFulcrumAngle.put(2.0, 18.0);
         kDistanceToFulcrumAngle.put(3.0, 29.0);
-        kDistanceToFulcrumAngle.put(5.0, 32.5);
+        kDistanceToFulcrumAngle.put(4.0, 32.5);
     }
 
     final DoubleSubscriber distanceSubscriber;
@@ -207,13 +207,14 @@ public class Fulcrum extends SubsystemBase {
 
     // calculates estimated fulcrum angle to hit goal with out accounting for the change in height as fulcrum moves
     public void autoAim() {
-        Double distance = SmartDashboard.getNumber("Distance To Target", .5);
-        Double theta = Math.toRadians(55.0); // angle of shooter relative to arm
-        Double Rz = 0.7; // Meters (Shooter Height)
-        Double Tz = 2.05; // Meters (Target Height)
-        Double alpha = Math.atan((Tz-Rz)/(distance)); // Radians (angle to target)
-        Double beta = theta - alpha; // radians (arm angle)
-        setPoint = beta;
+        // Double distance = SmartDashboard.getNumber("Distance To Target", .5);
+        // Double theta = Math.toRadians(55.0); // angle of shooter relative to arm
+        // Double Rz = 0.7; // Meters (Shooter Height)
+        // Double Tz = 2.05; // Meters (Target Height)
+        // Double alpha = Math.atan((Tz-Rz)/(distance)); // Radians (angle to target)
+        // Double beta = theta - alpha; // radians (arm angle)
+        lastSetpoint = setPoint;
+        setPoint = getAutoFulcrumAngle()-3;
         closedLoopFulcrum();
     }
 
