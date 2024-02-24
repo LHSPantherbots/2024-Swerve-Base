@@ -46,12 +46,12 @@ public class Launcher extends SubsystemBase {
 
         pidController = m_LauncherTop.getPIDController();
 
-        // PID coefficients these will need to be tuned
+        // PID coefficients
         kP = 0.00015;// 0.00025; //5e-5;
         kI = 0;// 1e-6;
         kD = 0.0008;// 0.0004;
         kIz = 0;
-        kFF = 0.00017;// 0.00019; TODO need to tune this
+        kFF = 0.00016;// 0.00017// 0.00019;
         kMaxOutput = 1;
         kMinOutput = -1;
         maxRPM = 5700;
