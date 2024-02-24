@@ -68,7 +68,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    NamedCommands.registerCommand("ShootCmd", new ShootCmd(launcher, feeder));
+    NamedCommands.registerCommand("ShootCmd", new ShootCmd(launcher, feeder).withTimeout(1));
     NamedCommands.registerCommand("IntakeCmd", new IntakeCmd(intake, feeder));
     NamedCommands.registerCommand("IntakeCmd2", new IntakeCmd(intake, feeder));
     NamedCommands.registerCommand("AutoAim", new TurnToTargetCmd(m_robotDrive));
