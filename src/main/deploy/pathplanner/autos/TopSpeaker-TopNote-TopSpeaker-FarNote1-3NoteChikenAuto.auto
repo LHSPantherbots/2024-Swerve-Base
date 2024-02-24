@@ -5,7 +5,7 @@
       "x": 0.7980072100495078,
       "y": 6.63469379570338
     },
-    "rotation": 60.07463915754776
+    "rotation": 60.020765203537444
   },
   "command": {
     "type": "sequential",
@@ -37,15 +37,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "AutoAim"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoFulcrum"
+            "pathName": "TopNote-TopSpeaker"
           }
         },
         {
@@ -61,44 +55,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "TopNote-MidNote"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakeCmd"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoAim"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoFulcrum"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootCmd"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "MidNote-FarNote2"
+                  "pathName": "TopSpeaker-FarNote1"
                 }
               },
               {
@@ -113,19 +70,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "FarNote2-Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoAim"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoFulcrum"
+            "pathName": "FarNote1-TopSpeaker"
           }
         },
         {
