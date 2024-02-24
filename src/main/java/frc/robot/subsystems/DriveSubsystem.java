@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import org.opencv.core.Mat;
-
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -23,6 +21,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.Publisher;
 import edu.wpi.first.networktables.StructArrayPublisher;
@@ -80,6 +79,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final StructArrayPublisher<SwerveModuleState> publisher;
   private final SwerveDrivePoseEstimator m_poseEstimator;
   private final LimeLight m_limeLight = new LimeLight();
+  private final DoublePublisher distancePublisher;
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -116,7 +116,7 @@ public class DriveSubsystem extends SubsystemBase {
         this::driveRobotRelative,
         new HolonomicPathFollowerConfig(
             new PIDConstants(5.0, 0.0, 0.0),
-            new PIDConstants(2.0, 0.0, 0.0),
+            new PIDConstants(1.75, 0.0, 0.0),
             4.5,
             0.4,
             new ReplanningConfig()),
@@ -137,6 +137,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putData("Field", m_field);
     publisher = NetworkTableInstance.getDefault()
       .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
+    distancePublisher = NetworkTableInstance.getDefault().getDoubleTopic("/Distance").publish();
   }
 
   @Override
@@ -176,6 +177,7 @@ public class DriveSubsystem extends SubsystemBase {
       m_rearLeft.getState(),
       m_rearRight.getState()
     });
+    distancePublisher.set(getDistanceToTarget());
     SmartDashboard.putNumber("Distance To Target", getDistanceToTarget());
     SmartDashboard.putNumber("desired Angle", angleToTarget());
     SmartDashboard.putNumber("auto aim error", errorToTarget());
