@@ -12,12 +12,15 @@ import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import frc.robot.Constants.FulcrumConstants;
 
 public class Fulcrum extends SubsystemBase {
@@ -40,6 +43,18 @@ public class Fulcrum extends SubsystemBase {
         .withWidget(BuiltInWidgets.kNumberSlider)
         .withProperties(Map.of("min", 0, "max", 90))
         .getEntry();
+    
+    static InterpolatingDoubleTreeMap kDistanceToFulcrumAngle = new InterpolatingDoubleTreeMap();
+
+    static {
+        kDistanceToFulcrumAngle.put(0.0, 9.0);
+        kDistanceToFulcrumAngle.put(1.0, 9.0);
+        kDistanceToFulcrumAngle.put(2.0, 18.0);
+        kDistanceToFulcrumAngle.put(3.0, 29.0);
+        kDistanceToFulcrumAngle.put(5.0, 32.5);
+    }
+
+    final DoubleSubscriber distanceSubscriber;
 
     public Fulcrum() {
         m_FulcrumRight = new CANSparkMax(FulcrumConstants.kFulcrumRight, MotorType.kBrushless);
@@ -102,6 +117,8 @@ public class Fulcrum extends SubsystemBase {
         m_FulcrumLeft.burnFlash();
         m_FulcrumRight.burnFlash();
 
+        distanceSubscriber = NetworkTableInstance.getDefault().getDoubleTopic("/Distance").subscribe(0.0);
+
     }
 
     @Override
@@ -112,6 +129,7 @@ public class Fulcrum extends SubsystemBase {
         SmartDashboard.putNumber("Fulcrum Setpoint", setPoint);
         SmartDashboard.putNumber("Fulcrum Pos", e_FulcrumEncoder.getPosition());
         SmartDashboard.putBoolean("Fulcrum Down", isFulcurmDown());
+        SmartDashboard.putNumber("Auto Angle", getAutoFulcrumAngle());
     }
 
     public void manualFulcrum(double move) {
@@ -201,6 +219,14 @@ public class Fulcrum extends SubsystemBase {
 
     public double getSbAngle() {
         return sbAngle.getDouble(1.0);
+    }
+
+    public double getFulcrumAngleForDistance(double distance) {
+        return kDistanceToFulcrumAngle.get(distance);
+    }
+
+    public double getAutoFulcrumAngle() {
+        return getFulcrumAngleForDistance(distanceSubscriber.get());
     }
 
 }

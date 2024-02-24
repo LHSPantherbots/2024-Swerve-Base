@@ -14,11 +14,12 @@ public class FulcrumAimCmd extends Command {
     @Override
     public void initialize() {
         this.fulcrum.resetController();
+        this.fulcrum.setSetPoint(this.fulcrum.getAutoFulcrumAngle());
     }
 
     @Override
     public void execute() {
-        this.fulcrum.autoAim();
+        this.fulcrum.closedLoopFulcrum();
     }
 
     @Override
