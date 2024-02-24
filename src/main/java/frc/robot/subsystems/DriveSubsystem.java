@@ -85,7 +85,7 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem() {
     m_gyro.reset();
 
-    if (m_limeLight.hasLockedVisionTarget()) {
+    if (m_limeLight.isTargetValid()) {
       m_poseEstimator = new SwerveDrivePoseEstimator(
           DriveConstants.kDriveKinematics,
           m_gyro.getRotation2d(),
@@ -431,9 +431,9 @@ public class DriveSubsystem extends SubsystemBase {
     double outP = kP * error;
     double outputTurn = outF + outP;
     if (Math.abs(error) > 0.1 ) { // if error is greater than ~5.7 deg (0.1 rad)
-      drive(0, 0, outputTurn, false, false);
+      drive(x, y, outputTurn, false, false);
     } else {
-      drive(0, 0, 0, false, false);
+      drive(x, y, 0, false, false);
     }
   }
 

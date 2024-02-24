@@ -173,6 +173,8 @@ public class RobotContainer {
 
     operatorController.start().whileTrue(new FeedCenterCmd(feeder));
 
+    operatorController.back().whileTrue(new RunCommand(() -> fulcrum.autoAim(), fulcrum)).whileTrue(new RunCommand(() -> launcher.launcherAutoSpeed(), launcher)).onTrue(new InstantCommand(()-> leds.setRobotStatus(RobotStatus.TARGET_LOCK), leds)).onFalse(new InstantCommand(()-> leds.setRobotStatus(leds.getPrevRobotStatus()), leds)).onFalse(new RunCommand(() -> launcher.resumeLauncher(), launcher));
+
     operatorController.pov(0).onTrue(new FulcrumCmd(Position.AMP, fulcrum, false));
     operatorController.pov(270).onTrue(new FulcrumCmd(Position.STOW, fulcrum, false));
     operatorController.pov(90).onTrue(new FulcrumCmd(Position.SPEAKER, fulcrum, false));
