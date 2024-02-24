@@ -6,6 +6,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -26,7 +28,8 @@ public class Feeder extends SubsystemBase {
     private double allowableError = 0.5;
     private double positionSetpoint = 0.0;
   
-    DigitalInput breamBreak = new DigitalInput(RIO_Channels_DIO.FEEDER_BEAM_BREAK);
+    DigitalInput breamBreak_raw = new DigitalInput(RIO_Channels_DIO.FEEDER_BEAM_BREAK);
+    Debouncer beamBreak = new Debouncer(0.1, DebounceType.kBoth);
 
     public Feeder() {
 
@@ -56,7 +59,7 @@ public class Feeder extends SubsystemBase {
     }
 
     public boolean isNoteDetected() {
-        return !breamBreak.get();
+        return !beamBreak.calculate(breamBreak_raw.get());
     }
 
     public void stopAll() {
