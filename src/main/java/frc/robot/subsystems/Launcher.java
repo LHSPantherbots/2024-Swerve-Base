@@ -28,12 +28,12 @@ public class Launcher extends SubsystemBase {
 
     static InterpolatingDoubleTreeMap kDistanceToShooterSpeed = new InterpolatingDoubleTreeMap();
 
-    // These values are made up, must get real values from testing
     static {
         kDistanceToShooterSpeed.put(0.0, 5000.0);
-        kDistanceToShooterSpeed.put(1.0, 5200.0);
-        kDistanceToShooterSpeed.put(3.0, 5400.0);
-        kDistanceToShooterSpeed.put(5.0, 6000.0);
+        kDistanceToShooterSpeed.put(1.0, 5000.0);
+        kDistanceToShooterSpeed.put(2.0, 5000.0);
+        kDistanceToShooterSpeed.put(3.0, 5000.0);
+        kDistanceToShooterSpeed.put(4.0, 5225.0);
     }
 
     final DoubleSubscriber distanceSubscriber;

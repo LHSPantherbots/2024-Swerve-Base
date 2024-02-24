@@ -46,12 +46,12 @@ public class Fulcrum extends SubsystemBase {
     
     static InterpolatingDoubleTreeMap kDistanceToFulcrumAngle = new InterpolatingDoubleTreeMap();
 
-    // These values are made up, must get real values from testing
     static {
         kDistanceToFulcrumAngle.put(0.0, 9.0);
-        kDistanceToFulcrumAngle.put(1.0, 15.0);
-        kDistanceToFulcrumAngle.put(3.0, 20.0);
-        kDistanceToFulcrumAngle.put(5.0, 30.0);
+        kDistanceToFulcrumAngle.put(1.0, 9.0);
+        kDistanceToFulcrumAngle.put(2.0, 18.0);
+        kDistanceToFulcrumAngle.put(3.0, 29.0);
+        kDistanceToFulcrumAngle.put(5.0, 32.5);
     }
 
     final DoubleSubscriber distanceSubscriber;
