@@ -150,6 +150,13 @@ public class RobotContainer {
             -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband)),
         m_robotDrive)
     );
+    m_driverController.b().whileTrue(
+      new RunCommand(
+        () -> m_robotDrive.turnToAmpAndDrive(
+          -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+          -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband)), 
+        m_robotDrive)
+    );
     // operatorController.a().whileTrue(new RunCommand(() -> intake.intake(), intake))
     //     .onFalse(new RunCommand(() -> intake.intakeStop(), intake));
     // operatorController.b().whileTrue(new RunCommand(() -> intake.outtake(), intake))
