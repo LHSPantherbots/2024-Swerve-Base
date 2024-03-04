@@ -437,6 +437,25 @@ public class DriveSubsystem extends SubsystemBase {
     }
   }
 
+  public void turnToAmpAndDrive(Double x, Double y) {
+    double error;
+    if (isRed()) {
+      error = Math.toRadians(-90) - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
+    } else {
+      error = Math.toRadians(90) - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
+    }
+    kF = Math.copySign(kF, error);
+    double outF = kF;
+    double outP = kP * error;
+    double outputTurn = outF + outP;
+    if (Math.abs(error) > 0.1 ) { // if error is greater than ~5.7 deg (0.1 rad)
+      drive(x, y, outputTurn, false, false);
+    } else {
+      drive(x, y, 0, false, false);
+    }
+
+  }
+
   public boolean isAimedAtGoal() {
     double error = angleToTarget() - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
     if (Math.abs(error) > 0.1 ) {
