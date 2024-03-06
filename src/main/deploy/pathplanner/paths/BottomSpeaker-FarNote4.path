@@ -8,11 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.6151356540016027,
-        "y": 0.7900529986938403
+        "x": 0.7515525931525792,
+        "y": 0.8948522162447154
       },
       "isLocked": false,
       "linkedName": "BottomSpeaker"
+    },
+    {
+      "anchor": {
+        "x": 5.293900256046959,
+        "y": 1.789704432489432
+      },
+      "prevControl": {
+        "x": 4.476833741407524,
+        "y": 1.7967481093397721
+      },
+      "nextControl": {
+        "x": 6.4221921808772535,
+        "y": 1.7799777779650328
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,15 +36,21 @@
         "y": 2.4483866511592676
       },
       "prevControl": {
-        "x": 6.048413717892435,
-        "y": 1.8106508776884982
+        "x": 7.0836046885363935,
+        "y": 2.3635770494289794
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "FarNote4"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 0.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {

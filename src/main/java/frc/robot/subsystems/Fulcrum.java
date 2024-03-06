@@ -214,7 +214,7 @@ public class Fulcrum extends SubsystemBase {
         // Double alpha = Math.atan((Tz-Rz)/(distance)); // Radians (angle to target)
         // Double beta = theta - alpha; // radians (arm angle)
         lastSetpoint = setPoint;
-        setPoint = getAutoFulcrumAngle()-3;
+        setPoint = getAutoFulcrumAngle();
         closedLoopFulcrum();
     }
 
