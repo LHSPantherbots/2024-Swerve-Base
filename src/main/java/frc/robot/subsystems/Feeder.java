@@ -9,9 +9,12 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LauncherConstants;
+import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.RIO_Channels_DIO;
 
 public class Feeder extends SubsystemBase {
@@ -19,6 +22,11 @@ public class Feeder extends SubsystemBase {
     private final CANSparkMax m_Feeder;
     private final PIDController m_controller;
 
+    private XboxController m_driverFeedBack = new XboxController(OIConstants.kDriverControllerPort);
+    private XboxController m_operatorFeedBack = new XboxController(OIConstants.kOperatorControllerPort);
+
+    private boolean lastBeamBreakState;
+    private int feedbackCountDown = 0;
     RelativeEncoder feederEncoder;
 
     private double kP = 0.1;
@@ -47,6 +55,8 @@ public class Feeder extends SubsystemBase {
         this.feederEncoder = m_Feeder.getEncoder();
         m_controller = new PIDController(kP, kI, kD);
         m_Feeder.burnFlash();
+
+        lastBeamBreakState = !breamBreak_raw.get();
     }
 
     @Override
@@ -55,6 +65,19 @@ public class Feeder extends SubsystemBase {
         SmartDashboard.putNumber("Feeder RPM", feederEncoder.getVelocity());
         SmartDashboard.putNumber("Feeder Output", m_Feeder.getAppliedOutput());
         SmartDashboard.putNumber("Feeder Current", m_Feeder.getOutputCurrent());
+        if (isNoteDetected() && lastBeamBreakState==false) {
+            m_driverFeedBack.setRumble(RumbleType.kBothRumble, 1.0);
+            m_operatorFeedBack.setRumble(RumbleType.kBothRumble, 1.0);
+            feedbackCountDown = 10;
+        }
+        if (feedbackCountDown >= 0) {
+            feedbackCountDown-=1;
+        }
+        if (feedbackCountDown == 0) {
+            m_driverFeedBack.setRumble(RumbleType.kBothRumble, 0.0);
+            m_operatorFeedBack.setRumble(RumbleType.kBothRumble, 0.0);
+        }
+        lastBeamBreakState = isNoteDetected();
 
     }
 

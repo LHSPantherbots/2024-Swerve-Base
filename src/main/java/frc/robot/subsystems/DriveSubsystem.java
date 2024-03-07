@@ -185,6 +185,14 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("desired Angle (deg)", Math.toDegrees(angleToTarget()));
     SmartDashboard.putNumber("auto aim error (deg)", Math.toDegrees(errorToTarget()));
     SmartDashboard.putNumber("currAngle (deg)", Math.toDegrees(currAngle()));
+    SmartDashboard.putNumber("FR Drive Current", m_frontRight.getDriveCurrent());
+    SmartDashboard.putNumber("FL Drive Current", m_frontLeft.getDriveCurrent());
+    SmartDashboard.putNumber("RR Drive Current", m_rearRight.getDriveCurrent());
+    SmartDashboard.putNumber("RL Drive Current", m_rearLeft.getDriveCurrent());
+    SmartDashboard.putNumber("FR Turn Current", m_frontRight.getTurnCurrent());
+    SmartDashboard.putNumber("FL Turn Current", m_frontLeft.getTurnCurrent());
+    SmartDashboard.putNumber("RR Turn Current", m_rearRight.getTurnCurrent());
+    SmartDashboard.putNumber("RL Turn Current", m_rearLeft.getTurnCurrent());
   }
 
 

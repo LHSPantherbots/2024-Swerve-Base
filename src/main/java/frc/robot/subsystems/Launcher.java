@@ -19,6 +19,7 @@ public class Launcher extends SubsystemBase {
     private final CANSparkFlex m_LauncherTop;
     private final CANSparkFlex m_LauncherBottom;
     private final RelativeEncoder m_LauncherEncoder;
+    private final RelativeEncoder m_lowerLauncherEncoder;
 
     private double lastSetpoint = 0;
     private double setPoint = 0;
@@ -58,6 +59,7 @@ public class Launcher extends SubsystemBase {
         // m_LauncherTop.setClosedLoopRampRate(0.25);
 
         m_LauncherEncoder = m_LauncherTop.getEncoder();
+        m_lowerLauncherEncoder = m_LauncherBottom.getEncoder();
 
         pidController = m_LauncherTop.getPIDController();
 
@@ -86,7 +88,8 @@ public class Launcher extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Shooter Current", m_LauncherTop.getOutputCurrent());
-        SmartDashboard.putNumber("Launcer RPM", m_LauncherEncoder.getVelocity());
+        SmartDashboard.putNumber("Launcer Top RPM", m_LauncherEncoder.getVelocity());;
+        SmartDashboard.putNumber("Launcer Bottom RPM", m_lowerLauncherEncoder.getVelocity());
         SmartDashboard.putNumber("Launcher SetPoint", setPoint);
         SmartDashboard.putBoolean("Launcher Is At Vel", isAtVelocity());
         SmartDashboard.putNumber("Auto RPM", getAutoShooterSpeed());
