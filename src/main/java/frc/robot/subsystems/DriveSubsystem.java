@@ -117,9 +117,9 @@ public class DriveSubsystem extends SubsystemBase {
         new HolonomicPathFollowerConfig(
             new PIDConstants(5.0, 0.0, 0.0),
             new PIDConstants(1.75, 0.0, 0.0),
-            4.5,
+            4.0,
             0.4,
-            new ReplanningConfig()),
+            new ReplanningConfig(true, true)),
         () -> {
           // Boolean supplier that controls when the path will be mirrored for the red
           // alliance
@@ -153,7 +153,7 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
       });
-    if (m_limeLight.isTargetValid()) {
+    if (m_limeLight.isTargetValid() && Math.sqrt((getChassisSpeed().vxMetersPerSecond*getChassisSpeed().vxMetersPerSecond)+(getChassisSpeed().vyMetersPerSecond*getChassisSpeed().vyMetersPerSecond)) > 1.0) {
       var tmpPose = m_limeLight.getBotPose3d().toPose2d();
       if (Math
           .abs(m_poseEstimator.getEstimatedPosition().getTranslation().getDistance(tmpPose.getTranslation())) < 0.75) {
@@ -448,9 +448,9 @@ public class DriveSubsystem extends SubsystemBase {
   public void turnToAmpAndDrive(Double x, Double y) {
     double error;
     if (isRed()) {
-      error = Math.toRadians(-90) - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
-    } else {
       error = Math.toRadians(90) - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
+    } else {
+      error = Math.toRadians(-90) - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
     }
     kF = Math.copySign(kF, error);
     double outF = kF;
