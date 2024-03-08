@@ -28,7 +28,7 @@ public class FulcrumCmd extends Command {
         this.fulcrum.resetController();
         switch (this.position) {
             case STOW:
-                this.fulcrum.setSetPoint(45);
+                this.fulcrum.setSetPoint(54.1);
                 break;
             case INTAKE:
                 this.fulcrum.setSetPoint(9);
