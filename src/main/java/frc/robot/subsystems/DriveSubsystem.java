@@ -115,11 +115,11 @@ public class DriveSubsystem extends SubsystemBase {
         this::getChassisSpeed,
         this::driveRobotRelative,
         new HolonomicPathFollowerConfig(
-            new PIDConstants(5.0, 0.0, 0.0),
-            new PIDConstants(1.75, 0.0, 0.0),
+            new PIDConstants(4.0, 0.0, 0.0),
+            new PIDConstants(1.0, 0.0, 0.0),
             4.0,
             0.4,
-            new ReplanningConfig(true, true)),
+            new ReplanningConfig(true, false)),
         () -> {
           // Boolean supplier that controls when the path will be mirrored for the red
           // alliance

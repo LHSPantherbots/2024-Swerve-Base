@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.AutoShootAndFulcrum;
 import frc.robot.commands.FeedCenterCmd;
 import frc.robot.commands.FeedHoldCmd;
 import frc.robot.commands.FulcrumAimCmd;
@@ -17,6 +18,7 @@ import frc.robot.commands.FulcrumCmd;
 import frc.robot.commands.FulcrumTuningCmd;
 import frc.robot.commands.IntakeCmd;
 import frc.robot.commands.IntakeCmd2;
+import frc.robot.commands.ShootAutoRpmCmd;
 import frc.robot.commands.ShootCmd;
 import frc.robot.commands.TurnToTargetCmd;
 import frc.robot.subsystems.Climb;
@@ -73,6 +75,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("IntakeCmd2", new IntakeCmd(intake, feeder));
     NamedCommands.registerCommand("AutoAim", new TurnToTargetCmd(m_robotDrive));
     NamedCommands.registerCommand("AutoFulcrum", new FulcrumAimCmd(fulcrum));
+    NamedCommands.registerCommand("FeedHold", new RunCommand(() -> feeder.stopAll(), feeder));
+    NamedCommands.registerCommand("AutoShoot", new AutoShootAndFulcrum(fulcrum, launcher, feeder));
 
     SmartDashboard.putData("Turn To Target", new TurnToTargetCmd(m_robotDrive));
     SmartDashboard.putData("Auto Fulcrum", new FulcrumAimCmd(fulcrum));
