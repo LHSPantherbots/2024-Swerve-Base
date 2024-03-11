@@ -78,6 +78,12 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Fulcrum", new FulcrumAimCmd(fulcrum));
     SmartDashboard.putData("Set Fulcrum SetPoint", new FulcrumTuningCmd(fulcrum));
 
+    SmartDashboard.putData("Red Dot Led", new InstantCommand(()-> leds.redDot(), leds));
+    SmartDashboard.putData("Purple Gradient", new InstantCommand(()-> leds.purpleGradient(), leds));
+    SmartDashboard.putData("Orange Race", new InstantCommand(()-> leds.orangeRace(), leds));
+    SmartDashboard.putData("Purple Streak 10", new InstantCommand(()-> leds.purpleStreak10(), leds));
+    SmartDashboard.putData("Purple Flash", new InstantCommand(()-> leds.purpleFlash(), leds));
+
     autoChoice = AutoBuilder.buildAutoChooser();
 
     Shuffleboard.getTab("Autonomous").add(autoChoice);

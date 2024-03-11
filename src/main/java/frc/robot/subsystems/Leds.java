@@ -5,6 +5,7 @@ import frc.robot.RobotContainer;
 import frc.robot.Constants.LEDs;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.utils.RobotStatus;
 
 
@@ -18,6 +19,7 @@ public class Leds extends SubsystemBase {
   private AddressableLEDBuffer m_ledBuffer;
   // Store what the last hue of the first pixel is
   private int m_rainbowFirstPixelHue;
+  private int m_purpleFirstPixelVal;
 
   private int temp_Blue = 0;
   private int temp_Green = 0;
@@ -26,6 +28,8 @@ public class Leds extends SubsystemBase {
   private int numLoops = 0;
   private int index = 0;
   private int index1 = 1; //this varible should never be less than 1
+  private int index_lightdifuser = 0; //TODO: set this to the start of the light diffuser
+  private boolean reached_End = false;
 
   public Leds() {
     // PWM port 9
@@ -45,7 +49,6 @@ public class Leds extends SubsystemBase {
 
   @Override
   public void periodic() {
-
 
     
   }
@@ -69,6 +72,18 @@ public class Leds extends SubsystemBase {
     m_rainbowFirstPixelHue += 3;
     // Check bounds
     m_rainbowFirstPixelHue %= 180;
+
+    m_led.setData(m_ledBuffer);
+  }
+
+  public void purpleGradient(){
+    for(int i = 0; i < m_ledBuffer.getLength(); i++){
+      int val = (m_purpleFirstPixelVal + (i * 255 / m_ledBuffer.getLength())) % 255;
+      m_ledBuffer.setHSV(i, LEDs.purple_Hue, LEDs.purple_Sat, val);
+    }
+
+    m_purpleFirstPixelVal += 3;
+    m_rainbowFirstPixelHue %= 255;
 
     m_led.setData(m_ledBuffer);
   }
@@ -124,6 +139,22 @@ public class Leds extends SubsystemBase {
     else{
       temp_Red = 0;
       temp_Blue = 0;
+      temp_Green = 0;
+    }
+
+    numLoops %= 10;
+
+  }
+
+  public void greenFlash(){
+    for(int i = 0; i < m_ledBuffer.getLength(); i++){
+      m_ledBuffer.setRGB(i, 0, temp_Green, 0);
+    }
+
+    if (numLoops < 5){ //sets speed of flash
+      temp_Green = LEDs.Green;
+    }
+    else{
       temp_Green = 0;
     }
 
@@ -282,6 +313,44 @@ public class Leds extends SubsystemBase {
     m_led.setData(m_ledBuffer);
   }
 
+  public void orangeRace(){
+    for(int i = 0; i < index; i++){
+      m_ledBuffer.setRGB(i, LEDs.orange_Red, LEDs.orange_Green, LEDs.orange_Blue);
+      m_ledBuffer.setRGB(m_ledBuffer.getLength() - i, LEDs.orange_Red, LEDs.orange_Green, LEDs.orange_Blue);
+    }
+
+    if (numLoops % 3 == 0) {
+      index++;
+      index %= m_ledBuffer.getLength();
+      numLoops %= 3;
+    } 
+
+    m_led.setData(m_ledBuffer);
+    numLoops++;
+  }
+
+  public void blueStreakWithWhiteDot() {
+    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
+      // Sets all LEDs to blue
+      m_ledBuffer.setRGB(i, 0, 0, LEDs.Blue);
+    }
+
+    // turns one led to white
+    m_ledBuffer.setRGB(blueStreakLED, LEDs.Red, LEDs.Green, LEDs.Blue);
+
+    if (numLoops % 3 == 0) {
+      blueStreakLED += 1;
+
+      // Check bounds
+      blueStreakLED %= m_ledBuffer.getLength();
+    }
+
+    m_led.setData(m_ledBuffer);
+
+    numLoops += 1;
+
+  }
+
   public void blueStreak() {
     for (int i = 0; i < m_ledBuffer.getLength(); i++) {
       // Sets the specified LED to the RGB values for blue
@@ -327,7 +396,7 @@ public void purpleStreak10() {
 
   }
 
-  public void PurpleWhiteStrobe(){
+  public void purpleWhiteStrobe(){
     if (numLoops == 0 || numLoops == 2){
       for (int i = 0; i < m_ledBuffer.getLength(); i++) {
       m_ledBuffer.setRGB(i, 0, 0, 0); //black
@@ -388,6 +457,25 @@ public void purpleStreak10() {
             }
 
     }
+  }
+
+  public void redDot(){
+        
+    m_ledBuffer.setRGB(index_lightdifuser, LEDs.Red, 0, 0);
+
+    if (!reached_End){
+    index_lightdifuser++;
+    if (index_lightdifuser == 50){
+    reached_End = true; 
+      }
+    }
+    else{
+      index_lightdifuser--;
+      if (index_lightdifuser == 40){
+        reached_End = false;
+      }
+    }
+    
   }
 
   public void setRobotStatus(RobotStatus newState){
