@@ -49,9 +49,15 @@ public class Fulcrum extends SubsystemBase {
     static {
         kDistanceToFulcrumAngle.put(0.0, 9.0);
         kDistanceToFulcrumAngle.put(1.0, 9.0);
-        kDistanceToFulcrumAngle.put(2.0, 18.0);
-        kDistanceToFulcrumAngle.put(3.0, 29.0);
-        kDistanceToFulcrumAngle.put(4.0, 32.5);
+        kDistanceToFulcrumAngle.put(2.0, 20.0);
+        // kDistanceToFulcrumAngle.put(2.25, 22.0);
+        // kDistanceToFulcrumAngle.put(3.0, 28.0);
+        // kDistanceToFulcrumAngle.put(3.5, 29.0);
+        // kDistanceToFulcrumAngle.put(4.0, 32.5);
+        kDistanceToFulcrumAngle.put(2.25, 24.0);
+        kDistanceToFulcrumAngle.put(3.0, 30.0);
+        kDistanceToFulcrumAngle.put(3.5, 34.0);
+        kDistanceToFulcrumAngle.put(4.0, 36.0);
     }
 
     final DoubleSubscriber distanceSubscriber;
@@ -84,7 +90,7 @@ public class Fulcrum extends SubsystemBase {
         pidController = m_FulcrumRight.getPIDController();
         pidController.setFeedbackDevice(e_FulcrumEncoder);
 
-        pidController.setP(0.01);
+        pidController.setP(0.02);
         pidController.setI(0.0);
         pidController.setD(0.0);
         pidController.setFF(0.0);
@@ -103,7 +109,7 @@ public class Fulcrum extends SubsystemBase {
         maxRPM = 5700;
         allowableError = 5; // 50 //Lets the system known when the velocity is close enough to launch
 
-        m_Constraints = new TrapezoidProfile.Constraints(180, 90);
+        m_Constraints = new TrapezoidProfile.Constraints(180, 180);
         //m_Controller = new ProfiledPIDController(kP, kI, kD, m_Constraints, kDt);
         m_Controller = new ProfiledPIDController(kP, kI, kD, m_Constraints, kDt);
 
@@ -202,7 +208,7 @@ public class Fulcrum extends SubsystemBase {
 
 
     public boolean isFulcurmDown(){
-        return (e_FulcrumEncoder.getPosition()<15.0);
+        return (e_FulcrumEncoder.getPosition()<20.0);
     }
 
     // calculates estimated fulcrum angle to hit goal with out accounting for the change in height as fulcrum moves

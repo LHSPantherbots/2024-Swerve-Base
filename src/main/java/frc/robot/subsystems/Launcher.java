@@ -32,9 +32,13 @@ public class Launcher extends SubsystemBase {
     static {
         kDistanceToShooterSpeed.put(0.0, 5000.0);
         kDistanceToShooterSpeed.put(1.0, 5000.0);
-        kDistanceToShooterSpeed.put(2.0, 5000.0);
-        kDistanceToShooterSpeed.put(3.0, 5000.0);
-        kDistanceToShooterSpeed.put(4.0, 5225.0);
+        kDistanceToShooterSpeed.put(1.5, 5000.0);
+        // kDistanceToShooterSpeed.put(2.0, 5000.0);
+        // kDistanceToShooterSpeed.put(3.0, 5000.0);
+        // kDistanceToShooterSpeed.put(4.0, 5225.0);
+        kDistanceToShooterSpeed.put(2.0, 5500.0);
+        kDistanceToShooterSpeed.put(3.0, 6000.0);
+        kDistanceToShooterSpeed.put(4.0, 6225.0);
     }
 
     final DoubleSubscriber distanceSubscriber;
@@ -146,7 +150,8 @@ public class Launcher extends SubsystemBase {
 
     public void setSetPoint(double point) {
         lastSetpoint = setPoint;
-        setPoint = point;
+        this.setPoint = point;
+        closedLoopLaunch();
     }
 
     public boolean isAtVelocity() {
