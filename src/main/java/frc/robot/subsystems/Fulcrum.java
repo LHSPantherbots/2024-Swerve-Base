@@ -208,7 +208,7 @@ public class Fulcrum extends SubsystemBase {
 
 
     public boolean isFulcurmDown(){
-        return (e_FulcrumEncoder.getPosition()<15.0);
+        return (e_FulcrumEncoder.getPosition()<20.0);
     }
 
     // calculates estimated fulcrum angle to hit goal with out accounting for the change in height as fulcrum moves

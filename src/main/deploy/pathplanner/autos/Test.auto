@@ -47,6 +47,37 @@
           "data": {
             "name": "AutoShoot"
           }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MidNote-TopNote"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeCmd2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoAim"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoShoot"
+          }
         }
       ]
     }
