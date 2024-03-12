@@ -142,8 +142,30 @@ public class Leds extends SubsystemBase {
       temp_Green = 0;
     }
 
+    numLoops++;
     numLoops %= 10;
 
+     m_led.setData(m_ledBuffer);
+  }
+
+  public void redFlash(){
+    for(int i = 0; i < m_ledBuffer.getLength(); i++){
+      m_ledBuffer.setRGB(i, temp_Red, 0, 0);
+    }
+
+    if (numLoops < 5){ //sets speed of flash
+      temp_Red = LEDs.Red;
+      
+    }
+    else{
+      temp_Red = 0;
+      
+    }
+
+    numLoops++;
+    numLoops %= 10;
+
+     m_led.setData(m_ledBuffer);
   }
 
   public void greenFlash(){
@@ -158,8 +180,10 @@ public class Leds extends SubsystemBase {
       temp_Green = 0;
     }
 
+    numLoops++;
     numLoops %= 10;
 
+    m_led.setData(m_ledBuffer);
   }
 
   public void yellowFlash(){
@@ -178,8 +202,10 @@ public class Leds extends SubsystemBase {
       temp_Green = 0;
     }
 
+    numLoops++;
     numLoops %= 10;
 
+    m_led.setData(m_ledBuffer);
   }
 
 
@@ -375,11 +401,14 @@ public class Leds extends SubsystemBase {
   }
 
 public void purpleStreak10() {
+    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
+      m_ledBuffer.setRGB(i, 0, 0, 0);
+    }
     for (int i = index1; i < index1 + 10; i++) {
-      m_ledBuffer.setRGB(i, LEDs.purple_Red, LEDs.purple_Blue, LEDs.purple_Green);
+      m_ledBuffer.setRGB(i, LEDs.purple_Red, LEDs.purple_Green, LEDs.purple_Blue);
     }
 
-    m_ledBuffer.setRGB(index1 - 1, 0,0,0);
+    //m_ledBuffer.setRGB(index1 - 1, 0,0,0);
 
     // increase brightness
     if (numLoops % 7 == 0) {
@@ -415,6 +444,29 @@ public void purpleStreak10() {
 
     numLoops++;
     numLoops %= 4;
+  }
+
+public void redStreak10WithWhite() {
+    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
+      m_ledBuffer.setRGB(i, LEDs.Red, LEDs.Green, LEDs.Blue);
+    }
+    for (int i = index1; i < index1 + 10; i++) {
+      m_ledBuffer.setRGB(i, LEDs.Red, 0, 0);
+    }
+    
+    // increase brightness
+    if (numLoops % 7 == 0) {
+      index1++;
+      numLoops = 0;
+
+      // Check bounds
+      index1 = index1 % (m_ledBuffer.getLength() - 20) + 1;
+    }
+
+    m_led.setData(m_ledBuffer);
+
+    numLoops++;
+
   }
 
   public void PinkYellowStreak(){
@@ -506,7 +558,7 @@ public void purpleStreak10() {
       //case 4: yellowStreak(); break;
       //case 5: red(); break;
       case ROBOT_CENTRIC: rainbow(); break;
-      case DEFAULT: if(RobotContainer.feeder.isNoteDetected()){orange();break;} pantherStreak(); break;
+      case DEFAULT: if(RobotContainer.feeder.isNoteDetected()){purpleFlash();break;} purpleWhiteStrobe(); break;
     }
 }
 
