@@ -143,6 +143,7 @@ public class RobotContainer {
     
 
     m_driverController.start().onTrue(new InstantCommand(()->m_robotDrive.zeroHeading()));
+    m_driverController.back().onTrue(new InstantCommand(()->m_robotDrive.restOdomWithCamData()));
     m_driverController.leftBumper().whileTrue(
         new RunCommand(()->climb.manualAll(-MathUtil.applyDeadband(m_driverController.getRightY(), OIConstants.kDriveDeadband),-MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband)), climb));
     m_driverController.leftBumper().onTrue(new InstantCommand(()-> leds.setRobotStatus(RobotStatus.CLIMB), leds));
