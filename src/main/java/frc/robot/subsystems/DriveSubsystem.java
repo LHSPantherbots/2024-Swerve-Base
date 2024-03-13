@@ -72,7 +72,7 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
   //AutoAim PID values
-  private double kP = 0.15; //0.05;
+  private double kP = 0.4; //0.05;
   private double kF = 0.05; //0.0125;
   
   private final Field2d m_field = new Field2d();
@@ -115,7 +115,7 @@ public class DriveSubsystem extends SubsystemBase {
         this::getChassisSpeed,
         this::driveRobotRelative,
         new HolonomicPathFollowerConfig(
-            new PIDConstants(1.75, 0.0, 0.0),
+            new PIDConstants(2.0, 0.0, 0.0),
             new PIDConstants(1.75, 0.0, 0.0),
             4.0,
             0.4,
@@ -425,7 +425,7 @@ public class DriveSubsystem extends SubsystemBase {
     double outF = kF;
     double outP = kP * error;
     double outputTurn = outF + outP;
-    if (Math.abs(error) > 0.1 ) { // if error is greater than ~5.7 deg (0.1 rad)
+    if (Math.abs(error) > 0.02 ) { // if error is greater than ~5.7 deg (0.1 rad)
       drive(0, 0, outputTurn, false, false);
     } else {
       drive(0, 0, 0, false, false);
@@ -466,7 +466,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public boolean isAimedAtGoal() {
     double error = angleToTarget() - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
-    if (Math.abs(error) > 0.1 ) {
+    if (Math.abs(error) > 0.02 ) {
       return false;
     } else {
       return true;
