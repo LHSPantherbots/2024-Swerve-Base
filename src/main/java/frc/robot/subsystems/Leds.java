@@ -446,14 +446,14 @@ public void purpleStreak10() {
     numLoops %= 4;
   }
 
-public void redStreak10WithWhite() {
+public void redStreak10WithWhite() { //TODO: MAKE BOUNCE
     for (int i = 0; i < m_ledBuffer.getLength(); i++) {
       m_ledBuffer.setRGB(i, LEDs.Red, LEDs.Green, LEDs.Blue);
     }
     for (int i = index1; i < index1 + 10; i++) {
       m_ledBuffer.setRGB(i, LEDs.Red, 0, 0);
     }
-    
+
     // increase brightness
     if (numLoops % 7 == 0) {
       index1++;
