@@ -45,7 +45,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootCmd"
+            "name": "AutoAim"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoShoot"
           }
         }
       ]
