@@ -230,6 +230,11 @@ public class DriveSubsystem extends SubsystemBase {
    * @param pose The pose to which to set the odometry.
    */
   public void resetOdometry(Pose2d pose) {
+    if (isRed()) {
+      Rotation2d rot = pose.getRotation();
+      rot.rotateBy(new Rotation2d(Math.toRadians(180.0)));
+      pose = new Pose2d(pose.getTranslation(), rot);
+    }
     m_poseEstimator.resetPosition(
         // getYaw(),
         m_gyro.getRotation2d(),
@@ -239,7 +244,7 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         },
-        pose);
+          pose);
   }
 
   /**
@@ -401,19 +406,71 @@ public class DriveSubsystem extends SubsystemBase {
     double Ry = m_poseEstimator.getEstimatedPosition().getY();
     double Rx = m_poseEstimator.getEstimatedPosition().getX();
     double desiredAngle = 0;
-    double Ty;
+    double Ty = 5.55;
+    double Tx;
     if (isRed()) {
-      Ty = 2.65;
+      // Ty = 2.65;
+      Tx = 16.579342;
     } else {
-      Ty = 5.55;
+      // Ty = 5.55;
+      Tx = 0.0;
     }
     if (Ry > Ty) {
-      desiredAngle = Math.atan((Ry - Ty)/Rx) * (isRed() ? -1.0 : 1.0);
+      if (isRed()) {
+        // desiredAngle = (Math.atan((Ry - Ty)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) + Math.PI;
+        desiredAngle = Math.atan((Ry - Ty)/(Tx - Rx)) + Math.PI;
+        // desiredAngle = Math.IEEEremainder(desiredAngle, 2*Math.PI);
+      } else {
+        desiredAngle = Math.atan((Ry - Ty)/Rx);
+      }
+      
     } else {
-      desiredAngle = -Math.atan((Ty-Ry)/Rx) * (isRed() ? -1.0 : 1.0);
+      if (isRed()) {
+        // desiredAngle = (-Math.atan((Ty-Ry)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) + Math.PI;
+        desiredAngle = Math.atan((Ty-Ry)/(Tx - Rx)) + Math.PI;
+
+        // desiredAngle = Math.IEEEremainder(desiredAngle, 2*Math.PI);
+      } else {
+        desiredAngle = -Math.atan((Ty-Ry)/Rx);
+      }
+      
     }
-    return desiredAngle;
+    return Math.IEEEremainder(desiredAngle, 2*Math.PI);
   }
+
+  // public double autoAngleToTarget() {
+  //   double Ry = m_poseEstimator.getEstimatedPosition().getY();
+  //   double Rx = m_poseEstimator.getEstimatedPosition().getX();
+  //   double desiredAngle = 0;
+  //   double Ty = 5.55;
+  //   double Tx;
+  //   if (isRed()) {
+  //     // Ty = 2.65;
+  //     Tx = 10; // not correct
+  //   } else {
+  //     // Ty = 5.55;
+  //     Tx = 0.0;
+  //   }
+  //   if (Ry > Ty) {
+  //     if (isRed()) {
+  //       desiredAngle = (Math.atan((Ry - Ty)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) + Math.PI;
+  //       Math.IEEEremainder(desiredAngle, 2*Math.PI);
+  //     } else {
+  //       desiredAngle = Math.atan((Ry - Ty)/Rx) * (isRed() ? -1.0 : 1.0);
+  //     }
+      
+  //   } else {
+  //     if (isRed()) {
+  //       desiredAngle = (-Math.atan((Ty-Ry)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) + Math.PI;
+
+  //       Math.IEEEremainder(desiredAngle, 2*Math.PI);
+  //     } else {
+  //       desiredAngle = -Math.atan((Ty-Ry)/Rx) * (isRed() ? -1.0 : 1.0);
+  //     }
+      
+  //   }
+  //   return desiredAngle;
+  // }
 
   public double errorToTarget() {
     double error = angleToTarget() - currAngle();
@@ -479,13 +536,14 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double getDistanceToTarget() {
-    double Ty;
+    double Ty = 5.55;
+    double Tx;
     if (isRed()) {
-      Ty = 2.65;
+      Tx = 16.579342;
     } else {
-      Ty = 5.55;
+      Tx = 0.0;
     }
-    return m_poseEstimator.getEstimatedPosition().getTranslation().getDistance(new Translation2d(0.0, Ty));
+    return m_poseEstimator.getEstimatedPosition().getTranslation().getDistance(new Translation2d(Tx, Ty));
 
   }
 
