@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7810738428494404,
-      "y": 4.382406358792537
+      "x": 0.7134190306340287,
+      "y": 4.391924892983831
     },
     "rotation": -57.473921398533015
   },
@@ -39,7 +39,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "FarNote5-BottomSpeaker"
+            "pathName": "FarNote5-BottomSpeakerAutoAim"
           }
         },
         {
@@ -51,7 +51,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootCmd"
+            "name": "AutoShoot"
           }
         }
       ]

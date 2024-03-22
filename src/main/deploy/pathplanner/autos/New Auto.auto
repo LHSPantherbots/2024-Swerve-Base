@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7134190306340287,
+      "y": 4.391924892983831
+    },
+    "rotation": -58.99709850493889
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BottomSpeaker-FarNote5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FarNote5-BottomSpeakerAutoAim"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
