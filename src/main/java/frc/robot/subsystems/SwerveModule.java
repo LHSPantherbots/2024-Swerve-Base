@@ -117,6 +117,8 @@ public class SwerveModule {
 
     m_drivingPIDController = m_drivingPidWrapper.getSparkPIDController();
     m_turningPIDController = m_turningPidWrapper.getSparkPIDController();
+    m_drivingEncoder.setMeasurementPeriod(16);
+    m_drivingEncoder.setAverageDepth(2);
     m_drivingPIDController.setFeedbackDevice(m_drivingEncoder);
     m_turningPIDController.setFeedbackDevice(m_turningEncoder);
 
@@ -192,5 +194,9 @@ public class SwerveModule {
 
   public double getTurnCurrent() {
     return m_turningSparkMax.getOutputCurrent();
+  }
+
+  public double getVelocity(){
+    return m_drivingEncoder.getVelocity();
   }
 }

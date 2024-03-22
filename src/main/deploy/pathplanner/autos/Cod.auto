@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 0.6842044526319189,
+      "y": 4.3627103149817215
+    },
+    "rotation": -60.39554925399507
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -24,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BottomSpeaker-FarNote4"
+                  "pathName": "BottomSpeakerAutoAim-FarNote4"
                 }
               }
             ]
@@ -33,13 +39,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "FarNote4-BottomSpeaker"
+            "pathName": "FarNote4-BottomSpeakerAutoAim"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootCmd"
+            "name": "AutoShoot"
           }
         }
       ]

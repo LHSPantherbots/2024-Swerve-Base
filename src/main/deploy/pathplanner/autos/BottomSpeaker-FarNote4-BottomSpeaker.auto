@@ -30,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BottomSpeaker-FarNote4"
+                  "pathName": "BottomSpeakerAutoAim-FarNote4"
                 }
               }
             ]
@@ -39,7 +39,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "FarNote4-BottomSpeaker"
+            "pathName": "FarNote4-BottomSpeakerAutoAim"
           }
         },
         {

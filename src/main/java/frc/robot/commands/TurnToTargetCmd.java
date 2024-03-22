@@ -18,6 +18,7 @@ public class TurnToTargetCmd extends Command {
 
     @Override
     public void execute() {
+        //this.drive.restOdomWithCamData();
         this.drive.autoAim();
     }
 

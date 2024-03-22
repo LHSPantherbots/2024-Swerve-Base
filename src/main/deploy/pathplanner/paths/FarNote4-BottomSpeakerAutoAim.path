@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.838188307955564,
-        "y": 2.4483866511592676
+        "x": 7.841776063148806,
+        "y": 2.4442863595098485
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.672250119107726,
-        "y": -1.1439667089394288
+        "x": 7.675837874300968,
+        "y": -1.1480670005888478
       },
       "isLocked": false,
       "linkedName": "FarNote4"
     },
     {
       "anchor": {
-        "x": 0.7810738428494404,
-        "y": 4.382406358792537
+        "x": 1.9306931140552677,
+        "y": 3.9147534522827057
       },
       "prevControl": {
-        "x": 0.8685885839270591,
-        "y": 2.484422910473211
+        "x": 1.9404313067226375,
+        "y": 1.9573767261413524
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "BottomSpeaker"
+      "linkedName": "LowNoteAutoAim"
     }
   ],
   "rotationTargets": [],
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.53445508029465,
+    "rotation": -43.15238973400532,
     "rotateFast": false
   },
   "reversed": false,
