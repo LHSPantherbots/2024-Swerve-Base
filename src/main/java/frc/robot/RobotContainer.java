@@ -77,6 +77,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("AutoFulcrum", new FulcrumAimCmd(fulcrum));
     NamedCommands.registerCommand("FeedHold", new RunCommand(() -> feeder.stopAll(), feeder));
     NamedCommands.registerCommand("AutoShoot", new AutoShootAndFulcrum(fulcrum, launcher, feeder));
+    NamedCommands.registerCommand("PostAutoGyroReset", new InstantCommand(()->m_robotDrive.resetGyroToPose(), m_robotDrive));
 
     SmartDashboard.putData("Turn To Target", new TurnToTargetCmd(m_robotDrive));
     SmartDashboard.putData("Auto Fulcrum", new FulcrumAimCmd(fulcrum));

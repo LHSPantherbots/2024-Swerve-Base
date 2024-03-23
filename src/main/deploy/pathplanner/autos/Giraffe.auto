@@ -78,6 +78,12 @@
           "data": {
             "name": "ShootCmd"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PostAutoGyroReset"
+          }
         }
       ]
     }

@@ -247,6 +247,10 @@ public class DriveSubsystem extends SubsystemBase {
           pose);
   }
 
+  public void resetGyroToPose() {
+    m_gyro.setYaw(getPose().getRotation().getDegrees());
+  }
+
   /**
    * Method to drive the robot using joystick info.
    *
