@@ -368,6 +368,12 @@ public class DriveSubsystem extends SubsystemBase {
     m_gyro.reset();
   }
 
+  public void zeroHeadingReverse() {
+    var heading = m_gyro.getRotation2d().rotateBy(new Rotation2d(Math.toRadians(180.0)));
+    m_gyro.setYaw(heading.getDegrees());
+
+  }
+
   
   
   public double getAngle(){
@@ -510,11 +516,12 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void turnToAmpAndDrive(Double x, Double y) {
     double error;
-    if (isRed()) {
-      error = Math.toRadians(90) - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
-    } else {
-      error = Math.toRadians(-90) - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
-    }
+    // if (isRed()) {
+    //   error = Math.toRadians(90) - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
+    // } else {
+    //   error = Math.toRadians(-90) - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
+    // }
+    error = Math.toRadians(-90) - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
     kF = Math.copySign(kF, error);
     double outF = kF;
     double outP = kP * error;

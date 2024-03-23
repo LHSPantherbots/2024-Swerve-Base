@@ -94,8 +94,8 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband) * (m_robotDrive.isRed() ? -1.0 : 1.0),
+                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband) * (m_robotDrive.isRed() ? -1.0 : 1.0),
                 -MathUtil.applyDeadband((m_driverController.getRightTriggerAxis()
                     - m_driverController.getLeftTriggerAxis()), OIConstants.kDriveDeadband),
                 true, true),
@@ -152,15 +152,15 @@ public class RobotContainer {
     m_driverController.rightBumper().whileTrue(
       new RunCommand(
         () -> m_robotDrive.autoAimAndDrive(
-            -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-            -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband)),
+            -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband) * (m_robotDrive.isRed() ? -1.0 : 1.0),
+            -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband) * (m_robotDrive.isRed() ? -1.0 : 1.0)),
         m_robotDrive)
     );
     m_driverController.b().whileTrue(
       new RunCommand(
         () -> m_robotDrive.turnToAmpAndDrive(
-          -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-          -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband)), 
+          -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband) * (m_robotDrive.isRed() ? -1.0 : 1.0),
+          -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband) * (m_robotDrive.isRed() ? -1.0 : 1.0)), 
         m_robotDrive)
     );
     // operatorController.a().whileTrue(new RunCommand(() -> intake.intake(), intake))
