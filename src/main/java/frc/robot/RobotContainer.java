@@ -124,10 +124,10 @@ public class RobotContainer {
     m_driverController.a().whileTrue(
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband)* DriveConstants.kMaxSpeedMetersPerSecond,
+                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband)* DriveConstants.kMaxSpeedMetersPerSecond,
                 -MathUtil.applyDeadband((m_driverController.getRightTriggerAxis()
-                    - m_driverController.getLeftTriggerAxis()), OIConstants.kDriveDeadband),
+                    - m_driverController.getLeftTriggerAxis()), OIConstants.kDriveDeadband)* DriveConstants.kMaxAngularSpeed,
                 false, true),
             m_robotDrive));
     m_driverController.a().onTrue(new InstantCommand(() -> leds.setRobotStatus(RobotStatus.ROBOT_CENTRIC), leds));
@@ -148,14 +148,14 @@ public class RobotContainer {
     m_driverController.rightBumper().whileTrue(
         new RunCommand(
             () -> m_robotDrive.autoAimAndDrive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband)),
+                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband)* DriveConstants.kMaxSpeedMetersPerSecond,
+                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband)* DriveConstants.kMaxSpeedMetersPerSecond),
             m_robotDrive));
     m_driverController.b().whileTrue(
         new RunCommand(
             () -> m_robotDrive.turnToAmpAndDrive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband)),
+                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband)* DriveConstants.kMaxSpeedMetersPerSecond,
+                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband)* DriveConstants.kMaxSpeedMetersPerSecond),
             m_robotDrive));
     // operatorController.a().whileTrue(new RunCommand(() -> intake.intake(),
     // intake))
@@ -172,7 +172,7 @@ public class RobotContainer {
     // launcher.lancherMaxSpeed(), launcher))
     // .onFalse(new RunCommand(()-> launcher.stopAll(), launcher));
     operatorController.a()
-        .whileTrue(new FulcrumCmd(Position.INTAKE, fulcrum, false).alongWith(new IntakeCmd2(intake, feeder, fulcrum)));
+        .whileTrue(new FulcrumCmd(Position.INTAKE, fulcrum, false).alongWith(new IntakeCmd2(intake, feeder, fulcrum))).onFalse(new RunCommand(() -> feeder.stopAll(), feeder).alongWith(new RunCommand(() -> intake.intakeStop(), intake)));
     // operatorController.b().onTrue(new ShootCmd(launcher, feeder));
     operatorController.b().onTrue(new RunCommand(() -> launcher.lancherMaxSpeed(), launcher));
     operatorController.b().onTrue(new InstantCommand(() -> leds.setRobotStatus(RobotStatus.LAUNCH), leds));
@@ -180,7 +180,7 @@ public class RobotContainer {
         .onTrue(new RunCommand(() -> feeder.stopAll(), feeder))
         .onTrue(new RunCommand(() -> intake.intakeStop(), intake));
     operatorController.x().onTrue(new InstantCommand(() -> leds.setRobotStatus(RobotStatus.DEFAULT), leds));
-    operatorController.y().whileTrue(new RunCommand(() -> intake.outtake(), intake));
+    operatorController.y().whileTrue(new RunCommand(() -> intake.outtake(), intake)).onFalse(new RunCommand(()->intake.intakeStop(), intake));
     operatorController.rightBumper().whileTrue(new RunCommand(() -> feeder.feed(), feeder));
     operatorController.leftBumper().whileTrue(new RunCommand(() -> feeder.reversefeed(), feeder));
 

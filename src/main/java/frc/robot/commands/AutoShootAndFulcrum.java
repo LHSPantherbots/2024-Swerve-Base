@@ -42,6 +42,8 @@ public class AutoShootAndFulcrum extends Command {
         if (this.launcher.isAtVelocity() && this.fulcrum.isAtPoint()) {
             this.feeder.feed();
             this.startCountDown = true;
+        } else {
+            this.feeder.stopAll();
         }
 
         if (this.startCountDown) {
