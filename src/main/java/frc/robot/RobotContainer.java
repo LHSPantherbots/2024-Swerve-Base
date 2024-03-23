@@ -35,6 +35,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.DriveConstants;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -94,11 +95,11 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband)* DriveConstants.kMaxSpeedMetersPerSecond,
+                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband)* DriveConstants.kMaxSpeedMetersPerSecond,
                 -MathUtil.applyDeadband((m_driverController.getRightTriggerAxis()
-                    - m_driverController.getLeftTriggerAxis()), OIConstants.kDriveDeadband),
-                true, true),
+                    - m_driverController.getLeftTriggerAxis()), OIConstants.kDriveDeadband)* DriveConstants.kMaxAngularSpeed,
+                true, false),
             m_robotDrive));
 
     leds.setDefaultCommand(new RunCommand(() -> leds.ledState(), leds));
