@@ -32,16 +32,15 @@ public class Feeder extends SubsystemBase {
     private double kP = 0.1;
     private double kI = 0.0;
     private double kD = 0.0;
-    private double kIz = 0.0;
-    private double allowableError = 0.5;
+    // private double kIz = 0.0;
+    // private double allowableError = 0.5;
     private double positionSetpoint = 0.0;
-  
+
     DigitalInput breamBreak_raw = new DigitalInput(RIO_Channels_DIO.FEEDER_BEAM_BREAK);
     Debouncer beamBreak = new Debouncer(0.1, DebounceType.kBoth);
 
     public Feeder() {
 
-        
         m_Feeder = new CANSparkMax(LauncherConstants.kFeeder, MotorType.kBrushless);
 
         m_Feeder.restoreFactoryDefaults();
@@ -65,13 +64,13 @@ public class Feeder extends SubsystemBase {
         SmartDashboard.putNumber("Feeder RPM", feederEncoder.getVelocity());
         SmartDashboard.putNumber("Feeder Output", m_Feeder.getAppliedOutput());
         SmartDashboard.putNumber("Feeder Current", m_Feeder.getOutputCurrent());
-        if (isNoteDetected() && lastBeamBreakState==false) {
+        if (isNoteDetected() && lastBeamBreakState == false) {
             m_driverFeedBack.setRumble(RumbleType.kBothRumble, 1.0);
             m_operatorFeedBack.setRumble(RumbleType.kBothRumble, 1.0);
             feedbackCountDown = 10;
         }
         if (feedbackCountDown >= 0) {
-            feedbackCountDown-=1;
+            feedbackCountDown -= 1;
         }
         if (feedbackCountDown == 0) {
             m_driverFeedBack.setRumble(RumbleType.kBothRumble, 0.0);
@@ -93,7 +92,7 @@ public class Feeder extends SubsystemBase {
         m_Feeder.set(-.5);
     }
 
-    public void setFeed(double feedVal){
+    public void setFeed(double feedVal) {
         m_Feeder.set(feedVal);
     }
 
@@ -103,10 +102,10 @@ public class Feeder extends SubsystemBase {
 
     public void closedLoopFeeder() {
         m_Feeder.set(m_controller.calculate(feederEncoder.getPosition(), positionSetpoint)); // is this needed?
-      }
+    }
 
     public void resetEncoder() {
         feederEncoder.setPosition(0.0);
-      }
+    }
 
 }
