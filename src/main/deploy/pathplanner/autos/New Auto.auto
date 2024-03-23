@@ -22,6 +22,12 @@
           "data": {
             "pathName": "FarNote5-BottomSpeakerAutoAim"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PostAutoGyroReset"
+          }
         }
       ]
     }
