@@ -18,12 +18,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+// import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.Publisher;
+// import edu.wpi.first.networktables.Publisher;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -59,9 +59,8 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kBackRightChassisAngularOffset);
 
   // The gyro sensor
-  private final Pigeon2  m_gyro = new Pigeon2(DriveConstants.kPigeonCAN_Id);
+  private final Pigeon2 m_gyro = new Pigeon2(DriveConstants.kPigeonCAN_Id);
 
- 
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.0;
@@ -71,10 +70,10 @@ public class DriveSubsystem extends SubsystemBase {
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
-  //AutoAim PID values
-  private double kP = 0.4; //0.05;
-  private double kF = 0.05; //0.0125;
-  
+  // AutoAim PID values
+  private double kP = 0.4; // 0.05;
+  private double kF = 0.05; // 0.0125;
+
   private final Field2d m_field = new Field2d();
   private final StructArrayPublisher<SwerveModuleState> publisher;
   private final SwerveDrivePoseEstimator m_poseEstimator;
@@ -133,10 +132,10 @@ public class DriveSubsystem extends SubsystemBase {
           return false;
         },
         this);
-    
+
     SmartDashboard.putData("Field", m_field);
     publisher = NetworkTableInstance.getDefault()
-      .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
+        .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
     distancePublisher = NetworkTableInstance.getDefault().getDoubleTopic("/Distance").publish();
   }
 
@@ -146,14 +145,16 @@ public class DriveSubsystem extends SubsystemBase {
       REVPhysicsSim.getInstance().run();
     }
     m_poseEstimator.update(
-      m_gyro.getRotation2d(),
-      new SwerveModulePosition[] {
-          m_frontLeft.getPosition(),
-          m_frontRight.getPosition(),
-          m_rearLeft.getPosition(),
-          m_rearRight.getPosition()
-      });
-    if (m_limeLight.isTargetValid() && Math.sqrt((getChassisSpeed().vxMetersPerSecond*getChassisSpeed().vxMetersPerSecond)+(getChassisSpeed().vyMetersPerSecond*getChassisSpeed().vyMetersPerSecond)) > 1.0) {
+        m_gyro.getRotation2d(),
+        new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
+        });
+    if (m_limeLight.isTargetValid()
+        && Math.sqrt((getChassisSpeed().vxMetersPerSecond * getChassisSpeed().vxMetersPerSecond)
+            + (getChassisSpeed().vyMetersPerSecond * getChassisSpeed().vyMetersPerSecond)) > 1.0) {
       var tmpPose = m_limeLight.getBotPose3d().toPose2d();
       if (Math
           .abs(m_poseEstimator.getEstimatedPosition().getTranslation().getDistance(tmpPose.getTranslation())) < 0.75) {
@@ -162,7 +163,7 @@ public class DriveSubsystem extends SubsystemBase {
       }
 
     }
-    
+
     m_field.setRobotPose(m_poseEstimator.getEstimatedPosition());
 
     SmartDashboard.putNumber("Front Left Angle", m_frontLeft.getPosition().angle.getDegrees());
@@ -172,10 +173,10 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Gyro Angle", getAngle());
     SmartDashboard.putString("Chassis Speed", getChassisSpeed().toString());
     publisher.set(new SwerveModuleState[] {
-      m_frontLeft.getState(),
-      m_frontRight.getState(),
-      m_rearLeft.getState(),
-      m_rearRight.getState()
+        m_frontLeft.getState(),
+        m_frontRight.getState(),
+        m_rearLeft.getState(),
+        m_rearRight.getState()
     });
     distancePublisher.set(getDistanceToTarget());
     SmartDashboard.putNumber("Distance To Target", getDistanceToTarget());
@@ -200,7 +201,6 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("isRed", isRed());
   }
 
-
   public ChassisSpeeds getChassisSpeed() {
     return DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());
   }
@@ -216,10 +216,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   public SwerveModuleState[] getModuleStates() {
     SwerveModuleState[] states = new SwerveModuleState[] {
-      m_frontLeft.getState(),
-      m_frontRight.getState(),
-      m_rearLeft.getState(),
-      m_rearRight.getState()
+        m_frontLeft.getState(),
+        m_frontRight.getState(),
+        m_rearLeft.getState(),
+        m_rearRight.getState()
     };
     return states;
   }
@@ -244,7 +244,7 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         },
-          pose);
+        pose);
   }
 
   public void resetGyroToPose() {
@@ -262,7 +262,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @param rateLimit     Whether to enable rate limiting for smoother control.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
-    
+
     double xSpeedCommanded;
     double ySpeedCommanded;
 
@@ -271,42 +271,40 @@ public class DriveSubsystem extends SubsystemBase {
       double inputTranslationDir = Math.atan2(ySpeed, xSpeed);
       double inputTranslationMag = Math.sqrt(Math.pow(xSpeed, 2) + Math.pow(ySpeed, 2));
 
-      // Calculate the direction slew rate based on an estimate of the lateral acceleration
+      // Calculate the direction slew rate based on an estimate of the lateral
+      // acceleration
       double directionSlewRate;
       if (m_currentTranslationMag != 0.0) {
         directionSlewRate = Math.abs(DriveConstants.kDirectionSlewRate / m_currentTranslationMag);
       } else {
-        directionSlewRate = 500.0; //some high number that means the slew rate is effectively instantaneous
+        directionSlewRate = 500.0; // some high number that means the slew rate is effectively instantaneous
       }
-      
 
       double currentTime = WPIUtilJNI.now() * 1e-6;
       double elapsedTime = currentTime - m_prevTime;
       double angleDif = SwerveUtils.AngleDifference(inputTranslationDir, m_currentTranslationDir);
-      if (angleDif < 0.45*Math.PI) {
-        m_currentTranslationDir = SwerveUtils.StepTowardsCircular(m_currentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
+      if (angleDif < 0.45 * Math.PI) {
+        m_currentTranslationDir = SwerveUtils.StepTowardsCircular(m_currentTranslationDir, inputTranslationDir,
+            directionSlewRate * elapsedTime);
         m_currentTranslationMag = m_magLimiter.calculate(inputTranslationMag);
-      }
-      else if (angleDif > 0.85*Math.PI) {
-        if (m_currentTranslationMag > 1e-4) { //some small number to avoid floating-point errors with equality checking
+      } else if (angleDif > 0.85 * Math.PI) {
+        if (m_currentTranslationMag > 1e-4) { // some small number to avoid floating-point errors with equality checking
           // keep currentTranslationDir unchanged
           m_currentTranslationMag = m_magLimiter.calculate(0.0);
-        }
-        else {
+        } else {
           m_currentTranslationDir = SwerveUtils.WrapAngle(m_currentTranslationDir + Math.PI);
           m_currentTranslationMag = m_magLimiter.calculate(inputTranslationMag);
         }
-      }
-      else {
-        m_currentTranslationDir = SwerveUtils.StepTowardsCircular(m_currentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
+      } else {
+        m_currentTranslationDir = SwerveUtils.StepTowardsCircular(m_currentTranslationDir, inputTranslationDir,
+            directionSlewRate * elapsedTime);
         m_currentTranslationMag = m_magLimiter.calculate(0.0);
       }
       m_prevTime = currentTime;
-      
+
       xSpeedCommanded = m_currentTranslationMag * Math.cos(m_currentTranslationDir);
       ySpeedCommanded = m_currentTranslationMag * Math.sin(m_currentTranslationDir);
       m_currentRotation = m_rotLimiter.calculate(rot);
-
 
     } else {
       xSpeedCommanded = xSpeed;
@@ -321,7 +319,8 @@ public class DriveSubsystem extends SubsystemBase {
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(getAngle()))
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
+                Rotation2d.fromDegrees(getAngle()))
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -378,13 +377,12 @@ public class DriveSubsystem extends SubsystemBase {
 
   }
 
-  
-  
-  public double getAngle(){
-    double ang = Math.IEEEremainder(m_gyro.getAngle(), 360);//Returns heading 180 to -180.  Right turn is negative and Left turn is positive
+  public double getAngle() {
+    double ang = Math.IEEEremainder(m_gyro.getAngle(), 360);// Returns heading 180 to -180. Right turn is negative and
+                                                            // Left turn is positive
     return ang * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
-  
+
   /**
    * Returns the heading of the robot.
    *
@@ -427,59 +425,63 @@ public class DriveSubsystem extends SubsystemBase {
     }
     if (Ry > Ty) {
       if (isRed()) {
-        // desiredAngle = (Math.atan((Ry - Ty)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) + Math.PI;
-        desiredAngle = -Math.atan((Ry - Ty)/(Tx - Rx)) + Math.PI;
+        // desiredAngle = (Math.atan((Ry - Ty)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) +
+        // Math.PI;
+        desiredAngle = -Math.atan((Ry - Ty) / (Tx - Rx)) + Math.PI;
         // desiredAngle = Math.IEEEremainder(desiredAngle, 2*Math.PI);
       } else {
-        desiredAngle = Math.atan((Ry - Ty)/Rx);
+        desiredAngle = Math.atan((Ry - Ty) / Rx);
       }
-      
+
     } else {
       if (isRed()) {
-        // desiredAngle = (-Math.atan((Ty-Ry)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) + Math.PI;
-        desiredAngle = Math.atan((Ty-Ry)/(Tx - Rx)) + Math.PI;
+        // desiredAngle = (-Math.atan((Ty-Ry)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) +
+        // Math.PI;
+        desiredAngle = Math.atan((Ty - Ry) / (Tx - Rx)) + Math.PI;
 
         // desiredAngle = Math.IEEEremainder(desiredAngle, 2*Math.PI);
       } else {
-        desiredAngle = -Math.atan((Ty-Ry)/Rx);
+        desiredAngle = -Math.atan((Ty - Ry) / Rx);
       }
-      
+
     }
-    return Math.IEEEremainder(desiredAngle, 2*Math.PI);
+    return Math.IEEEremainder(desiredAngle, 2 * Math.PI);
   }
 
   // public double autoAngleToTarget() {
-  //   double Ry = m_poseEstimator.getEstimatedPosition().getY();
-  //   double Rx = m_poseEstimator.getEstimatedPosition().getX();
-  //   double desiredAngle = 0;
-  //   double Ty = 5.55;
-  //   double Tx;
-  //   if (isRed()) {
-  //     // Ty = 2.65;
-  //     Tx = 10; // not correct
-  //   } else {
-  //     // Ty = 5.55;
-  //     Tx = 0.0;
-  //   }
-  //   if (Ry > Ty) {
-  //     if (isRed()) {
-  //       desiredAngle = (Math.atan((Ry - Ty)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) + Math.PI;
-  //       Math.IEEEremainder(desiredAngle, 2*Math.PI);
-  //     } else {
-  //       desiredAngle = Math.atan((Ry - Ty)/Rx) * (isRed() ? -1.0 : 1.0);
-  //     }
-      
-  //   } else {
-  //     if (isRed()) {
-  //       desiredAngle = (-Math.atan((Ty-Ry)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) + Math.PI;
+  // double Ry = m_poseEstimator.getEstimatedPosition().getY();
+  // double Rx = m_poseEstimator.getEstimatedPosition().getX();
+  // double desiredAngle = 0;
+  // double Ty = 5.55;
+  // double Tx;
+  // if (isRed()) {
+  // // Ty = 2.65;
+  // Tx = 10; // not correct
+  // } else {
+  // // Ty = 5.55;
+  // Tx = 0.0;
+  // }
+  // if (Ry > Ty) {
+  // if (isRed()) {
+  // desiredAngle = (Math.atan((Ry - Ty)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) +
+  // Math.PI;
+  // Math.IEEEremainder(desiredAngle, 2*Math.PI);
+  // } else {
+  // desiredAngle = Math.atan((Ry - Ty)/Rx) * (isRed() ? -1.0 : 1.0);
+  // }
 
-  //       Math.IEEEremainder(desiredAngle, 2*Math.PI);
-  //     } else {
-  //       desiredAngle = -Math.atan((Ty-Ry)/Rx) * (isRed() ? -1.0 : 1.0);
-  //     }
-      
-  //   }
-  //   return desiredAngle;
+  // } else {
+  // if (isRed()) {
+  // desiredAngle = (-Math.atan((Ty-Ry)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) +
+  // Math.PI;
+
+  // Math.IEEEremainder(desiredAngle, 2*Math.PI);
+  // } else {
+  // desiredAngle = -Math.atan((Ty-Ry)/Rx) * (isRed() ? -1.0 : 1.0);
+  // }
+
+  // }
+  // return desiredAngle;
   // }
 
   public double errorToTarget() {
@@ -491,27 +493,27 @@ public class DriveSubsystem extends SubsystemBase {
     return m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
   }
 
-  public void autoAim() { 
+  public void autoAim() {
     double error = angleToTarget() - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
     error = error * (isRed() ? -1.0 : 1.0);
     kF = Math.copySign(kF, error);
     double outF = kF;
     double outP = kP * error;
     double outputTurn = outF + outP;
-    if (Math.abs(error) > 0.02 ) { // if error is greater than ~5.7 deg (0.1 rad)
+    if (Math.abs(error) > 0.02) { // if error is greater than ~5.7 deg (0.1 rad)
       drive(0, 0, outputTurn, false, false);
     } else {
       drive(0, 0, 0, false, false);
     }
   }
-  
-  public void autoAimAndDrive(Double x, Double y) { 
+
+  public void autoAimAndDrive(Double x, Double y) {
     double error = angleToTarget() - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
     kF = Math.copySign(kF, error);
     double outF = kF;
     double outP = kP * error;
     double outputTurn = outF + outP;
-    if (Math.abs(error) > 0.1 ) { // if error is greater than ~5.7 deg (0.1 rad)
+    if (Math.abs(error) > 0.1) { // if error is greater than ~5.7 deg (0.1 rad)
       drive(x, y, outputTurn, false, false);
     } else {
       drive(x, y, 0, false, false);
@@ -521,16 +523,18 @@ public class DriveSubsystem extends SubsystemBase {
   public void turnToAmpAndDrive(Double x, Double y) {
     double error;
     // if (isRed()) {
-    //   error = Math.toRadians(90) - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
+    // error = Math.toRadians(90) -
+    // m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
     // } else {
-    //   error = Math.toRadians(-90) - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
+    // error = Math.toRadians(-90) -
+    // m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
     // }
     error = Math.toRadians(-90) - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
     kF = Math.copySign(kF, error);
     double outF = kF;
     double outP = kP * error;
     double outputTurn = outF + outP;
-    if (Math.abs(error) > 0.1 ) { // if error is greater than ~5.7 deg (0.1 rad)
+    if (Math.abs(error) > 0.1) { // if error is greater than ~5.7 deg (0.1 rad)
       drive(x, y, outputTurn, true, false);
     } else {
       drive(x, y, 0, true, false);
@@ -540,7 +544,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public boolean isAimedAtGoal() {
     double error = angleToTarget() - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
-    if (Math.abs(error) > 0.02 ) {
+    if (Math.abs(error) > 0.02) {
       return false;
     } else {
       return true;

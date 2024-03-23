@@ -39,11 +39,11 @@ public class Fulcrum extends SubsystemBase {
     private final ProfiledPIDController m_Controller;
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Tuning");
-    private GenericEntry  sbAngle = tab.add("Fulcrum Angle", 1)
-        .withWidget(BuiltInWidgets.kNumberSlider)
-        .withProperties(Map.of("min", 0, "max", 90))
-        .getEntry();
-    
+    private GenericEntry sbAngle = tab.add("Fulcrum Angle", 1)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 90))
+            .getEntry();
+
     static InterpolatingDoubleTreeMap kDistanceToFulcrumAngle = new InterpolatingDoubleTreeMap();
 
     static {
@@ -66,8 +66,8 @@ public class Fulcrum extends SubsystemBase {
         m_FulcrumRight = new CANSparkMax(FulcrumConstants.kFulcrumRight, MotorType.kBrushless);
         m_FulcrumLeft = new CANSparkMax(FulcrumConstants.kFulcrumLeft, MotorType.kBrushless);
 
-       // m_FulcrumRight.restoreFactoryDefaults();
-       // m_FulcrumLeft.restoreFactoryDefaults();
+        // m_FulcrumRight.restoreFactoryDefaults();
+        // m_FulcrumLeft.restoreFactoryDefaults();
 
         m_FulcrumRight.setInverted(false);
         m_FulcrumLeft.setInverted(false);
@@ -83,7 +83,6 @@ public class Fulcrum extends SubsystemBase {
 
         m_FulcrumLeft.follow(m_FulcrumRight, true);
 
-        
         e_FulcrumEncoder = m_FulcrumRight.getAbsoluteEncoder(Type.kDutyCycle);
         e_FulcrumEncoder.setPositionConversionFactor(360.0);
 
@@ -95,7 +94,6 @@ public class Fulcrum extends SubsystemBase {
         pidController.setD(0.0);
         pidController.setFF(0.0);
         pidController.setOutputRange(-1, 1);
-
 
         // PID coefficients these will need to be tuned
         kP = 0.02;// 0.00025; //5e-5;
@@ -110,16 +108,16 @@ public class Fulcrum extends SubsystemBase {
         allowableError = 5; // 50 //Lets the system known when the velocity is close enough to launch
 
         m_Constraints = new TrapezoidProfile.Constraints(180, 180);
-        //m_Controller = new ProfiledPIDController(kP, kI, kD, m_Constraints, kDt);
+        // m_Controller = new ProfiledPIDController(kP, kI, kD, m_Constraints, kDt);
         m_Controller = new ProfiledPIDController(kP, kI, kD, m_Constraints, kDt);
 
         // set PID coefficients
-        //pidController.setP(kP);
-       // pidController.setI(kI);
-        //pidController.setD(kD);
-        //pidController.setIZone(kIz);
-        //pidController.setFF(kFF);
-        //pidController.setOutputRange(kMinOutput, kMaxOutput);
+        // pidController.setP(kP);
+        // pidController.setI(kI);
+        // pidController.setD(kD);
+        // pidController.setIZone(kIz);
+        // pidController.setFF(kFF);
+        // pidController.setOutputRange(kMinOutput, kMaxOutput);
         m_FulcrumLeft.burnFlash();
         m_FulcrumRight.burnFlash();
 
@@ -202,16 +200,17 @@ public class Fulcrum extends SubsystemBase {
     }
 
     public void closedLoopFulcrum() {
-        //m_FulcrumRight.set(m_Controller.calculate(e_FulcrumEncoder.getPosition(), setPoint));
+        // m_FulcrumRight.set(m_Controller.calculate(e_FulcrumEncoder.getPosition(),
+        // setPoint));
         pidController.setReference(setPoint, CANSparkMax.ControlType.kPosition);
     }
 
-
-    public boolean isFulcurmDown(){
-        return (e_FulcrumEncoder.getPosition()<20.0);
+    public boolean isFulcurmDown() {
+        return (e_FulcrumEncoder.getPosition() < 20.0);
     }
 
-    // calculates estimated fulcrum angle to hit goal with out accounting for the change in height as fulcrum moves
+    // calculates estimated fulcrum angle to hit goal with out accounting for the
+    // change in height as fulcrum moves
     public void autoAim() {
         // Double distance = SmartDashboard.getNumber("Distance To Target", .5);
         // Double theta = Math.toRadians(55.0); // angle of shooter relative to arm

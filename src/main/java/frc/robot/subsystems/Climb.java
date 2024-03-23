@@ -121,20 +121,20 @@ public class Climb extends SubsystemBase {
   public void manualRightArm(double move) {
     m_RightArm.set(move);
     // if ((getRightHeight() < ClimbConstants.heightUpperLimit || move < 0) &&
-    //     (getRightHeight() > ClimbConstants.heightLowerLimit || move > 0)) {
-    //   m_RightArm.set(move);
+    // (getRightHeight() > ClimbConstants.heightLowerLimit || move > 0)) {
+    // m_RightArm.set(move);
     // } else {
-    //   m_RightArm.set(0);
+    // m_RightArm.set(0);
     // }
   }
 
   public void manualLeftArm(double move) {
     m_LeftArm.set(move);
     // if ((getLeftHeight() < ClimbConstants.heightUpperLimit || move < 0) &&
-    //     (getLeftHeight() > ClimbConstants.heightLowerLimit || move > 0)) {
-    //   m_LeftArm.set(move);
+    // (getLeftHeight() > ClimbConstants.heightLowerLimit || move > 0)) {
+    // m_LeftArm.set(move);
     // } else {
-    //   m_LeftArm.set(0);
+    // m_LeftArm.set(0);
     // }
   }
 
