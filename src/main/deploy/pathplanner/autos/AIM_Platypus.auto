@@ -109,6 +109,12 @@
           "data": {
             "name": "AutoShoot"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PostAutoGyroReset"
+          }
         }
       ]
     }

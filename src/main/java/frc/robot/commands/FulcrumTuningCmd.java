@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Fulcrum;
-import frc.utils.Position;
 
 public class FulcrumTuningCmd extends Command {
     Fulcrum fulcrum;
