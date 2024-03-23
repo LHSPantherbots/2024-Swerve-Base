@@ -47,8 +47,8 @@ public class Launcher extends SubsystemBase {
         m_LauncherTop = new CANSparkFlex(LauncherConstants.kLauncherTop, MotorType.kBrushless);
         m_LauncherBottom = new CANSparkFlex(LauncherConstants.kLauncherBottom, MotorType.kBrushless);
 
-        m_LauncherTop.restoreFactoryDefaults();
-        m_LauncherBottom.restoreFactoryDefaults();
+        // m_LauncherTop.restoreFactoryDefaults();
+        // m_LauncherBottom.restoreFactoryDefaults(); 
 
         m_LauncherTop.setInverted(false);
         m_LauncherBottom.setInverted(false);
@@ -63,7 +63,11 @@ public class Launcher extends SubsystemBase {
         // m_LauncherTop.setClosedLoopRampRate(0.25);
 
         m_LauncherEncoder = m_LauncherTop.getEncoder();
+        m_LauncherEncoder.setMeasurementPeriod(16);
+        m_LauncherEncoder.setAverageDepth(2);
         m_lowerLauncherEncoder = m_LauncherBottom.getEncoder();
+        m_lowerLauncherEncoder.setMeasurementPeriod(16);
+        m_lowerLauncherEncoder.setAverageDepth(2);
 
         pidController = m_LauncherTop.getPIDController();
 

@@ -71,8 +71,8 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
   // AutoAim PID values
-  private double kP = 0.4; // 0.05;
-  private double kF = 0.05; // 0.0125;
+  private double kP = 3.5; // 0.05;
+  private double kF = 0.5; // 0.0125;
 
   private final Field2d m_field = new Field2d();
   private final StructArrayPublisher<SwerveModuleState> publisher;
@@ -427,21 +427,21 @@ public class DriveSubsystem extends SubsystemBase {
       if (isRed()) {
         // desiredAngle = (Math.atan((Ry - Ty)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) +
         // Math.PI;
-        desiredAngle = -Math.atan((Ry - Ty) / (Tx - Rx)) + Math.PI;
+        desiredAngle = Math.atan((Ry - Ty) / (Tx - Rx)) + Math.PI;
         // desiredAngle = Math.IEEEremainder(desiredAngle, 2*Math.PI);
       } else {
-        desiredAngle = Math.atan((Ry - Ty) / Rx);
+        desiredAngle = -Math.atan((Ty - Ry) / Rx);
       }
 
     } else {
       if (isRed()) {
         // desiredAngle = (-Math.atan((Ty-Ry)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) +
         // Math.PI;
-        desiredAngle = Math.atan((Ty - Ry) / (Tx - Rx)) + Math.PI;
+        desiredAngle = -Math.atan((Ty - Ry) / (Tx - Rx)) + Math.PI;
 
         // desiredAngle = Math.IEEEremainder(desiredAngle, 2*Math.PI);
       } else {
-        desiredAngle = -Math.atan((Ty - Ry) / Rx);
+        desiredAngle = Math.atan((Ry - Ty) / Rx);
       }
 
     }
@@ -513,7 +513,7 @@ public class DriveSubsystem extends SubsystemBase {
     double outF = kF;
     double outP = kP * error;
     double outputTurn = outF + outP;
-    if (Math.abs(error) > 0.1) { // if error is greater than ~5.7 deg (0.1 rad)
+    if (Math.abs(error) > 0.02) { // if error is greater than ~5.7 deg (0.1 rad)
       drive(x, y, outputTurn, false, false);
     } else {
       drive(x, y, 0, false, false);
