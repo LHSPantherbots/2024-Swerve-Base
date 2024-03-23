@@ -58,12 +58,12 @@ public class Climb extends SubsystemBase {
 
     m_RightArm.enableSoftLimit(SoftLimitDirection.kForward, true);
     m_RightArm.enableSoftLimit(SoftLimitDirection.kReverse, true);
-    m_RightArm.setSoftLimit(SoftLimitDirection.kForward, 415);
+    m_RightArm.setSoftLimit(SoftLimitDirection.kForward, 311);
     m_RightArm.setSoftLimit(SoftLimitDirection.kReverse, 0);
 
     m_LeftArm.enableSoftLimit(SoftLimitDirection.kForward, true);
     m_LeftArm.enableSoftLimit(SoftLimitDirection.kReverse, true);
-    m_LeftArm.setSoftLimit(SoftLimitDirection.kForward, 415);
+    m_LeftArm.setSoftLimit(SoftLimitDirection.kForward, 311);
     m_LeftArm.setSoftLimit(SoftLimitDirection.kReverse, 0);
 
     e_RightArm = m_RightArm.getEncoder();
