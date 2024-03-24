@@ -20,7 +20,7 @@ public class DriveToNote  extends Command {
         this.intake = intake;
         this.driveSubsystem = driveSubsystem;
         this.ll = ll;
-        addRequirements(feeder, intake, driveSubsystem, ll);
+        addRequirements(driveSubsystem, ll);
 
         X_pid = new PIDController(0, 0, 0);
         X_pid.disableContinuousInput();
