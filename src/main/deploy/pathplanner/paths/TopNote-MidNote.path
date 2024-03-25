@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 2.9155563765672983,
-        "y": 5.662548779643014
+        "x": 2.891391838763322,
+        "y": 5.566863856374023
       },
       "prevControl": {
-        "x": 2.9435426143579555,
-        "y": 6.063684854642436
+        "x": 2.9193780765539787,
+        "y": 5.967999931373445
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "MidNoteDirect"
+      "linkedName": "MidNote"
     }
   ],
   "rotationTargets": [],
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0,
+    "rotation": -58.695018339195265,
     "rotateFast": true
   },
   "reversed": false,

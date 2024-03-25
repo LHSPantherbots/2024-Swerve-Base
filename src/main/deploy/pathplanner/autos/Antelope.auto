@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4042995358717991,
-      "y": 5.559932574410603
+      "x": 1.3456210118527112,
+      "y": 5.556419458894899
     },
-    "rotation": -0.6861441978351885
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "MidSpeaker-MidNote"
+                  "pathName": "MidSpeaker-TopNote"
                 }
               },
               {
@@ -55,16 +55,40 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "MidNote-TopNote"
+                  "pathName": "TopNote-FarNote1"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeCmd2"
+                  "name": "IntakeCmd"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FarNote1-AmpSideWing-AutoAim"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoAim"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AmpSideWing-MidNote"
           }
         },
         {
