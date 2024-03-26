@@ -54,10 +54,10 @@ public class Fulcrum extends SubsystemBase {
         // kDistanceToFulcrumAngle.put(3.0, 28.0);
         // kDistanceToFulcrumAngle.put(3.5, 29.0);
         // kDistanceToFulcrumAngle.put(4.0, 32.5);
-        kDistanceToFulcrumAngle.put(2.25, 24.0);
-        kDistanceToFulcrumAngle.put(3.0, 30.0);
-        kDistanceToFulcrumAngle.put(3.5, 34.0);
-        kDistanceToFulcrumAngle.put(4.0, 36.0);
+        kDistanceToFulcrumAngle.put(2.5, 25.0);
+        kDistanceToFulcrumAngle.put(3.0, 27.0);
+        kDistanceToFulcrumAngle.put(3.5, 30.0);
+        kDistanceToFulcrumAngle.put(4.0, 33.0);
     }
 
     final DoubleSubscriber distanceSubscriber;
