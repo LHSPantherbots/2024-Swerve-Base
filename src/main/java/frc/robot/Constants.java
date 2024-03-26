@@ -124,7 +124,7 @@ public final class Constants {
   }
 
   public static final class LauncherConstants{
-    public static final int kLauncherTop = 30;
+    public static final int kLauncherTop = 33;
     public static final int kLauncherBottom = 31;
     public static final int kFeeder = 32;
   }
