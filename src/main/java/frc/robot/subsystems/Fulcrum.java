@@ -135,6 +135,7 @@ public class Fulcrum extends SubsystemBase {
         SmartDashboard.putNumber("Fulcrum Pos", e_FulcrumEncoder.getPosition());
         SmartDashboard.putBoolean("Fulcrum Down", isFulcurmDown());
         SmartDashboard.putNumber("Auto Angle", getAutoFulcrumAngle());
+        SmartDashboard.putNumber("Fulcrum Trim",autoAimTrim);
     }
 
     public void manualFulcrum(double move) {
