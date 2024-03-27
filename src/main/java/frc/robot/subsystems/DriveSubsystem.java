@@ -509,6 +509,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void autoAimAndDrive(Double x, Double y) {
     double error = angleToTarget() - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
+    error = error * (isRed() ? -1.0 : 1.0);
     kF = Math.copySign(kF, error);
     double outF = kF;
     double outP = kP * error;
