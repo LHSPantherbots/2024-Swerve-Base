@@ -427,7 +427,8 @@ public class DriveSubsystem extends SubsystemBase {
       if (isRed()) {
         // desiredAngle = (Math.atan((Ry - Ty)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) +
         // Math.PI;
-        desiredAngle = Math.atan((Ry - Ty) / (Tx - Rx)) + Math.PI;
+        // desiredAngle = Math.atan((Ry - Ty) / (Tx - Rx)) + Math.PI;
+        desiredAngle = Math.atan((Ty - Ry) / (Tx - Rx)) - Math.PI;
         // desiredAngle = Math.IEEEremainder(desiredAngle, 2*Math.PI);
       } else {
         desiredAngle = -Math.atan((Ty - Ry) / Rx);
@@ -437,7 +438,8 @@ public class DriveSubsystem extends SubsystemBase {
       if (isRed()) {
         // desiredAngle = (-Math.atan((Ty-Ry)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) +
         // Math.PI;
-        desiredAngle = -Math.atan((Ty - Ry) / (Tx - Rx)) + Math.PI;
+        // desiredAngle = -Math.atan((Ty - Ry) / (Tx - Rx)) + Math.PI;
+        desiredAngle = -Math.atan((Ry - Ty) / (Tx - Rx)) - Math.PI;
 
         // desiredAngle = Math.IEEEremainder(desiredAngle, 2*Math.PI);
       } else {
@@ -486,7 +488,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   public double errorToTarget() {
     double error = angleToTarget() - currAngle();
-    return -error;
+    // return -error * (isRed() ? -1.0 : 1.0);
+    return Math.IEEEremainder(-error, 2 * Math.PI);
+    // return -error;
   }
 
   public double currAngle() {
@@ -495,7 +499,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void autoAim() {
     double error = angleToTarget() - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
-    error = error * (isRed() ? -1.0 : 1.0);
+    // error = error * (isRed() ? -1.0 : 1.0);
     kF = Math.copySign(kF, error);
     double outF = kF;
     double outP = kP * error;
