@@ -172,7 +172,7 @@ public class RobotContainer {
     // launcher.lancherMaxSpeed(), launcher))
     // .onFalse(new RunCommand(()-> launcher.stopAll(), launcher));
     operatorController.a()
-        .whileTrue(new FulcrumCmd(Position.INTAKE, fulcrum, false).alongWith(new IntakeCmd2(intake, feeder, fulcrum))).onFalse(new RunCommand(() -> feeder.stopAll(), feeder).alongWith(new RunCommand(() -> intake.intakeStop(), intake)));
+        .whileTrue(new FulcrumCmd(Position.INTAKE, fulcrum, false).alongWith(new IntakeCmd2(intake, feeder, fulcrum)).alongWith(new RunCommand(() -> launcher.stopLauncher() , launcher) )).onFalse(new RunCommand(() -> feeder.stopAll(), feeder).alongWith(new RunCommand(() -> intake.intakeStop(), intake)));
     // operatorController.b().onTrue(new ShootCmd(launcher, feeder));
     operatorController.b().onTrue(new RunCommand(() -> launcher.lancherMaxSpeed(), launcher));
     operatorController.b().onTrue(new InstantCommand(() -> leds.setRobotStatus(RobotStatus.LAUNCH), leds));
