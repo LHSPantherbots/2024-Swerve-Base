@@ -29,6 +29,7 @@ public class Fulcrum extends SubsystemBase {
 
     private double lastSetpoint = 0;
     private double setPoint = 0;
+    private double autoAimTrim = 0;
 
     public double kP, kI, kD, kIz, kFF, kDt, kMaxOutput, kMinOutput, maxRPM, allowableError;
     private SparkPIDController pidController;
@@ -134,6 +135,7 @@ public class Fulcrum extends SubsystemBase {
         SmartDashboard.putNumber("Fulcrum Pos", e_FulcrumEncoder.getPosition());
         SmartDashboard.putBoolean("Fulcrum Down", isFulcurmDown());
         SmartDashboard.putNumber("Auto Angle", getAutoFulcrumAngle());
+        SmartDashboard.putNumber("Fulcrum Trim",autoAimTrim);
     }
 
     public void manualFulcrum(double move) {
@@ -232,7 +234,19 @@ public class Fulcrum extends SubsystemBase {
     }
 
     public double getAutoFulcrumAngle() {
-        return getFulcrumAngleForDistance(distanceSubscriber.get());
+        return getFulcrumAngleForDistance(distanceSubscriber.get()) + autoAimTrim;
+    }
+
+    public void resetTrim() {
+        autoAimTrim = 0;
+    }
+
+    public void trimUp() {
+        autoAimTrim += 0.5;
+    }
+
+    public void trimDown() {
+        autoAimTrim -= 0.5;
     }
 
 }
