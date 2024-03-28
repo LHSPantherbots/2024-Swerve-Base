@@ -182,6 +182,10 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Distance To Target", getDistanceToTarget());
     SmartDashboard.putNumber("desired Angle", angleToTarget());
     SmartDashboard.putNumber("auto aim error", errorToTarget());
+    SmartDashboard.putNumber("X Position", m_poseEstimator.getEstimatedPosition().getX());
+    SmartDashboard.putNumber("Y Position", m_poseEstimator.getEstimatedPosition().getX());
+        
+
     SmartDashboard.putNumber("currAngle", currAngle());
     SmartDashboard.putNumber("desired Angle (deg)", Math.toDegrees(angleToTarget()));
     SmartDashboard.putNumber("auto aim error (deg)", Math.toDegrees(errorToTarget()));
@@ -423,28 +427,9 @@ public class DriveSubsystem extends SubsystemBase {
       // Ty = 5.55;
       Tx = 0.0;
     }
-    if (Ry > Ty) {
-      if (isRed()) {
-        // desiredAngle = (Math.atan((Ry - Ty)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) +
-        // Math.PI;
-        desiredAngle = Math.atan((Ry - Ty) / (Tx - Rx)) + Math.PI;
-        // desiredAngle = Math.IEEEremainder(desiredAngle, 2*Math.PI);
-      } else {
-        desiredAngle = -Math.atan((Ty - Ry) / Rx);
-      }
+    
+    desiredAngle = Math.atan((Ry - Ty)/(Rx - Tx));
 
-    } else {
-      if (isRed()) {
-        // desiredAngle = (-Math.atan((Ty-Ry)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) +
-        // Math.PI;
-        desiredAngle = -Math.atan((Ty - Ry) / (Tx - Rx)) + Math.PI;
-
-        // desiredAngle = Math.IEEEremainder(desiredAngle, 2*Math.PI);
-      } else {
-        desiredAngle = Math.atan((Ry - Ty) / Rx);
-      }
-
-    }
     return Math.IEEEremainder(desiredAngle, 2 * Math.PI);
   }
 
