@@ -415,6 +415,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double angleToTarget() {
+    //Use this if Rx and Ry have an always blue origin
     double Ry = m_poseEstimator.getEstimatedPosition().getY();
     double Rx = m_poseEstimator.getEstimatedPosition().getX();
     double desiredAngle = 0;
@@ -425,6 +426,30 @@ public class DriveSubsystem extends SubsystemBase {
       Tx = 16.579342;
     } else {
       // Ty = 5.55;
+      Tx = 0.0;
+    }
+    
+    desiredAngle = Math.atan((Ry - Ty)/(Rx - Tx));
+
+    return Math.IEEEremainder(desiredAngle, 2 * Math.PI);
+  }
+
+
+
+
+    public double angleToTarget2() {
+    //Use this one if we find that the Ry and Rx end up have a Red origin when on red
+    double Ry = m_poseEstimator.getEstimatedPosition().getY();
+    double Rx = m_poseEstimator.getEstimatedPosition().getX();
+    double desiredAngle = 0;
+    double Ty;
+    double Tx;
+    if (isRed()) {
+      Ty = 2.65;
+      Tx = 0.0;
+    } else {
+      // Ty = 5.55;
+      Ty = 5.55;
       Tx = 0.0;
     }
     
