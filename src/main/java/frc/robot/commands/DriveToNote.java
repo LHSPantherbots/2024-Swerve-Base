@@ -16,6 +16,7 @@ public class DriveToNote  extends Command {
     // PIDController Y_pid;
     double xkP = 0.05;
     double ykP = 0.05;
+    int noNoteEndCountDown = 500;
 
     // public DriveToNote(Feeder feeder, Intake intake, DriveSubsystem driveSubsystem, NoteLimeLight ll) {
     public DriveToNote(DriveSubsystem driveSubsystem, NoteLimeLight ll) {
@@ -50,7 +51,7 @@ public class DriveToNote  extends Command {
         // } else {
         //     x_output = 0.0;
         // }
-        System.out.println("Is target valid: "+ll.isTargetValid());
+        // System.out.println("Is target valid: "+ll.isTargetValid());
         if (ll.isTargetValid()) {
             double tX = ll.getHorizontalOffset();
             double tY = ll.getVerticalOffset();
@@ -64,6 +65,9 @@ public class DriveToNote  extends Command {
             System.out.println("x output:"+x_output);
             System.out.println("y output:"+y_output);
             driveSubsystem.drive(y_output, -x_output, 0, false, false);
+        } else {
+            // driveSubsystem.drive(0, 0, 0, false, false);
+            noNoteEndCountDown -= 1;        
         }
     }
 
@@ -75,7 +79,8 @@ public class DriveToNote  extends Command {
     @Override
     public boolean isFinished() {
         // return this.ll.isTargetValid();
-        return false;
+        return (noNoteEndCountDown <= 0);
+        // return false;
     }
     
 }
