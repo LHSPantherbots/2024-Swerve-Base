@@ -13,7 +13,7 @@ public class NoteLimeLight extends SubsystemBase {
     private double targetArea;
 
     public NoteLimeLight() {
-        table = NetworkTableInstance.getDefault().getTable("driving-limelight");
+        table = NetworkTableInstance.getDefault().getTable("limelight-driving");
         validTargets = isTargetValid();
         horizontalOffset = getHorizontalOffset();
         verticalOffset = getVerticalOffset();
@@ -33,7 +33,12 @@ public class NoteLimeLight extends SubsystemBase {
     }
 
     public boolean isTargetValid() {
-        return (table.getEntry("tv").getDouble(0) == 1);
+        var tclass = table.getEntry("tclass").getString("nothing");
+        // System.out.println("tclass: "+tclass);
+        // System.out.println("Is frisbee: "+(tclass.equals("frisbee")));
+
+        return (table.getEntry("tv").getDouble(0) == 1)&&(tclass.equals("frisbee"));
+        // return (table.getEntry("tv").getDouble(0) == 1)&&((tclass == "toilet"||tclass == "frisbee"));
     }
 
     public double getHorizontalOffset() {

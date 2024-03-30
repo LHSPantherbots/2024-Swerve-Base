@@ -79,7 +79,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("AutoShoot", new AutoShootAndFulcrum(fulcrum, launcher, feeder));
     NamedCommands.registerCommand("PostAutoGyroReset",
         new InstantCommand(() -> m_robotDrive.resetGyroToPose(), m_robotDrive));
-    NamedCommands.registerCommand("DriveToNote", new DriveToNote(feeder, intake, m_robotDrive, noteLimeLight));
+    NamedCommands.registerCommand("DriveToNote", new DriveToNote(m_robotDrive, noteLimeLight).raceWith(new IntakeCmd(intake, feeder)));
 
     autoChoice = AutoBuilder.buildAutoChooser();
 
@@ -161,6 +161,9 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband)* DriveConstants.kMaxSpeedMetersPerSecond,
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband)* DriveConstants.kMaxSpeedMetersPerSecond),
             m_robotDrive));
+    m_driverController.x().whileTrue(
+        new DriveToNote(m_robotDrive, noteLimeLight).raceWith(new IntakeCmd(intake, feeder))
+    );
     // operatorController.a().whileTrue(new RunCommand(() -> intake.intake(),
     // intake))
     // .onFalse(new RunCommand(() -> intake.intakeStop(), intake));

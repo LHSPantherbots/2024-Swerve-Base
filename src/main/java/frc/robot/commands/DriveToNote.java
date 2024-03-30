@@ -12,43 +12,59 @@ public class DriveToNote  extends Command {
     Intake intake;
     DriveSubsystem driveSubsystem;
     NoteLimeLight ll;
-    PIDController X_pid;
-    PIDController Y_pid;
+    // PIDController X_pid;
+    // PIDController Y_pid;
+    double xkP = 0.05;
+    double ykP = 0.05;
 
-    public DriveToNote(Feeder feeder, Intake intake, DriveSubsystem driveSubsystem, NoteLimeLight ll) {
-        this.feeder = feeder;
-        this.intake = intake;
+    // public DriveToNote(Feeder feeder, Intake intake, DriveSubsystem driveSubsystem, NoteLimeLight ll) {
+    public DriveToNote(DriveSubsystem driveSubsystem, NoteLimeLight ll) {
+        // this.feeder = feeder;
+        // this.intake = intake;
         this.driveSubsystem = driveSubsystem;
         this.ll = ll;
         addRequirements(driveSubsystem, ll);
 
-        X_pid = new PIDController(0, 0, 0);
-        X_pid.disableContinuousInput();
-        X_pid.setTolerance(10);
-        Y_pid = new PIDController(0, 0, 0);
-        Y_pid.disableContinuousInput();
+        // X_pid = new PIDController(0.1, 0, 0);
+        // X_pid.disableContinuousInput();
+        // X_pid.setTolerance(10);
+        // Y_pid = new PIDController(0.1, 0, 0);
+        // Y_pid.disableContinuousInput();
 
-        this.raceWith(new IntakeCmd(intake, feeder));
+        // this.raceWith(new IntakeCmd(intake, feeder));
     }
 
     @Override
     public void initialize() {
-        X_pid.reset();
-        Y_pid.reset();
+        // X_pid.reset();
+        // Y_pid.reset();
 
     }
 
     @Override
     public void execute() {
-        var y_output = Y_pid.calculate(ll.getHorizontalOffset());
-        Double x_output;
-        if (Y_pid.atSetpoint()) {
-            x_output = X_pid.calculate(ll.getVerticalOffset());
-        } else {
-            x_output = 0.0;
+        // var y_output = Y_pid.calculate(ll.getHorizontalOffset());
+        // Double x_output;
+        // if (Y_pid.atSetpoint()) {
+        //     x_output = X_pid.calculate(ll.getVerticalOffset());
+        // } else {
+        //     x_output = 0.0;
+        // }
+        System.out.println("Is target valid: "+ll.isTargetValid());
+        if (ll.isTargetValid()) {
+            double tX = ll.getHorizontalOffset();
+            double tY = ll.getVerticalOffset();
+            double y_output;
+            double x_output = tX*xkP;
+            if (tX < 5.0) {
+                y_output = (tY+20.0)*ykP;
+            } else {
+                y_output = 0.0;
+            }
+            System.out.println("x output:"+x_output);
+            System.out.println("y output:"+y_output);
+            driveSubsystem.drive(y_output, -x_output, 0, false, false);
         }
-        driveSubsystem.drive(x_output, y_output, 0, false, false);
-        
     }
 
     @Override
@@ -58,7 +74,8 @@ public class DriveToNote  extends Command {
 
     @Override
     public boolean isFinished() {
-        return this.ll.isTargetValid();
+        // return this.ll.isTargetValid();
+        return false;
     }
     
 }
