@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.AutoShootAndFulcrum;
+import frc.robot.commands.DriveToNote;
 import frc.robot.commands.FeedCenterCmd;
 import frc.robot.commands.FulcrumAimCmd;
 import frc.robot.commands.FulcrumCmd;
@@ -24,6 +25,7 @@ import frc.robot.subsystems.Fulcrum;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Leds;
+import frc.robot.subsystems.NoteLimeLight;
 import frc.utils.Position;
 import frc.utils.RobotStatus;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -52,6 +54,7 @@ public class RobotContainer {
   public static final Feeder feeder = new Feeder();
   public static final Leds leds = new Leds();
   private final Climb climb = new Climb();
+  private final NoteLimeLight noteLimeLight = new NoteLimeLight();
 
   // The driver's controller
   // XboxController m_driverController = new
@@ -76,6 +79,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("AutoShoot", new AutoShootAndFulcrum(fulcrum, launcher, feeder));
     NamedCommands.registerCommand("PostAutoGyroReset",
         new InstantCommand(() -> m_robotDrive.resetGyroToPose(), m_robotDrive));
+    NamedCommands.registerCommand("DriveToNote", new DriveToNote(m_robotDrive, noteLimeLight).raceWith(new IntakeCmd(intake, feeder)));
 
     autoChoice = AutoBuilder.buildAutoChooser();
 
@@ -157,6 +161,9 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband)* DriveConstants.kMaxSpeedMetersPerSecond,
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband)* DriveConstants.kMaxSpeedMetersPerSecond),
             m_robotDrive));
+    m_driverController.x().whileTrue(
+        new DriveToNote(m_robotDrive, noteLimeLight).raceWith(new IntakeCmd(intake, feeder))
+    );
     
     m_driverController.povUp().onTrue(new InstantCommand(() -> fulcrum.trimUp(), fulcrum));
     m_driverController.povDown().onTrue(new InstantCommand(() -> fulcrum.trimDown(), fulcrum));

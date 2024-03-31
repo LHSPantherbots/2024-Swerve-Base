@@ -71,8 +71,9 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
   // AutoAim PID values
-  private double kP = 3.5; // 0.05;
-  private double kF = 0.5; // 0.0125;
+  private double kP = 1.5; //3.5; // 0.05;
+  private double kF = 0.75; // 0.0125;
+  private double kAllowedError = 0.025;
 
   private final Field2d m_field = new Field2d();
   private final StructArrayPublisher<SwerveModuleState> publisher;
@@ -199,6 +200,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("RR Turn Current", m_rearRight.getTurnCurrent());
     SmartDashboard.putNumber("RL Turn Current", m_rearLeft.getTurnCurrent());
     SmartDashboard.putBoolean("isRed", isRed());
+    SmartDashboard.putBoolean("isAimedAtTarget", isAimedAtGoal());
   }
 
   public ChassisSpeeds getChassisSpeed() {
@@ -428,7 +430,9 @@ public class DriveSubsystem extends SubsystemBase {
         // desiredAngle = (Math.atan((Ry - Ty)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) +
         // Math.PI;
         // desiredAngle = Math.atan((Ry - Ty) / (Tx - Rx)) + Math.PI;
-        desiredAngle = Math.atan((Ry - Ty) / (Tx - Rx));
+        // desiredAngle = Math.atan((Ty - Ry) / (Tx - Rx)) - Math.PI;
+
+        desiredAngle = Math.atan((Ty - Ry) / (Tx - Rx));
         // desiredAngle = Math.IEEEremainder(desiredAngle, 2*Math.PI);
       } else {
         desiredAngle = -Math.atan((Ty - Ry) / Rx);
@@ -439,7 +443,8 @@ public class DriveSubsystem extends SubsystemBase {
         // desiredAngle = (-Math.atan((Ty-Ry)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) +
         // Math.PI;
         // desiredAngle = -Math.atan((Ty - Ry) / (Tx - Rx)) + Math.PI;
-        desiredAngle = -Math.atan((Ty - Ry) / (Tx - Rx));
+        // desiredAngle = -Math.atan((Ry - Ty) / (Tx - Rx)) - Math.PI;
+        desiredAngle = -Math.atan((Ry - Ty) / (Tx - Rx));
 
         // desiredAngle = Math.IEEEremainder(desiredAngle, 2*Math.PI);
       } else {
@@ -488,7 +493,18 @@ public class DriveSubsystem extends SubsystemBase {
 
   public double errorToTarget() {
     double error = angleToTarget() - currAngle();
-    return -error;
+    Rotation2d r1 = new Rotation2d().fromRadians(angleToTarget());
+    Rotation2d r2 = new Rotation2d().fromRadians(currAngle());
+    Rotation2d r3 = r1.minus(r2);
+    if (isRed()) {
+      return r3.rotateBy(new Rotation2d().fromDegrees(180)).getRadians();
+    } else {
+      return r3.getRadians();
+    }
+    // return r1.minus(r2).getRadians();
+    // return -error * (isRed() ? -1.0 : 1.0);
+    // return Math.IEEEremainder(-error, 2 * Math.PI);
+    // return -error;
   }
 
   public double currAngle() {
@@ -496,13 +512,14 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void autoAim() {
-    double error = angleToTarget() - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
-    error = error * (isRed() ? -1.0 : 1.0);
+    double error = errorToTarget();
+    // double error = angleToTarget() - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
+    // error = error * (isRed() ? -1.0 : 1.0);
     kF = Math.copySign(kF, error);
     double outF = kF;
     double outP = kP * error;
     double outputTurn = outF + outP;
-    if (Math.abs(error) > 0.02) { // if error is greater than ~5.7 deg (0.1 rad)
+    if (Math.abs(error) > kAllowedError) { // if error is greater than ~5.7 deg (0.1 rad)
       drive(0, 0, outputTurn, false, false);
     } else {
       drive(0, 0, 0, false, false);
@@ -510,13 +527,13 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void autoAimAndDrive(Double x, Double y) {
-    double error = angleToTarget() - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
-    error = error * (isRed() ? -1.0 : 1.0);
+    double error = errorToTarget();
+    // double error = angleToTarget() - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
     kF = Math.copySign(kF, error);
     double outF = kF;
     double outP = kP * error;
     double outputTurn = outF + outP;
-    if (Math.abs(error) > 0.02) { // if error is greater than ~5.7 deg (0.1 rad)
+    if (Math.abs(error) > kAllowedError) { // if error is greater than ~5.7 deg (0.1 rad)
       drive(x, y, outputTurn, false, false);
     } else {
       drive(x, y, 0, false, false);
@@ -537,7 +554,7 @@ public class DriveSubsystem extends SubsystemBase {
     double outF = kF;
     double outP = kP * error;
     double outputTurn = outF + outP;
-    if (Math.abs(error) > 0.1) { // if error is greater than ~5.7 deg (0.1 rad)
+    if (Math.abs(error) > kAllowedError) { // if error is greater than ~5.7 deg (0.1 rad)
       drive(x, y, outputTurn, true, false);
     } else {
       drive(x, y, 0, true, false);
@@ -546,8 +563,9 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public boolean isAimedAtGoal() {
-    double error = angleToTarget() - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
-    if (Math.abs(error) > 0.02) {
+    // double error = angleToTarget() - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
+    double error = errorToTarget();
+    if (Math.abs(error) > kAllowedError) {
       return false;
     } else {
       return true;
