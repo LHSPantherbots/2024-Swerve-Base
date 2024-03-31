@@ -204,7 +204,7 @@ public class RobotContainer {
         .onFalse(new RunCommand(() -> launcher.resumeLauncher(), launcher));
 
     operatorController.pov(0).onTrue(new FulcrumCmd(Position.AMP, fulcrum, false));
-    operatorController.pov(270).onTrue(new FulcrumCmd(Position.STOW, fulcrum, false));
+    operatorController.pov(270).onTrue(new FulcrumCmd(Position.STOW, fulcrum, false).alongWith(new RunCommand(() -> launcher.stopLauncher() , launcher)));
     operatorController.pov(90).onTrue(new FulcrumCmd(Position.SPEAKER, fulcrum, false));
     operatorController.pov(180).onTrue(new FulcrumCmd(Position.INTAKE, fulcrum, false));
 
