@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Fulcrum;
 import frc.robot.subsystems.Launcher;
+import frc.utils.Position;
 import frc.robot.subsystems.Feeder;
 
 public class AutoShootAndFulcrum extends Command {
@@ -29,7 +30,7 @@ public class AutoShootAndFulcrum extends Command {
         // this.noteWasDetected = false;
         this.shouldEnd = false;
         this.startCountDown = false;
-        this.countDown = 50;
+        this.countDown = 75;
         this.launcher.setSetPoint(this.launcher.getAutoShooterSpeed());
         this.feeder.stopAll();
     }
@@ -51,6 +52,8 @@ public class AutoShootAndFulcrum extends Command {
         }
 
         if (this.countDown <= 0) {
+            this.fulcrum.setSetPoint(12);
+            this.fulcrum.closedLoopFulcrum();
             this.shouldEnd = true;
         }
 
