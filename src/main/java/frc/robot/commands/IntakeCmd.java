@@ -39,7 +39,7 @@ public class IntakeCmd extends Command {
             this.feeder.feed();
         } else if (noteWasDetected && !shouldEnd) {
             this.intake.intakeStop();
-            this.feeder.reversefeed();
+            this.feeder.autoreversefeed();
         } else if (noteWasDetected && shouldEnd) {
             this.intake.intakeStop();
             this.feeder.stopAll();

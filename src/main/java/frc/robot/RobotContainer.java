@@ -8,6 +8,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.AutoShootAndFulcrum;
 import frc.robot.commands.DriveToNote;
@@ -70,11 +71,18 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
+    SmartDashboard.putData("Green Flash", new RunCommand(leds::greenFlash,leds));
+    SmartDashboard.putData("Purple Streak 10", new RunCommand(leds::purpleStreak10,leds));
+    SmartDashboard.putData("Purple Flash", new RunCommand(leds::purpleFlash,leds));
+    SmartDashboard.putData("Purple White Strobe", new RunCommand(leds::PurpleWhiteStrobe,leds));
+    SmartDashboard.putData("Purple 10 Bounce", new RunCommand(leds::purpleStreak10Return, leds));
+
     NamedCommands.registerCommand("ShootCmd", new ShootCmd(launcher, feeder).withTimeout(1));
     NamedCommands.registerCommand("IntakeCmd", new IntakeCmd(intake, feeder));
     NamedCommands.registerCommand("IntakeCmd2", new IntakeCmd(intake, feeder));
     NamedCommands.registerCommand("AutoAim", new TurnToTargetCmd(m_robotDrive));
     NamedCommands.registerCommand("AutoFulcrum", new FulcrumAimCmd(fulcrum));
+    NamedCommands.registerCommand("FulcrumStow", new FulcrumCmd(Position.STOW, fulcrum, false));
     NamedCommands.registerCommand("FeedHold", new RunCommand(() -> feeder.stopAll(), feeder));
     NamedCommands.registerCommand("AutoShoot", new AutoShootAndFulcrum(fulcrum, launcher, feeder));
     NamedCommands.registerCommand("PostAutoGyroReset",

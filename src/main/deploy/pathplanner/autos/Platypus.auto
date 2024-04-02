@@ -99,15 +99,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "TopNote-MidSpeaker"
+            "name": "AutoAim"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootCmd"
+            "name": "AutoShoot"
           }
         },
         {

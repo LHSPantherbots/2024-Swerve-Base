@@ -100,6 +100,10 @@ public class Feeder extends SubsystemBase {
         m_Feeder.set(.15);
     }
 
+    public void autoreversefeed(){
+        m_Feeder.set(.05);
+    }
+
     public void closedLoopFeeder() {
         m_Feeder.set(m_controller.calculate(feederEncoder.getPosition(), positionSetpoint)); // is this needed?
     }

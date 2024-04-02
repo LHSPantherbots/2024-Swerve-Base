@@ -1,10 +1,12 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.LEDs;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.utils.RobotStatus;
 
 
@@ -26,6 +28,7 @@ public class Leds extends SubsystemBase {
   private int numLoops = 0;
   private int index = 0;
   private int index1 = 1; //this varible should never be less than 1
+  private boolean hasReachedEnd = false;
 
   public Leds() {
     // PWM port 9
@@ -45,7 +48,6 @@ public class Leds extends SubsystemBase {
 
   @Override
   public void periodic() {
-
 
     
   }
@@ -127,8 +129,10 @@ public class Leds extends SubsystemBase {
       temp_Green = 0;
     }
 
+    numLoops++;
     numLoops %= 10;
-
+    
+    m_led.setData(m_ledBuffer);
   }
 
   public void yellowFlash(){
@@ -147,10 +151,52 @@ public class Leds extends SubsystemBase {
       temp_Green = 0;
     }
 
+    numLoops++;
     numLoops %= 10;
-
+    
+    m_led.setData(m_ledBuffer);
   }
 
+
+public void greenFlash(){
+    for(int i = 0; i < m_ledBuffer.getLength(); i++){
+      m_ledBuffer.setRGB(i,0, temp_Green, 0);
+    }
+
+    if (numLoops < 5){ //sets speed of flash
+      temp_Green = LEDs.Green;
+    }
+    else{
+      temp_Green = 0;
+    }
+
+    numLoops++;
+    numLoops %= 10;
+
+    m_led.setData(m_ledBuffer);
+  }
+
+  public void orangeFlash(){
+    for(int i = 0; i < m_ledBuffer.getLength(); i++){
+      m_ledBuffer.setRGB(i,temp_Red, temp_Green, temp_Blue);
+    }
+
+    if (numLoops < 10){ //sets speed of flash
+      temp_Red = LEDs.orange_Red;
+      temp_Green = LEDs.orange_Green;
+      temp_Blue = LEDs.orange_Blue;
+    }
+    else{
+      temp_Red = 0;
+      temp_Green = 0;
+      temp_Blue = 0;
+    }
+
+    numLoops++;
+    numLoops %= 20;
+
+    m_led.setData(m_ledBuffer);
+  }
 
   public void yellowStreak() {
     for (int i = 0; i < m_ledBuffer.getLength(); i++) {
@@ -307,7 +353,7 @@ public class Leds extends SubsystemBase {
 
 public void purpleStreak10() {
     for (int i = index1; i < index1 + 10; i++) {
-      m_ledBuffer.setRGB(i, LEDs.purple_Red, LEDs.purple_Blue, LEDs.purple_Green);
+      m_ledBuffer.setRGB(i, LEDs.purple_Red, LEDs.purple_Green, LEDs.purple_Blue);
     }
 
     m_ledBuffer.setRGB(index1 - 1, 0,0,0);
@@ -319,6 +365,42 @@ public void purpleStreak10() {
 
       // Check bounds
       index1 = index1 % (m_ledBuffer.getLength() - 20) + 1;
+    }
+
+    m_led.setData(m_ledBuffer);
+
+    numLoops++;
+
+  }
+
+  public void purpleStreak10Return() {
+    for (int i = index1; i < index1 + 10; i++) {
+      m_ledBuffer.setRGB(i, LEDs.purple_Red, LEDs.purple_Green, LEDs.purple_Blue);
+    }
+
+    m_ledBuffer.setRGB(index1 - 1, 0,0,0);
+
+    if (numLoops % 7 == 0) {
+      numLoops = 0;
+
+      if (hasReachedEnd){
+        index1--;
+      }
+      else{
+        index1++;
+      }
+      
+      if (index1 == m_ledBuffer.getLength() - 20){
+        hasReachedEnd = true;
+      }
+      else if(index1 == 1){
+        hasReachedEnd = false;
+      }
+
+    }
+
+    if (hasReachedEnd){
+      index1--;
     }
 
     m_led.setData(m_ledBuffer);
@@ -346,49 +428,11 @@ public void purpleStreak10() {
 
     numLoops++;
     numLoops %= 4;
-  }
-
-  public void PinkYellowStreak(){
-    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
-      m_ledBuffer.setRGB(i, 245, 34,195); //pink
-      if (i % 2 == index){
-        m_ledBuffer.setRGB(i, 239, 239, 32); //yellow
-      }
-      
-    }
-  /*  for (int i = index; i < m_ledBuffer.getLength(); i += 2) {
-      m_ledBuffer.setRGB(i, 239, 239, 32);
-    }
-*/
-    if (numLoops % 10 == 0) {
-      index++;
-      index = index % 2;
-      numLoops = 0;
-    }
-
-    numLoops++;
-
     m_led.setData(m_ledBuffer);
-
-
   }
 
 
-  public void snakeStreak()
-  {
-      for (int i = index; i < m_ledBuffer.getLength() - 4; i++) { //set color pattern of the leds  
-          m_ledBuffer.setRGB(i, 148, 0, 211); //purple        
 
-      /*add one every loop, if it reaches 4, make it go back to 0
-      This switches the postions of the leds for each color, makes it looks like colors are snaking around bot*/
-          if (numLoops % 10 == 0) {
-              index++;
-              index = index % 2;
-              numLoops = 0;
-            }
-
-    }
-  }
 
   public void setRobotStatus(RobotStatus newState){
     this.prevState = this.state;
@@ -411,7 +455,7 @@ public void purpleStreak10() {
       case TARGET_LOCK: white(); break;
       case LAUNCH: blue(); break;
       case NOTE_STORED: orange(); break;
-      case INTAKE: if(RobotContainer.feeder.isNoteDetected()){orangePulse();break;} greenPulse(); break;
+      case INTAKE: if(RobotContainer.feeder.isNoteDetected()){orangeFlash();break;} greenPulse(); break;
       //case 1: purpleFlash(); break;
       //case 2: yellowFlash(); break;
       //case 3: purpleStreak10(); break;
