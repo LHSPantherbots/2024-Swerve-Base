@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SmartZebra1"
+            "pathName": "TopSpeaker-TopNote"
           }
         },
         {
@@ -32,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SmartZebra2"
+            "pathName": "TopNote-TopSpeaker"
           }
         },
         {
@@ -44,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SmartZebra3"
+            "pathName": "TopSpeaker-FarNote1"
           }
         },
         {

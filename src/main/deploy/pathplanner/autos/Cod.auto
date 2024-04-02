@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6842044526319189,
-      "y": 4.3627103149817215
+      "x": 0.7036808379666589,
+      "y": 4.382186700316462
     },
-    "rotation": -60.39554925399507
+    "rotation": -61.46001481204003
   },
   "command": {
     "type": "sequential",
@@ -22,15 +22,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "IntakeCmd"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "BottomSpeakerAutoAim-FarNote4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeCmd"
                 }
               }
             ]
@@ -40,6 +40,12 @@
           "type": "path",
           "data": {
             "pathName": "FarNote4-BottomSpeakerAutoAim"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoAim"
           }
         },
         {

@@ -176,6 +176,28 @@ public void greenFlash(){
     m_led.setData(m_ledBuffer);
   }
 
+  public void orangeFlash(){
+    for(int i = 0; i < m_ledBuffer.getLength(); i++){
+      m_ledBuffer.setRGB(i,temp_Red, temp_Green, temp_Blue);
+    }
+
+    if (numLoops < 10){ //sets speed of flash
+      temp_Red = LEDs.orange_Red;
+      temp_Green = LEDs.orange_Green;
+      temp_Blue = LEDs.orange_Blue;
+    }
+    else{
+      temp_Red = 0;
+      temp_Green = 0;
+      temp_Blue = 0;
+    }
+
+    numLoops++;
+    numLoops %= 20;
+
+    m_led.setData(m_ledBuffer);
+  }
+
   public void yellowStreak() {
     for (int i = 0; i < m_ledBuffer.getLength(); i++) {
       m_ledBuffer.setRGB(i,LEDs.yellow_Red, LEDs.yellow_Green, LEDs.yellow_Blue);
@@ -433,7 +455,7 @@ public void purpleStreak10() {
       case TARGET_LOCK: white(); break;
       case LAUNCH: blue(); break;
       case NOTE_STORED: orange(); break;
-      case INTAKE: if(RobotContainer.feeder.isNoteDetected()){orangePulse();break;} greenFlash(); break;
+      case INTAKE: if(RobotContainer.feeder.isNoteDetected()){orangeFlash();break;} greenPulse(); break;
       //case 1: purpleFlash(); break;
       //case 2: yellowFlash(); break;
       //case 3: purpleStreak10(); break;

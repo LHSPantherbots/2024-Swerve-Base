@@ -39,7 +39,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LowNote-MidSpeaker"
+            "pathName": "Copy of LowNote-MidSpeaker"
           }
         },
         {
@@ -80,7 +80,7 @@
           }
         },
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -96,6 +96,18 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoAim"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoShoot"
           }
         },
         {
