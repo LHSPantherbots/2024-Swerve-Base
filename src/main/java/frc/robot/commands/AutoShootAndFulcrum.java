@@ -25,6 +25,7 @@ public class AutoShootAndFulcrum extends Command {
     @Override
     public void initialize() {
         this.fulcrum.resetController();
+        
         this.fulcrum.setSetPoint(this.fulcrum.getAutoFulcrumAngle());
         
         // this.noteWasDetected = false;

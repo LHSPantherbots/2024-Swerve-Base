@@ -216,6 +216,12 @@ public class RobotContainer {
     operatorController.pov(90).onTrue(new FulcrumCmd(Position.SPEAKER, fulcrum, false));
     operatorController.pov(180).onTrue(new FulcrumCmd(Position.INTAKE, fulcrum, false));
 
+    operatorController.rightTrigger().onTrue(new RunCommand(() -> launcher.lancherBloop(), launcher));
+    operatorController.x().onTrue(new InstantCommand(() -> leds.setRobotStatus(RobotStatus.ROBOT_CENTRIC), leds));
+    
+
+
+
     // new JoystickButton(operatorController, GamePadButtons.Start)
     // .whileTrue(new InstantCommand(driveTrain::resetAll, driveTrain));
   }

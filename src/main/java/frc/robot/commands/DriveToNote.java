@@ -58,9 +58,9 @@ public class DriveToNote  extends Command {
             double y_output;
             double x_output = tX*xkP;
             if (tX < 5.0) {
-                y_output = (tY+20.0)*ykP;
+                y_output = (tY+20.0)*ykP+.25;
             } else {
-                y_output = 0.0;
+                y_output = 0.0 + .25;
             }
             System.out.println("x output:"+x_output);
             System.out.println("y output:"+y_output);

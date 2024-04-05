@@ -134,6 +134,12 @@ public class Launcher extends SubsystemBase {
         closedLoopLaunch();
     }
 
+    public void lancherBloop() {
+        lastSetpoint = setPoint;
+        setPoint = 6500*.75;
+        closedLoopLaunch();
+    }
+
     public void stopLauncher() {
         lastSetpoint = setPoint;
         setPoint = 0;
