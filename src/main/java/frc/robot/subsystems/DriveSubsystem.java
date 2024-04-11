@@ -455,6 +455,15 @@ public class DriveSubsystem extends SubsystemBase {
     return Math.IEEEremainder(desiredAngle, 2 * Math.PI);
   }
 
+  public double angleToTriangle(){//TODO: get right angles
+    if(isRed()){
+      return 0.0;
+    }
+    else{
+      return 180.0;
+    }
+  }
+
   // public double autoAngleToTarget() {
   // double Ry = m_poseEstimator.getEstimatedPosition().getY();
   // double Rx = m_poseEstimator.getEstimatedPosition().getX();
@@ -509,6 +518,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   public double currAngle() {
     return m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
+  }
+
+  public double getVelocity(){
+    return m_frontRight.getVelocity();
   }
 
   public void autoAim() {

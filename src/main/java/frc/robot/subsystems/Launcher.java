@@ -97,7 +97,6 @@ public class Launcher extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Shooter Current", m_LauncherTop.getOutputCurrent());
         SmartDashboard.putNumber("Launcer Top RPM", m_LauncherEncoder.getVelocity());
-        ;
         SmartDashboard.putNumber("Launcer Bottom RPM", m_lowerLauncherEncoder.getVelocity());
         SmartDashboard.putNumber("Launcher SetPoint", setPoint);
         SmartDashboard.putBoolean("Launcher Is At Vel", isAtVelocity());
@@ -134,9 +133,9 @@ public class Launcher extends SubsystemBase {
         closedLoopLaunch();
     }
 
-    public void lancherBloop() {
+    public void lancherBloop(double velocity) {
         lastSetpoint = setPoint;
-        setPoint = 6500*.75;
+        setPoint = 4875 - 341.33 * velocity;
         closedLoopLaunch();
     }
 
