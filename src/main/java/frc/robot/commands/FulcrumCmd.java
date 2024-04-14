@@ -31,7 +31,7 @@ public class FulcrumCmd extends Command {
                 this.fulcrum.setSetPoint(54.1);
                 break;
             case INTAKE:
-                this.fulcrum.setSetPoint(13);
+                this.fulcrum.setSetPoint(13.5);
                 break;
             case AMP:
                 this.fulcrum.setSetPoint(90);

@@ -105,9 +105,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "AutoShoot"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MidNote-MidSpeaker-Slow"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoShoot"
+                }
+              }
+            ]
           }
         },
         {

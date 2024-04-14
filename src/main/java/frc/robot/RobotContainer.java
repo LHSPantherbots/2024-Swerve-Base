@@ -216,7 +216,7 @@ public class RobotContainer {
     operatorController.pov(90).onTrue(new FulcrumCmd(Position.SPEAKER, fulcrum, false));
     operatorController.pov(180).onTrue(new FulcrumCmd(Position.INTAKE, fulcrum, false));
 
-    operatorController.rightTrigger().whileTrue(new RunCommand(() -> launcher.lancherBloop(m_robotDrive.getVelocity()), launcher));
+    operatorController.rightTrigger().onTrue(new RunCommand(() -> launcher.lancherBloop(m_robotDrive.getVelocity()), launcher));
     operatorController.x().onTrue(new InstantCommand(() -> leds.setRobotStatus(RobotStatus.ROBOT_CENTRIC), leds));
     
 
