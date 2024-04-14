@@ -7,5 +7,6 @@ public enum RobotStatus{
     LAUNCH,
     ROBOT_CENTRIC,
     CLIMB,
-    TARGET_LOCK
+    TARGET_LOCK,
+    BLOOP
 }

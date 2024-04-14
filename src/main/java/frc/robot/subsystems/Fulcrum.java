@@ -28,7 +28,8 @@ public class Fulcrum extends SubsystemBase {
     private final CANSparkMax m_FulcrumLeft;
 
     private double lastSetpoint = 0;
-    private double setPoint = 0;
+    private double trimZero = 2.0;
+    private double setPoint = trimZero;
     private double autoAimTrim = 0;
 
     public double kP, kI, kD, kIz, kFF, kDt, kMaxOutput, kMinOutput, maxRPM, allowableError;
@@ -238,7 +239,7 @@ public class Fulcrum extends SubsystemBase {
     }
 
     public void resetTrim() {
-        autoAimTrim = 0;
+        autoAimTrim = trimZero;
     }
 
     public void trimUp() {
@@ -247,6 +248,10 @@ public class Fulcrum extends SubsystemBase {
 
     public void trimDown() {
         autoAimTrim -= 0.5;
+    }
+
+    public void setTrim(double trimValue){
+        autoAimTrim = trimValue;
     }
 
 }

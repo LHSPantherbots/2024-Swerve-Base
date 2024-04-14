@@ -176,6 +176,10 @@ public class RobotContainer {
     m_driverController.povUp().onTrue(new InstantCommand(() -> fulcrum.trimUp(), fulcrum));
     m_driverController.povDown().onTrue(new InstantCommand(() -> fulcrum.trimDown(), fulcrum));
     m_driverController.povLeft().onTrue(new InstantCommand(() -> fulcrum.resetTrim(), fulcrum));
+    m_driverController.y().whileTrue(new RunCommand(()-> m_robotDrive.AutoAimTriangle(
+        -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband)* DriveConstants.kMaxSpeedMetersPerSecond, 
+        -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband)* DriveConstants.kMaxSpeedMetersPerSecond), 
+        m_robotDrive));
     // operatorController.a().whileTrue(new RunCommand(() -> intake.intake(),
     // intake))
     // .onFalse(new RunCommand(() -> intake.intakeStop(), intake));
@@ -215,6 +219,12 @@ public class RobotContainer {
     operatorController.pov(270).onTrue(new FulcrumCmd(Position.STOW, fulcrum, false).alongWith(new RunCommand(() -> launcher.stopLauncher() , launcher)));
     operatorController.pov(90).onTrue(new FulcrumCmd(Position.SPEAKER, fulcrum, false));
     operatorController.pov(180).onTrue(new FulcrumCmd(Position.INTAKE, fulcrum, false));
+
+    operatorController.rightTrigger().onTrue(new RunCommand(() -> launcher.lancherBloop(m_robotDrive.getVelocity()), launcher));
+    operatorController.x().onTrue(new InstantCommand(() -> leds.setRobotStatus(RobotStatus.ROBOT_CENTRIC), leds));
+    
+
+
 
     // new JoystickButton(operatorController, GamePadButtons.Start)
     // .whileTrue(new InstantCommand(driveTrain::resetAll, driveTrain));

@@ -37,7 +37,7 @@ public class NoteLimeLight extends SubsystemBase {
         // System.out.println("tclass: "+tclass);
         // System.out.println("Is frisbee: "+(tclass.equals("frisbee")));
 
-        return (table.getEntry("tv").getDouble(0) == 1)&&(tclass.equals("frisbee")||tclass.equals("toilet"));
+        return (table.getEntry("tv").getDouble(0) == 1)&&(tclass.equals("frisbee")||tclass.equals("toilet")||tclass.equals("note"));
         // return (table.getEntry("tv").getDouble(0) == 1)&&((tclass == "toilet"||tclass == "frisbee"));
     }
 

@@ -12,25 +12,6 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoAim"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoFulcrum"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "ShootCmd"
@@ -62,28 +43,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoAim"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoFulcrum"
-                }
-              }
-            ]
+            "name": "AutoAim"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootCmd"
+            "name": "AutoShoot"
           }
         },
         {

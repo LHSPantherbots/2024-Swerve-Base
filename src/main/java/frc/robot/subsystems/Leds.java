@@ -454,7 +454,7 @@ public void purpleStreak10() {
       case CLIMB: red(); break;
       case TARGET_LOCK: white(); break;
       case LAUNCH: blue(); break;
-      case NOTE_STORED: orange(); break;
+      case NOTE_STORED: orangePulse(); break;
       case INTAKE: if(RobotContainer.feeder.isNoteDetected()){orangeFlash();break;} greenPulse(); break;
       //case 1: purpleFlash(); break;
       //case 2: yellowFlash(); break;
