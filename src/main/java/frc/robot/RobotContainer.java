@@ -176,6 +176,10 @@ public class RobotContainer {
     m_driverController.povUp().onTrue(new InstantCommand(() -> fulcrum.trimUp(), fulcrum));
     m_driverController.povDown().onTrue(new InstantCommand(() -> fulcrum.trimDown(), fulcrum));
     m_driverController.povLeft().onTrue(new InstantCommand(() -> fulcrum.resetTrim(), fulcrum));
+    m_driverController.y().whileTrue(new RunCommand(()-> m_robotDrive.AutoAimTriangle(
+        -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband)* DriveConstants.kMaxSpeedMetersPerSecond, 
+        -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband)* DriveConstants.kMaxSpeedMetersPerSecond), 
+        m_robotDrive));
     // operatorController.a().whileTrue(new RunCommand(() -> intake.intake(),
     // intake))
     // .onFalse(new RunCommand(() -> intake.intakeStop(), intake));
