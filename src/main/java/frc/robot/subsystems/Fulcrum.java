@@ -28,7 +28,7 @@ public class Fulcrum extends SubsystemBase {
     private final CANSparkMax m_FulcrumLeft;
 
     private double lastSetpoint = 0;
-    private double trimZero = 3.0;
+    private double trimZero = 4.0;
     private double setPoint = trimZero;
     private double autoAimTrim = 0;
 
