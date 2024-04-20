@@ -456,75 +456,75 @@ public class DriveSubsystem extends SubsystemBase {
     return Math.IEEEremainder(desiredAngle, 2 * Math.PI);
   }
 
-  public double angleToTriangle(){//TODO: might be broken, please test
-    double Ry = m_poseEstimator.getEstimatedPosition().getY();
-    double Rx = m_poseEstimator.getEstimatedPosition().getX();
-    double desiredAngle = 0;
-    double Ty = 6.5;
-    double Tx;
-    if (isRed()) {
-      // Ty = 2.65;
-      Tx = 13.8;
-    } else {
-      // Ty = 5.55;
-      Tx =  3.85;
-    }
-    if (Ry > Ty) {
-      if (isRed()) {
-        // desiredAngle = (Math.atan((Ry - Ty)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) +
-        // Math.PI;
-        // desiredAngle = Math.atan((Ry - Ty) / (Tx - Rx)) + Math.PI;
-        // desiredAngle = Math.atan((Ty - Ry) / (Tx - Rx)) - Math.PI;
+  // public double angleToTriangle(){//TODO: might be broken, please test
+  //   double Ry = m_poseEstimator.getEstimatedPosition().getY();
+  //   double Rx = m_poseEstimator.getEstimatedPosition().getX();
+  //   double desiredAngle = 0;
+  //   double Ty = 6.5;
+  //   double Tx;
+  //   if (isRed()) {
+  //     // Ty = 2.65;
+  //     Tx = 13.8;
+  //   } else {
+  //     // Ty = 5.55;
+  //     Tx =  3.85;
+  //   }
+  //   if (Ry > Ty) {
+  //     if (isRed()) {
+  //       // desiredAngle = (Math.atan((Ry - Ty)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) +
+  //       // Math.PI;
+  //       // desiredAngle = Math.atan((Ry - Ty) / (Tx - Rx)) + Math.PI;
+  //       // desiredAngle = Math.atan((Ty - Ry) / (Tx - Rx)) - Math.PI;
 
-        desiredAngle = Math.atan((Ty - Ry) / (Tx - Rx));
-        // desiredAngle = Math.IEEEremainder(desiredAngle, 2*Math.PI);
-      } else {
-        desiredAngle = -Math.atan((Ty - Ry) / Rx);
-      }
+  //       desiredAngle = Math.atan((Ty - Ry) / (Tx - Rx));
+  //       // desiredAngle = Math.IEEEremainder(desiredAngle, 2*Math.PI);
+  //     } else {
+  //       desiredAngle = -Math.atan((Ty - Ry) / Rx);
+  //     }
 
-    } else {
-      if (isRed()) {
-        // desiredAngle = (-Math.atan((Ty-Ry)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) +
-        // Math.PI;
-        // desiredAngle = -Math.atan((Ty - Ry) / (Tx - Rx)) + Math.PI;
-        // desiredAngle = -Math.atan((Ry - Ty) / (Tx - Rx)) - Math.PI;
-        desiredAngle = -Math.atan((Ry - Ty) / (Tx - Rx));
+  //   } else {
+  //     if (isRed()) {
+  //       // desiredAngle = (-Math.atan((Ty-Ry)/(Tx - Rx)) * (isRed() ? -1.0 : 1.0)) +
+  //       // Math.PI;
+  //       // desiredAngle = -Math.atan((Ty - Ry) / (Tx - Rx)) + Math.PI;
+  //       // desiredAngle = -Math.atan((Ry - Ty) / (Tx - Rx)) - Math.PI;
+  //       desiredAngle = -Math.atan((Ry - Ty) / (Tx - Rx));
 
-        // desiredAngle = Math.IEEEremainder(desiredAngle, 2*Math.PI);
-      } else {
-        desiredAngle = Math.atan((Ry - Ty) / Rx);
-      }
+  //       // desiredAngle = Math.IEEEremainder(desiredAngle, 2*Math.PI);
+  //     } else {
+  //       desiredAngle = Math.atan((Ry - Ty) / Rx);
+  //     }
 
-    }
-    return Math.IEEEremainder(desiredAngle, 2 * Math.PI);
-  }
+  //   }
+  //   return Math.IEEEremainder(desiredAngle, 2 * Math.PI);
+  // }
 
-  public double errorToTriangle() {
-    double error = angleToTriangle() - currAngle();
-    Rotation2d r1 = new Rotation2d().fromRadians(angleToTriangle());
-    Rotation2d r2 = new Rotation2d().fromRadians(currAngle());
-    Rotation2d r3 = r1.minus(r2);
-    if (isRed()) {
-      return r3.rotateBy(new Rotation2d().fromDegrees(180)).getRadians();
-    } else {
-      return r3.getRadians();
-    }
-  }
+  // public double errorToTriangle() {
+  //   double error = angleToTriangle() - currAngle();
+  //   Rotation2d r1 = new Rotation2d().fromRadians(angleToTriangle());
+  //   Rotation2d r2 = new Rotation2d().fromRadians(currAngle());
+  //   Rotation2d r3 = r1.minus(r2);
+  //   if (isRed()) {
+  //     return r3.rotateBy(new Rotation2d().fromDegrees(180)).getRadians();
+  //   } else {
+  //     return r3.getRadians();
+  //   }
+  // }
 
-  public void AutoAimTriangle(Double x, Double y){
-    double error = errorToTriangle();
-    // double error = angleToTarget() - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
-    // error = error * (isRed() ? -1.0 : 1.0);
-    kF = Math.copySign(kF, error);
-    double outF = kF;
-    double outP = kP * error;
-    double outputTurn = outF + outP;
-    if (Math.abs(error) > kAllowedError) { // if error is greater than ~5.7 deg (0.1 rad)
-      drive(x, y, outputTurn, false, false);
-    } else {
-      drive(x, y, 0, false, false);
-    }
-  }
+  // public void AutoAimTriangle(Double x, Double y){
+  //   double error = errorToTriangle();
+  //   // double error = angleToTarget() - m_poseEstimator.getEstimatedPosition().getRotation().getRadians();
+  //   // error = error * (isRed() ? -1.0 : 1.0);
+  //   kF = Math.copySign(kF, error);
+  //   double outF = kF;
+  //   double outP = kP * error;
+  //   double outputTurn = outF + outP;
+  //   if (Math.abs(error) > kAllowedError) { // if error is greater than ~5.7 deg (0.1 rad)
+  //     drive(x, y, outputTurn, false, false);
+  //   } else {
+  //     drive(x, y, 0, false, false);
+  //   }
+  // }
 
   // public double autoAngleToTarget() {
   // double Ry = m_poseEstimator.getEstimatedPosition().getY();
